@@ -63,7 +63,7 @@ body:has(.c3-root) {
   --c3-h2-case: clamp(40px, 3.6vw, 60px);
   --c3-h3: 22px;
   --c3-lead: 18px;
-  --c3-body: 16px;
+  --c3-body: var(--c3-text-copy);
   --c3-meta: 13px;
   --c3-menu: clamp(28px, 2.6vw, 40px);
   /* Индекс кейсов стоит во второй колонке, правее корешка, и кегль подобран
@@ -71,6 +71,17 @@ body:has(.c3-root) {
   --c3-index: clamp(36px, 3.4vw, 56px);
   --c3-step: clamp(22px, 1.7vw, 32px);
   --c3-step4: clamp(56px, 5vw, 96px);
+
+  /* Редакционные роли: абзацы не выглядят одинаковыми по громкости.
+     Токены названы по функции текста, а не по конкретной секции. */
+  --c3-text-deck: clamp(24px, 1.8vw, 30px);
+  --c3-text-deck-leading: 1.34;
+  --c3-text-copy: 17px;
+  --c3-text-copy-leading: 1.68;
+  --c3-text-service-lead: clamp(21px, 1.45vw, 24px);
+  --c3-text-service-leading: 1.42;
+  --c3-reading-measure: 35ch;
+  --c3-note-rule: 3px;
 
   background: var(--c3-field);
   color: var(--c3-type);
@@ -157,23 +168,7 @@ body:has(.c3-root) {
   min-height: 48px;
 }
 
-/*
-  Кнопка: прямая коробка, верхняя граница — сегмент окружности.
-
-  Дуга рисуется фоном, а не border-radius. У border-radius горизонтальный
-  радиус не бывает больше половины кнопки, поэтому эллипс выходил втрое выше
-  нормы: у боковых сторон он шёл вертикально и обламывался, а к середине
-  выполаживался — форма читалась перекошенным навесом, «лепёшкой со сломанным
-  радиусом». Радиальный градиент задаёт эллипс ШИРЕ самой кнопки (78% ширины
-  на полувысоту): в кадр попадает пологая середина сегмента, плечи сходятся
-  под чистым углом ≈18°, как у настоящей хорды окружности.
-
-  Заодно кнопка стала выше: прямые бока теперь втрое длиннее подъёма дуги,
-  и коробка читается коробкой, а дуга — дугой. Раньше подъём был ровно
-  в половину высоты, и от коробки не оставалось ничего.
-
-  Фон, а не clip-path и не mask: и то и другое срезало бы кольцо фокуса.
-*/
+/* Прямоугольная CTA работает как редакторская печать и не срезает focus ring. */
 .c3-btn {
   display: inline-block;
   font-family: var(--font-cannonade);
@@ -182,26 +177,18 @@ body:has(.c3-root) {
   line-height: 1.4;
   letter-spacing: 0.01em;
   padding: 18px 32px 16px;
-  background-color: transparent;
-  background-image: radial-gradient(
-    78% 100% at 50% 100%,
-    var(--c3-signal) 99.4%,
-    transparent 99.7%
-  );
+  background: var(--c3-signal);
   color: var(--c3-field);
   border: 0;
   border-radius: 0;
   cursor: pointer;
-  transition: background-image 0.16s ease;
+  transition: background-color 0.16s ease, color 0.16s ease;
 }
 
-/* Отклик на наведение: дуга становится глубже, заливка светлеет. */
+/* Отклик на наведение инвертирует печать. */
 .c3-btn:hover {
-  background-image: radial-gradient(
-    64% 100% at 50% 100%,
-    var(--c3-type) 99.4%,
-    transparent 99.7%
-  );
+  background: var(--c3-type);
+  color: var(--c3-field);
 }
 
 .c3-btn-lg {
@@ -431,10 +418,30 @@ body:has(.c3-root) {
   font-size: var(--c3-body);
   line-height: 1.7;
   max-width: var(--c3-measure);
+  text-wrap: pretty;
 }
 
 .c3-body + .c3-body {
-  margin-top: var(--c3-s18);
+  margin-top: 28px;
+}
+
+/* Первый абзац «О нас» и «Контактов» — дека: он задаёт тезис секции.
+   Второй — поясняющая заметка меньшей контрастности и длины. */
+:is(#about, .c3-contacts) .c3-sec-text > .c3-body:first-child {
+  max-width: min(var(--c3-reading-measure), 100%);
+  font-family: var(--font-kreadon);
+  font-size: var(--c3-text-deck);
+  font-weight: 600;
+  line-height: var(--c3-text-deck-leading);
+  letter-spacing: -0.008em;
+  color: var(--c3-type);
+}
+
+:is(#about, .c3-contacts) .c3-sec-text > .c3-body:nth-child(2) {
+  max-width: min(var(--c3-reading-measure), 100%);
+  color: var(--c3-quiet);
+  font-size: var(--c3-text-copy);
+  line-height: var(--c3-text-copy-leading);
 }
 
 /* ---------------------------------------------------- как мы работаем */
@@ -519,10 +526,9 @@ body:has(.c3-root) {
   margin-top: var(--c3-s6);
 }
 
-/* Описания шагов — подписи, а не текст: 13/1.5. Разрыв между ними и гребнем
-   в 96 и есть характер концепта — крупное и мелкое рядом почти без середины. */
+/* Описания шагов остаются компактными, но читаются как полноценная подпись. */
 .c3-step-desc {
-  font-size: var(--c3-meta);
+  font-size: 16px;
   line-height: 1.5;
   margin-top: var(--c3-s18);
 }
@@ -605,8 +611,13 @@ body:has(.c3-root) {
 }
 
 .c3-service-lead {
-  font-size: var(--c3-body);
-  line-height: 1.7;
+  max-width: min(var(--c3-reading-measure), 100%);
+  font-family: var(--font-kreadon);
+  font-size: var(--c3-text-service-lead);
+  font-weight: 600;
+  line-height: var(--c3-text-service-leading);
+  letter-spacing: -0.006em;
+  text-wrap: pretty;
 }
 
 /*
@@ -615,23 +626,48 @@ body:has(.c3-root) {
   Раньше это делали волосяные линии — их на странице больше нет.
 */
 .c3-service-items {
-  margin-top: var(--c3-s18);
+  max-width: min(var(--c3-reading-measure), 100%);
+  margin-top: 28px;
 }
 
 .c3-service-items li {
+  position: relative;
+  padding-left: 1.35em;
   font-size: var(--c3-body);
-  line-height: 1.25;
+  line-height: 1.45;
+}
+
+.c3-service-items li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--c3-signal);
 }
 
 .c3-service-items li + li {
-  margin-top: var(--c3-s18);
+  margin-top: 12px;
 }
 
 .c3-service-closing {
-  margin-top: var(--c3-s18);
+  position: relative;
+  max-width: min(var(--c3-reading-measure), 100%);
+  margin-top: 30px;
+  padding-left: 18px;
   font-size: var(--c3-body);
-  line-height: 1.7;
+  line-height: var(--c3-text-copy-leading);
   color: var(--c3-quiet);
+  text-wrap: pretty;
+}
+
+.c3-service-closing::before {
+  content: '';
+  position: absolute;
+  top: 0.35em;
+  bottom: auto;
+  left: 0;
+  width: var(--c3-note-rule);
+  height: 28px;
+  background: var(--c3-signal);
 }
 
 /* ----------------------------------------------------------------- кейсы */
@@ -715,7 +751,7 @@ body:has(.c3-root) {
 .c3-index-teaser {
   grid-column: 2;
   grid-row: 1;
-  font-size: var(--c3-meta);
+  font-size: 15px;
   line-height: 1.5;
   color: var(--c3-quiet);
   display: -webkit-box;
@@ -1153,6 +1189,10 @@ body:has(.c3-root) {
     --c3-step: 28px;
     --c3-step4: 46px;
     --c3-menu: 26px;
+    --c3-text-deck: clamp(22px, 6.4vw, 26px);
+    --c3-text-copy: 17px;
+    --c3-text-service-lead: clamp(20px, 5.7vw, 23px);
+    --c3-reading-measure: 35ch;
   }
 
   .c3-topbar-row {
@@ -1216,6 +1256,8 @@ body:has(.c3-root) {
 
   .c3-slogan-line {
     width: 100%;
+    /* В исходной строке стоит неразрывный пробел; локально разрешаем
+       перенос, чтобы слоган не расширял мобильный документ. */
     overflow-wrap: anywhere;
   }
 
@@ -1238,7 +1280,8 @@ body:has(.c3-root) {
   .c3-h2,
   .c3-case-h2 {
     margin-left: 0;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   .c3-body,
@@ -1298,7 +1341,16 @@ body:has(.c3-root) {
   }
 
   .c3-service > div {
-    margin-top: var(--c3-s18);
+    margin-top: 22px;
+  }
+
+  .c3-service-items {
+    margin-top: 24px;
+  }
+
+  .c3-service-closing {
+    margin-top: 26px;
+    padding-left: 16px;
   }
 
   .c3-index-row {

@@ -37,11 +37,9 @@ export default function C5Page() {
         <h2 id="c5-services-title">{site.services.title}</h2>
         <div className="c5-services-register">{site.services.list.map((service) => <article key={service.title}>
           <h3>{service.title}</h3>
-          <div className="c5-service-copy">
-            <p className="c5-service-lead">{service.lead}</p>
-            <p className="c5-service-close">{service.closing}</p>
-          </div>
+          <p className="c5-service-lead">{service.lead}</p>
           <ul>{service.items.map((item) => <li key={item}>{item}</li>)}</ul>
+          <p className="c5-service-close">{service.closing}</p>
         </article>)}</div>
       </section>
 

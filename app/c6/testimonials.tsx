@@ -26,7 +26,7 @@ export function C6Testimonials() {
     ref={ref}
     className="c6-quotes"
     tabIndex={0}
-    role="region"
+    role="group"
     aria-label={site.testimonials.title}
     onKeyDown={(event) => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return

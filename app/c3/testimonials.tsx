@@ -104,13 +104,13 @@ export function Testimonials() {
       <div
         className="c3-quotes"
         ref={stripRef}
-        role="list"
+        role="group"
         aria-label={site.testimonials.title}
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
         {site.testimonials.list.map((item) => (
-          <figure className="c3-quote" key={item.name} role="listitem">
+          <figure className="c3-quote" key={item.name}>
             <blockquote className="c3-quote-text">
               {item.paragraphs.map((paragraph) => (
                 <p key={paragraph.slice(0, 32)}>{paragraph}</p>

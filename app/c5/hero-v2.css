@@ -111,10 +111,15 @@
   }
 
   .c5-proof-visual {
-    height: 62svh;
-    min-height: 430px;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 8 / 5;
     border-left: 0;
     border-top: var(--c5-rule-strong);
+  }
+
+  .c5-proof-visual img {
+    object-fit: contain;
   }
 }
 

@@ -143,11 +143,11 @@
 .c4-about {
   width: var(--c4-page);
   margin: 0 auto;
-  padding: clamp(120px, 12vw, 190px) 0 clamp(140px, 14vw, 220px);
+  padding: var(--c4-section-space) 0 clamp(110px, 11vw, 176px);
   display: grid;
   grid-template-columns: 3fr 9fr;
   gap: clamp(54px, 8vw, 140px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.38);
+  border-bottom: 1px solid var(--c4-rule);
 }
 .c4-about h2 {
   font-size: clamp(48px, 5vw, 82px);
@@ -155,13 +155,34 @@
   letter-spacing: -0.045em;
 }
 .c4-about > div {
-  max-width: 920px;
-  font-family: var(--c4-display);
-  font-size: clamp(25px, 2.35vw, 40px);
-  line-height: 1.23;
+  max-width: 1040px;
 }
-.c4-about p:first-child { margin-top: 0; }
-.c4-about p:last-child { margin-bottom: 0; }
+.c4-about-statement {
+  max-width: 24ch;
+  margin: 0;
+  font-family: var(--c4-display);
+  font-size: var(--c4-wall-statement);
+  font-weight: 520;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+.c4-about-caption {
+  position: relative;
+  max-width: var(--c4-caption-measure);
+  margin: var(--c4-annotation-space) 0 0 clamp(64px, 8vw, 128px);
+  font-size: var(--c4-wall-caption);
+  font-weight: 540;
+  line-height: 1.56;
+}
+.c4-about-caption::before {
+  content: '';
+  position: absolute;
+  top: 0.72em;
+  right: calc(100% + 18px);
+  width: var(--c4-marker-width);
+  height: 3px;
+  background: var(--c4-signal);
+}
 
 /* The brief calls for one horizontal route. Here it reads as an exhibition rail. */
 .c4-process {
@@ -228,22 +249,22 @@
 
 /* Services are individual wall texts with deliberately different measures. */
 .c4-services {
-  padding: clamp(140px, 14vw, 220px) max(24px, calc((100vw - 1560px) / 2));
+  padding: var(--c4-section-space) max(24px, calc((100vw - 1560px) / 2)) clamp(108px, 11vw, 176px);
   color: var(--c4-ink);
   background: var(--c4-paper);
 }
 .c4-services > h2 {
-  margin-bottom: clamp(90px, 10vw, 155px);
+  margin-bottom: clamp(48px, 5vw, 78px);
   font-size: clamp(62px, 7.2vw, 116px);
   line-height: 0.84;
   letter-spacing: -0.055em;
 }
 .c4-service-list article {
-  padding: clamp(72px, 8vw, 122px) 0;
+  padding: clamp(30px, 3.2vw, 50px) 0 clamp(38px, 3.8vw, 62px);
   display: grid;
   grid-template-columns: 7fr 5fr;
-  gap: clamp(48px, 8vw, 130px);
-  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  gap: clamp(40px, 6vw, 96px);
+  border-top: 1px solid var(--c4-rule);
 }
 .c4-service-list article:nth-child(2) {
   width: 86%;
@@ -257,7 +278,7 @@
   display: block;
 }
 .c4-service-list article:nth-child(3) h3 { max-width: 8ch; }
-.c4-service-list article:nth-child(3) .c4-service-notes { width: 48%; margin: 66px 0 0 40%; }
+.c4-service-list article:nth-child(3) .c4-service-notes { width: 48%; margin: 32px 0 0 40%; }
 .c4-service-list article:nth-child(4) {
   width: 78%;
   margin-left: 22%;
@@ -272,25 +293,55 @@
 }
 .c4-service-notes { align-self: start; }
 .c4-service-lead {
-  max-width: 36ch;
-  margin: 0 0 34px;
-  font-size: 18px;
-  font-weight: 680;
-  line-height: 1.48;
+  max-width: 31ch;
+  margin: 0 0 30px;
+  font-family: var(--c4-display);
+  font-size: var(--c4-service-lead);
+  font-weight: 520;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
 }
-.c4-service-list ul { list-style: none; margin: 0; padding: 0; }
+.c4-service-list ul {
+  max-width: var(--c4-copy-measure);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--c4-rule-soft);
+}
 .c4-service-list li {
-  padding: 9px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.34);
-  font-size: 16px;
+  position: relative;
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid var(--c4-rule-soft);
+  font-size: var(--c4-utility-text);
+  font-weight: 570;
   line-height: 1.42;
 }
+.c4-service-list li::before {
+  content: '';
+  position: absolute;
+  top: 1.03em;
+  left: 0;
+  width: 9px;
+  height: 3px;
+  background: var(--c4-signal);
+}
 .c4-service-close {
-  max-width: 48ch;
-  margin: 36px 0 0;
+  position: relative;
+  max-width: var(--c4-caption-measure);
+  margin: 30px 0 0;
+  padding-left: 24px;
   color: var(--c4-muted);
-  font-size: 16px;
+  font-size: var(--c4-utility-text);
   line-height: 1.55;
+}
+.c4-service-close::before {
+  content: '';
+  position: absolute;
+  top: 0.22em;
+  bottom: 0.18em;
+  left: 0;
+  width: 3px;
+  background: var(--c4-signal);
 }
 
 /* Portfolio: three tailored installations, followed by an honest text archive. */
@@ -510,14 +561,16 @@
 }
 .c4-case-story > .c4-case-lead {
   width: 74%;
-  margin: 0 0 clamp(130px, 14vw, 220px) 26%;
+  max-width: 23ch;
+  margin: 0 0 clamp(96px, 10vw, 158px) 26%;
   font-family: var(--c4-display);
   font-size: clamp(32px, 4vw, 62px);
-  line-height: 1.08;
+  line-height: 1.06;
+  letter-spacing: -0.022em;
 }
 .c4-case-story > section {
   width: 82%;
-  padding: clamp(62px, 7vw, 105px) 0;
+  padding: clamp(52px, 5vw, 78px) 0 clamp(66px, 6vw, 92px);
   display: grid;
   grid-template-columns: 4fr 8fr;
   gap: clamp(44px, 8vw, 120px);
@@ -540,6 +593,20 @@
   margin-top: 0;
   font-size: 17px;
   line-height: 1.62;
+}
+.c4-case-story section > p {
+  position: relative;
+  max-width: var(--c4-copy-measure);
+  padding-left: 26px;
+}
+.c4-case-story section > p::before {
+  content: '';
+  position: absolute;
+  top: 0.34em;
+  bottom: 0.28em;
+  left: 0;
+  width: 3px;
+  background: var(--c4-signal);
 }
 .c4-case-story section ul { padding-left: 1.2em; }
 .c4-case-story section h3 { font-size: 27px; line-height: 1; }
@@ -574,9 +641,11 @@
   .c4-menu { width: 100%; border-left: 0; border-top: 8px solid var(--c4-signal); }
   .c4-menu nav a { font-size: clamp(43px, 12vw, 74px); }
 
-  .c4-about { width: min(100% - 40px, 760px); padding: 92px 0 110px; grid-template-columns: 1fr; gap: 48px; }
+  .c4-about { width: min(100% - 40px, 760px); padding: 82px 0 94px; grid-template-columns: 1fr; gap: 44px; }
   .c4-about h2 { font-size: 52px; }
-  .c4-about > div { font-size: clamp(24px, 4.8vw, 34px); }
+  .c4-about-statement { font-size: clamp(29px, 7.7vw, 45px); }
+  .c4-about-caption { margin: 42px 0 0 54px; font-size: 16px; }
+  .c4-about-caption::before { width: 34px; }
 
   .c4-process { padding: 95px 0 115px; }
   .c4-process > h2 { margin: 0 20px 62px; font-size: clamp(52px, 11vw, 80px); }
@@ -599,20 +668,21 @@
   }
   .c4-process li + li { padding-left: 28px; }
 
-  .c4-services { padding: 105px 20px 125px; }
-  .c4-services > h2 { margin-bottom: 70px; font-size: clamp(58px, 13vw, 88px); }
+  .c4-services { padding: 92px 20px 104px; }
+  .c4-services > h2 { margin-bottom: 48px; font-size: clamp(58px, 13vw, 88px); }
   .c4-service-list article,
   .c4-service-list article:nth-child(n) {
     width: 100%;
     margin-left: 0;
-    padding: 64px 0 78px;
+    padding: 32px 0 42px;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 30px;
   }
   .c4-service-list article:nth-child(n) h3,
   .c4-service-list article:nth-child(n) .c4-service-notes { width: 100%; max-width: none; margin: 0; grid-column: auto; grid-row: auto; }
   .c4-service-list h3 { font-size: clamp(48px, 11vw, 76px); }
+  .c4-service-lead { max-width: 29ch; font-size: clamp(22px, 5.9vw, 29px); }
 
   .c4-cases { padding: 105px 0 130px; }
   .c4-section-head { width: min(100% - 40px, 760px); margin-bottom: 85px; grid-template-columns: 1fr; gap: 28px; }
@@ -644,7 +714,7 @@
 
   .c4-testimonials { padding: 105px 0 125px; }
   .c4-testimonials > h2 { width: min(100% - 40px, 760px); font-size: clamp(62px, 15vw, 96px); }
-  .c4-quotes li { min-height: 520px; }
+  .c4-quotes li { min-height: 0; justify-content: flex-start; }
 
   .c4-contacts { padding: 105px 20px 120px; grid-template-columns: 1fr; gap: 0; }
   .c4-contacts h2,
@@ -665,8 +735,8 @@
   }
   .c4-case-hero h1 { margin: 56px 0 34px; font-size: clamp(62px, 15vw, 100px); }
   .c4-case-opening { height: min(105vw, 700px); }
-  .c4-case-story { padding: 105px 20px 130px; }
-  .c4-case-story > .c4-case-lead { width: 100%; margin: 0 0 110px; }
+  .c4-case-story { padding: 92px 20px 112px; }
+  .c4-case-story > .c4-case-lead { width: 100%; margin: 0 0 86px; font-size: clamp(31px, 8.2vw, 48px); }
   .c4-case-story > section,
   .c4-case-story > section:nth-of-type(n) { width: 100%; margin-left: 0; grid-template-columns: 1fr; gap: 30px; }
   .c4-case-story section > p,
@@ -690,7 +760,7 @@
   .c4-exhibit:nth-child(n) .c4-exhibit-label { padding: 0; }
   .c4-exhibit-label h3 { font-size: 43px; }
   .c4-quotes li,
-  .c4-quotes li:nth-child(n) { width: 88vw; min-height: 560px; padding-inline: 28px; }
+  .c4-quotes li:nth-child(n) { width: 88vw; min-height: 0; padding-inline: 28px; }
   .c4-footer span { width: 100%; }
   .c4-case-hero h1 { max-width: none; overflow-wrap: normal; font-size: clamp(48px, 12.5vw, 64px); }
   .c4-case-opening { height: 78vw; }

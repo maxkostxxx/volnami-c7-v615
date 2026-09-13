@@ -18,7 +18,7 @@ export function C4Testimonials() {
     el.addEventListener('wheel', wheel, { passive: false })
     return () => el.removeEventListener('wheel', wheel)
   }, [])
-  return <div ref={ref} className="c4-quotes" tabIndex={0} role="region" aria-label={site.testimonials.title} onKeyDown={(event) => {
+  return <div ref={ref} className="c4-quotes" tabIndex={0} role="group" aria-label={site.testimonials.title} onKeyDown={(event) => {
     if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return
     event.preventDefault(); const el = ref.current; if (!el) return
     if (event.key === 'Home') el.scrollTo({ left: 0, behavior: motion() })

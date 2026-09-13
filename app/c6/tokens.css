@@ -18,6 +18,9 @@
   --c6-display-md: clamp(42px, 5.4vw, 88px);
   --c6-body-lg: clamp(22px, 2vw, 34px);
   --c6-body-md: clamp(17px, 1.25vw, 21px);
+  --c6-reading: 42ch;
+  --c6-reading-narrow: 32ch;
+  --c6-cue-width: clamp(6px, 0.65vw, 10px);
   --c6-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --focus-ring: var(--c6-pink);
   --focus-ring-contrast: var(--c6-ink);

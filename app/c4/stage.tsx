@@ -220,10 +220,10 @@ export function C4Stage() {
       renderer.shadowMap.enabled = !mobile
       renderer.setSize(width, height, false)
       camera.aspect = width / height
-      camera.position.z = mobile ? 9 : 10.2
+      camera.position.z = mobile ? 9.6 : 10.2
       camera.updateProjectionMatrix()
-      stage.position.set(mobile ? 0 : 0.65, mobile ? -0.55 : -0.35, 0)
-      stage.scale.setScalar(mobile ? 1.18 : 0.9)
+      stage.position.set(mobile ? 0 : 0.65, mobile ? -0.65 : -0.35, 0)
+      stage.scale.setScalar(mobile ? 0.82 : 0.9)
       render(Boolean(texture))
     }
 

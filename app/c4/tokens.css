@@ -8,4 +8,15 @@
   --c4-display: var(--font-playfair);
   --c4-body: var(--font-commissioner);
   --c4-page: min(100% - 48px, 1560px);
+  --c4-copy-measure: 42rem;
+  --c4-caption-measure: 36rem;
+  --c4-rule: rgba(0, 0, 0, 0.5);
+  --c4-rule-soft: rgba(0, 0, 0, 0.28);
+  --c4-section-space: clamp(96px, 10vw, 160px);
+  --c4-annotation-space: clamp(46px, 5vw, 78px);
+  --c4-wall-statement: clamp(31px, 3.55vw, 58px);
+  --c4-wall-caption: clamp(16px, 1.25vw, 20px);
+  --c4-service-lead: clamp(21px, 1.9vw, 30px);
+  --c4-utility-text: clamp(16px, 1.1vw, 18px);
+  --c4-marker-width: 46px;
 }

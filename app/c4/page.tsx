@@ -35,7 +35,7 @@ export default function C4Page() {
       </section>
 
       <section className="c4-about c4-grid" id="about" aria-labelledby="c4-about-title" tabIndex={-1}>
-        <h2 id="c4-about-title">{site.about.title}</h2><div>{site.about.paragraphs.map((p) => <p key={p}>{p}</p>)}</div>
+        <h2 id="c4-about-title">{site.about.title}</h2><div>{site.about.paragraphs.map((p, index) => <p className={index === 0 ? 'c4-about-statement' : 'c4-about-caption'} key={p}>{p}</p>)}</div>
       </section>
 
       <section className="c4-process" aria-labelledby="c4-process-title">

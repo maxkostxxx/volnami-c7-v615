@@ -34,7 +34,7 @@ export default function C6Page() {
 
       <section className="c6-services" id="services" aria-labelledby="c6-services-title" tabIndex={-1}>
         <h2 id="c6-services-title">{site.services.title}</h2>
-        <div className="c6-service-scenes">{site.services.list.map((service, index) => <article key={service.title} className={index % 2 ? 'c6-service-scene c6-service-reverse' : 'c6-service-scene'}>
+        <div className="c6-service-scenes">{site.services.list.map((service) => <article key={service.title} className="c6-service-scene">
           <h3>{service.title}</h3>
           <div>
             <p className="c6-service-lead">{service.lead}</p>

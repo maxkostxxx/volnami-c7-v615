@@ -22,7 +22,7 @@ export function C5Testimonials() {
     return () => element.removeEventListener('wheel', wheel)
   }, [])
 
-  return <div ref={ref} className="c5-quotes" tabIndex={0} role="region" aria-label={site.testimonials.title} onKeyDown={(event) => {
+  return <div ref={ref} className="c5-quotes" tabIndex={0} role="group" aria-label={site.testimonials.title} onKeyDown={(event) => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
     event.preventDefault()
     const element = ref.current

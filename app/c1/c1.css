@@ -58,6 +58,9 @@
   --c1-edge: 64px;
   --c1-gap: 24px;
   --c1-measure: 720px; /* максимальная ширина текстовой колонки по спецификации */
+  --c1-reading: 38ch;
+  --c1-copy-lead: clamp(20px, 1.45vw, 24px);
+  --c1-chapter-rule: rgba(227, 176, 75, 0.72);
 
   /*
     Две плоскости глубины. Ими — и только ими — отделяются секции друг
@@ -75,7 +78,7 @@
     читаются как один уровень. Верх шкалы подобран по самому длинному
     слову в самом узком поле: «работаем?» в колонках 1–2 на 1280.
   */
-  --c1-titre: clamp(34px, 2.7vw, 44px);
+  --c1-titre: clamp(40px, 3.1vw, 52px);
 
   /* собственный гэп полосы «Как мы работаем»: полоса переехала
      из двенадцати колонок в десять, шаг между створами уже страничного */
@@ -330,11 +333,10 @@ body:has(.c1-root) {
   padding: var(--c1-s2) var(--c1-edge);
 }
 
-/* плашка ниже первого экрана получает фон и размытие; линейки под ней
-   больше нет — полноширинных линеек в концепте не осталось ни одной */
+/* Ниже первого экрана плашка получает плотный фон, чтобы её контраст
+   не зависел от фотографии под ней. */
 .c1-topbar--lifted {
   background: rgba(7, 26, 43, 0.92);
-  backdrop-filter: blur(12px);
 }
 
 .c1-topbar-left {
@@ -456,29 +458,11 @@ body:has(.c1-root) {
   scroll-margin-top: 0;
 }
 
-/*
-  Носитель кадра первого экрана и scroll-driven погружения.
-  Заливка осталась подложкой под фотографией: она держит цвет, пока кадр
-  грузится, и не даёт светлой вспышки. Поверх лежит .c1-depth-img.
-*/
+/* Однотонная подложка держит цвет до загрузки фотографии. */
 .c1-depth {
   position: absolute;
   inset: -12% -8%;
-  background:
-    radial-gradient(
-      40% 30% at 88% -4%,
-      rgba(227, 176, 75, 0.26) 0%,
-      rgba(227, 176, 75, 0.07) 48%,
-      rgba(227, 176, 75, 0) 74%
-    ),
-    radial-gradient(
-      132% 106% at 88% -8%,
-      #17435f 0%,
-      #103351 22%,
-      #0a2337 46%,
-      #061a2a 68%,
-      #030f1a 100%
-    );
+  background: #0a2337;
 }
 
 /*
@@ -498,23 +482,12 @@ body:has(.c1-root) {
   display: block;
 }
 
-/*
-  Затухание с глубиной. Лежит поверх полос, а не под ними: свет гаснет
-  в массе воды, а не подкрашивается ею. Нижняя треть кадра, где стоит
-  слоган, за счёт этого остаётся тёмной толщей.
-*/
+/* Ровный тон поверх фотографии стабилизирует контраст титра. */
 .c1-depth::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(3, 16, 28, 0) 0%,
-    rgba(3, 16, 28, 0.12) 34%,
-    rgba(3, 16, 28, 0.58) 62%,
-    rgba(3, 16, 28, 0.88) 86%,
-    rgba(3, 16, 28, 0.94) 100%
-  );
+  background: rgba(3, 16, 28, 0.26);
 }
 
 /* flex вместо потока: отступы внутри героя не схлопываются */
@@ -560,6 +533,22 @@ body:has(.c1-root) {
 .c1-about-body {
   grid-column: 3 / span 6;
   max-width: var(--c1-measure);
+}
+
+.c1-about-body .c1-body:first-child {
+  max-width: var(--c1-reading);
+  color: var(--c1-foam);
+  font-size: var(--c1-copy-lead);
+  font-weight: 560;
+  line-height: 1.48;
+}
+
+.c1-about-body .c1-body + .c1-body {
+  max-width: 45ch;
+  margin-top: 36px;
+  padding-left: 24px;
+  border-left: 2px solid var(--c1-chapter-rule);
+  color: var(--c1-foam-dim);
 }
 
 /* ------------------------------------------------------- как мы работаем */
@@ -683,38 +672,82 @@ body:has(.c1-root) {
 /* ---------------------------------------------------------------- услуги */
 
 /*
-  Услуги живут в колонках 3–8, справа от титра и на его горизонтали.
-  Разделительных линеек нет ни между услугами, ни внутри перечня — паузу
-  держит воздух, иерархию внутри услуги держат гарнитура и яркость.
+  Услуги читаются как главы в титрах: имя, световая строка-лид,
+  размеченный перечень и финальная реплика. Вертикальная насечка держит
+  главу единым фрагментом, не превращая её в карточку.
 */
 .c1-services {
   grid-column: 3 / span 6;
   max-width: var(--c1-measure);
 }
 
+.c1-service {
+  position: relative;
+  max-width: 680px;
+  padding-left: clamp(22px, 2.2vw, 34px);
+  border-left: 1px solid var(--c1-stroke);
+}
+
+.c1-service::before {
+  content: '';
+  position: absolute;
+  top: 0.16em;
+  left: -2px;
+  width: 3px;
+  height: 2.4em;
+  background: var(--c1-caustic);
+}
+
 .c1-service + .c1-service {
-  margin-top: var(--c1-s4);
+  margin-top: clamp(96px, 9vw, 132px);
+}
+
+.c1-service-title {
+  max-width: 11ch;
+  color: var(--c1-foam);
+  font-size: clamp(36px, 3.25vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
 }
 
 .c1-service-lead {
-  margin-top: var(--c1-s2);
-  color: var(--c1-foam-dim);
+  max-width: var(--c1-reading);
+  margin-top: 28px;
+  color: var(--c1-foam);
+  font-size: var(--c1-copy-lead);
+  font-weight: 560;
+  line-height: 1.45;
 }
 
-/* перечень набран в полную яркость: это и есть содержание услуги.
-   Втяжка вместо линейки — сдвиг говорит о вложенности не хуже */
 .c1-service-items {
-  margin-top: var(--c1-s2);
-  padding-left: var(--c1-s2);
+  max-width: 48ch;
+  margin-top: 32px;
+  padding-left: 0;
+  border-top: 1px solid var(--c1-stroke);
 }
 
-.c1-service-items li + li {
-  margin-top: var(--c1-s1);
+.c1-service-items li {
+  position: relative;
+  padding: 10px 0 10px 25px;
+  border-bottom: 1px solid var(--c1-stroke);
+  color: var(--c1-foam-dim);
+  line-height: 1.45;
+}
+
+.c1-service-items li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.15em;
+  width: 10px;
+  height: 2px;
+  background: var(--c1-caustic);
 }
 
 .c1-service-closing {
-  margin-top: var(--c1-s2);
-  color: var(--c1-foam-dim);
+  max-width: 34ch;
+  margin-top: 30px;
+  color: var(--c1-caustic);
 }
 
 /* ---------------------------------------------------------------- кейсы */
@@ -759,36 +792,29 @@ body:has(.c1-root) {
   и низкой лентой прямо показывает, где работа предъявлена, а где пока
   только названа.
 
-  Заливка каждой следующей уводится глубже — тем же шейдом толщи
-  (--c1-shade), которым гаснет свет в первом экране. Новых цветов это
-  не вводит: surface просто уходит на глубину и к последней ленте
-  приходит в abyss, откуда страница продолжается дальше. Заодно это
+  Заливка каждой следующей уводится глубже фиксированными оттенками одной
+  палитры и к последней ленте приходит в abyss. Заодно это
   единственное, что даёт лентам встык видимую границу: линеек между
   ними нет.
 */
 .c1-band--type {
-  background:
-    linear-gradient(
-      rgba(var(--c1-shade), var(--c1-band-depth, 0)),
-      rgba(var(--c1-shade), var(--c1-band-depth, 0))
-    ),
-    var(--c1-surface);
+  background: var(--c1-surface);
 }
 
 .c1-band--type:nth-of-type(2) {
-  --c1-band-depth: 0.14;
+  background: #0d293f;
 }
 
 .c1-band--type:nth-of-type(3) {
-  --c1-band-depth: 0.28;
+  background: #0c263a;
 }
 
 .c1-band--type:nth-of-type(4) {
-  --c1-band-depth: 0.42;
+  background: #0a2235;
 }
 
 .c1-band--type:nth-of-type(5) {
-  --c1-band-depth: 0.55;
+  background: #091f31;
 }
 
 .c1-band-media {
@@ -807,28 +833,11 @@ body:has(.c1-root) {
   object-position: 50% 88%;
 }
 
-/*
-  Затемнение — не украшение, а условие читаемости названия поверх кадра.
-  Глухой левой трети у него больше нет: кадр идёт во всю ширину ленты,
-  а название держит мягкий доводчик снизу.
-*/
+/* Ровное затемнение удерживает читаемость названия поверх полного кадра. */
 .c1-band-scrim {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      to right,
-      rgba(var(--c1-shade), 0.62) 0%,
-      rgba(var(--c1-shade), 0.26) 32%,
-      rgba(var(--c1-shade), 0) 60%
-    ),
-    linear-gradient(
-      to top,
-      rgba(var(--c1-shade), 0.92) 0%,
-      rgba(var(--c1-shade), 0.66) 20%,
-      rgba(var(--c1-shade), 0.2) 46%,
-      rgba(var(--c1-shade), 0) 72%
-    );
+  background: rgba(var(--c1-shade), 0.46);
 }
 
 /*
@@ -957,6 +966,21 @@ body:has(.c1-root) {
   max-width: var(--c1-measure);
 }
 
+.c1-contacts-body .c1-body:first-child {
+  max-width: var(--c1-reading);
+  color: var(--c1-foam);
+  font-size: var(--c1-copy-lead);
+  font-weight: 560;
+  line-height: 1.48;
+}
+
+.c1-contacts-body .c1-body + .c1-body {
+  max-width: 44ch;
+  padding-left: 24px;
+  border-left: 2px solid var(--c1-chapter-rule);
+  color: var(--c1-foam-dim);
+}
+
 .c1-contacts-cta {
   margin-top: var(--c1-s3);
 }
@@ -1003,36 +1027,11 @@ body:has(.c1-root) {
   object-position: 50% 78%;
 }
 
-/*
-  Два слоя затемнения: сверху — под плашку, чтобы жёлтая кнопка и иконка
-  не стояли на светлой картошке; снизу — доводчик под название.
-  Глухой левой половины больше нет: кадр идёт во всю ширину окна встык
-  к его краям, как и заявлено, а не собирается в правую половину экрана.
-*/
+/* Ровное затемнение удерживает контраст плашки и названия. */
 .c1-case-hero-scrim {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(var(--c1-shade), 0.85) 0%,
-      rgba(var(--c1-shade), 0.6) 7%,
-      rgba(var(--c1-shade), 0.2) 14%,
-      rgba(var(--c1-shade), 0) 22%
-    ),
-    linear-gradient(
-      to right,
-      rgba(var(--c1-shade), 0.6) 0%,
-      rgba(var(--c1-shade), 0.24) 34%,
-      rgba(var(--c1-shade), 0) 62%
-    ),
-    linear-gradient(
-      to top,
-      rgba(var(--c1-shade), 0.9) 0%,
-      rgba(var(--c1-shade), 0.68) 18%,
-      rgba(var(--c1-shade), 0.26) 42%,
-      rgba(var(--c1-shade), 0) 68%
-    );
+  background: rgba(var(--c1-shade), 0.42);
 }
 
 .c1-case-hero-caption {
@@ -1272,8 +1271,9 @@ body:has(.c1-root) {
     --c1-half: 72px;
     --c1-s3: 48px;
     --c1-s4: 88px;
-    --c1-titre: 38px;
-    font-size: 16px;
+    --c1-titre: 42px;
+    --c1-copy-lead: 20px;
+    font-size: 17px;
   }
 
   .c1-topbar { padding: 14px var(--c1-edge); }
@@ -1311,14 +1311,16 @@ body:has(.c1-root) {
 
   .c1-process { grid-column: 1; grid-template-columns: 1fr; gap: 46px; }
   .c1-step--final .c1-step-title { font-size: 34px; }
-  .c1-service + .c1-service { margin-top: 76px; }
-  .c1-service-items { padding-left: 18px; }
+  .c1-service { padding-left: 20px; }
+  .c1-service + .c1-service { margin-top: 82px; }
+  .c1-service-title { font-size: clamp(34px, 10.5vw, 44px); }
+  .c1-service-items { padding-left: 0; }
 
   .c1-bands { margin-top: 72px; }
   .c1-band--visual { height: 62vh; min-height: 420px; }
   .c1-band-title { max-width: 100%; font-size: clamp(34px, 10vw, 44px); overflow-wrap: anywhere; }
   .c1-band-caption { padding: 38px var(--c1-edge); }
-  .c1-band-teaser { font-size: 15px; }
+  .c1-band-teaser { font-size: 16px; }
 
   .c1-strip { grid-column: 1; margin-right: calc(-1 * var(--c1-edge)); }
   .c1-strip-track { gap: 16px; }

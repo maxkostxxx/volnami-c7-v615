@@ -27,7 +27,8 @@
   --c5-display-md: clamp(34px, 4.2vw, 68px);
   --c5-copy-lg: clamp(23px, 2.2vw, 36px);
   --c5-copy-md: clamp(18px, 1.35vw, 22px);
-  --c5-copy-sm: clamp(15px, 1vw, 17px);
+  --c5-copy-sm: clamp(16px, 1.05vw, 18px);
+  --c5-reading: 38ch;
 
   --focus-ring: #ffffff;
   --focus-ring-contrast: #000000;

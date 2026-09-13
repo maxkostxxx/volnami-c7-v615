@@ -71,9 +71,12 @@ export default function Page() {
             <h2 className="c2-h2" id="c2-about-title">
               <Display text={site.about.title} />
             </h2>
-            <div className="c2-measure c2-measure--center">
-              {site.about.paragraphs.map((p) => (
-                <p className="c2-p" key={p.slice(0, 24)}>
+            <div className="c2-measure c2-measure--center c2-editorial-copy">
+              {site.about.paragraphs.map((p, i) => (
+                <p
+                  className={i === 0 ? 'c2-p c2-p--lead' : 'c2-p c2-p--note'}
+                  key={p.slice(0, 24)}
+                >
                   {p}
                 </p>
               ))}
@@ -220,9 +223,12 @@ export default function Page() {
             <h2 className="c2-h2" id="c2-contacts-title">
               <Display text={site.contacts.title} />
             </h2>
-            <div className="c2-measure c2-measure--center">
-              {site.contacts.paragraphs.map((p) => (
-                <p className="c2-p" key={p.slice(0, 24)}>
+            <div className="c2-measure c2-measure--center c2-editorial-copy">
+              {site.contacts.paragraphs.map((p, i) => (
+                <p
+                  className={i === 0 ? 'c2-p c2-p--lead' : 'c2-p c2-p--note'}
+                  key={p.slice(0, 24)}
+                >
                   {p}
                 </p>
               ))}

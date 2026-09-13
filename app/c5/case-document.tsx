@@ -9,12 +9,12 @@ function Block({ block }: { block: CaseBlock }) {
   if (block.kind === 'lead') return <p className="c5-case-lead">{block.text}</p>
 
   if (block.kind === 'group') return <section className="c5-case-group">
-    <h2>{block.title}</h2>
+    <h2><span>{block.title}</span></h2>
     <div className="c5-case-group-body">{block.blocks.map((item, index) => <Block block={item} key={index} />)}</div>
   </section>
 
   return <section className="c5-case-block">
-    <h2>{block.heading}</h2>
+    <h2><span>{block.heading}</span></h2>
     <div className="c5-case-block-body">
       {block.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       {block.items ? <ul>{block.items.map((item) => <li key={item}>{item}</li>)}</ul> : null}

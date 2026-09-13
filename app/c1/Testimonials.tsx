@@ -99,7 +99,7 @@ export default function Testimonials() {
       ref={stripRef}
       className={`c1-strip${dragging ? ' c1-strip--dragging' : ''}`}
       tabIndex={0}
-      role="region"
+      role="group"
       aria-label={site.testimonials.title}
       onKeyDown={onKeyDown}
       onPointerDown={onPointerDown}

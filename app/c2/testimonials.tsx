@@ -163,7 +163,7 @@ export function TestimonialStrip() {
         ref={ref}
         className="c2-strip"
         tabIndex={0}
-        role="list"
+        role="group"
         aria-labelledby="c2-testimonials-title"
         onKeyDown={onKeyDown}
         onScroll={onScroll}
@@ -177,7 +177,6 @@ export function TestimonialStrip() {
           <figure
             key={t.name}
             className={`c2-quote${i === current ? ' c2-quote--current' : ''}`}
-            role="listitem"
           >
             <blockquote className="c2-quote-text">
               {t.paragraphs.map((paragraph) => (
