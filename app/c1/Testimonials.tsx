@@ -1,38 +1,19 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { site } from '@/content/site'
 
 const CARD = 520
 const GAP = 24
 
 /**
- * Горизонтальная полоса отзывов: перетаскивание мышью, колесо и клавиатура.
+ * Горизонтальная полоса отзывов: перетаскивание мышью, горизонтальный жест
+ * трекпада и клавиатура. Обычное колесо всегда остаётся прокрутке страницы.
  * Живёт внутри app/c1/ — общей библиотеки компонентов у концептов нет.
  */
 export default function Testimonials() {
   const stripRef = useRef<HTMLDivElement>(null)
   const [dragging, setDragging] = useState(false)
-
-  /*
-    Колесо: вертикальный тик переводится в горизонтальную прокрутку, пока
-    полосе есть куда ехать. На краях событие возвращается странице.
-  */
-  useEffect(() => {
-    const el = stripRef.current
-    if (!el) return
-    const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey) return
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
-      if (delta === 0) return
-      const max = el.scrollWidth - el.clientWidth
-      if ((delta < 0 && el.scrollLeft <= 0) || (delta > 0 && el.scrollLeft >= max - 1)) return
-      e.preventDefault()
-      el.scrollLeft = el.scrollLeft + delta
-    }
-    el.addEventListener('wheel', onWheel, { passive: false })
-    return () => el.removeEventListener('wheel', onWheel)
-  }, [])
 
   /* CSS scroll-behavior не перебивает явный behavior в scrollBy — медиазапрос
      читается из JS, иначе reduce не соблюдается. */

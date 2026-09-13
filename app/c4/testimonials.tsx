@@ -1,23 +1,11 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { site } from '@/content/site'
 
 export function C4Testimonials() {
   const ref = useRef<HTMLDivElement>(null)
   const motion = () => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
-  useEffect(() => {
-    const el = ref.current; if (!el) return
-    const wheel = (event: WheelEvent) => {
-      if (event.ctrlKey) return
-      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
-      const max = el.scrollWidth - el.clientWidth
-      if (!delta || (delta < 0 && el.scrollLeft <= 0) || (delta > 0 && el.scrollLeft >= max - 1)) return
-      event.preventDefault(); el.scrollLeft += delta
-    }
-    el.addEventListener('wheel', wheel, { passive: false })
-    return () => el.removeEventListener('wheel', wheel)
-  }, [])
   return <div ref={ref} className="c4-quotes" tabIndex={0} role="group" aria-label={site.testimonials.title} onKeyDown={(event) => {
     if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return
     event.preventDefault(); const el = ref.current; if (!el) return

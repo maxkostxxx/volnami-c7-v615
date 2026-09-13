@@ -8,9 +8,8 @@ import { site } from '@/content/site'
  *
  * Листается тремя способами, и все три проверены на живой странице:
  *  - мышью: полосу можно тащить за карточку и тянуть за видимый скроллбар;
- *  - колесом: вертикальный тик переносится в горизонтальную прокрутку,
- *    но только пока полосе есть куда ехать — на краю прокрутка сразу
- *    возвращается странице, полоса её не держит;
+ *  - трекпадом: явный горизонтальный жест листает полосу нативно, а обычное
+ *    вертикальное колесо всегда продолжает прокручивать страницу;
  *  - с клавиатуры: ←/→ на карточку, Home/End на края.
  *
  * Пока полоса едет, CSS-снэп выключен. Иначе `scroll-snap-type: x mandatory`
@@ -35,34 +34,6 @@ export function TestimonialStrip() {
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
       ? 'auto'
       : 'smooth'
-
-  /* Колесо. Перехват только внутри полосы и только пока ей есть куда ехать. */
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    let idle = 0
-    const settle = () => {
-      window.clearTimeout(idle)
-      idle = window.setTimeout(() => el.classList.remove('c2-strip--free'), 140)
-    }
-    const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey) return
-      const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
-      if (!d) return
-      const max = el.scrollWidth - el.clientWidth
-      const at = el.scrollLeft
-      if ((d < 0 && at <= 0.5) || (d > 0 && at >= max - 0.5)) return
-      e.preventDefault()
-      el.classList.add('c2-strip--free')
-      el.scrollLeft = Math.min(max, Math.max(0, at + d))
-      settle()
-    }
-    el.addEventListener('wheel', onWheel, { passive: false })
-    return () => {
-      el.removeEventListener('wheel', onWheel)
-      window.clearTimeout(idle)
-    }
-  }, [])
 
   /* Перетаскивание мышью. Тач не трогаем — там прокрутка нативная. */
   const drag = useRef<{

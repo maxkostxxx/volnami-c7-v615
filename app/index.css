@@ -42,7 +42,6 @@
 .index-masthead p,
 .index-kicker,
 .index-section-head p,
-.index-status,
 .index-links,
 .index-footer {
   font-size: var(--index-copy-small);
@@ -183,11 +182,6 @@
   font-weight: 800;
   letter-spacing: -0.08em;
   line-height: 0.78;
-}
-
-.index-status {
-  margin: 0;
-  font-weight: 700;
 }
 
 .index-preview {

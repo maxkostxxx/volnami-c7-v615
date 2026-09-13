@@ -1,26 +1,11 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { site } from '@/content/site'
 
 export function C5Testimonials() {
   const ref = useRef<HTMLDivElement>(null)
   const behavior = (): ScrollBehavior => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-    const wheel = (event: WheelEvent) => {
-      if (event.ctrlKey) return
-      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
-      const max = element.scrollWidth - element.clientWidth
-      if (!delta || delta < 0 && element.scrollLeft <= 0 || delta > 0 && element.scrollLeft >= max - 1) return
-      event.preventDefault()
-      element.scrollLeft += delta
-    }
-    element.addEventListener('wheel', wheel, { passive: false })
-    return () => element.removeEventListener('wheel', wheel)
-  }, [])
 
   return <div ref={ref} className="c5-quotes" tabIndex={0} role="group" aria-label={site.testimonials.title} onKeyDown={(event) => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return

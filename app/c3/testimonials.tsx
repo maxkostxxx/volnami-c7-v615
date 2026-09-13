@@ -43,37 +43,6 @@ export function Testimonials() {
     }
   }, [])
 
-  /*
-    Колесо мыши. Одного `overflow-y: hidden` мало: проверено — Chromium
-    не переводит вертикальный deltaY в горизонтальную прокрутку, страница
-    уезжает, а полоса стоит. Поэтому колесо листает полосу по блоку, как
-    ←/→ с клавиатуры. На краях полосы событие возвращается странице,
-    чтобы прокрутка не запиралась.
-  */
-  useEffect(() => {
-    const strip = stripRef.current
-    if (!strip) return
-
-    let lock = 0
-    const onWheel = (event: WheelEvent) => {
-      if (event.ctrlKey) return
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
-      const max = strip.scrollWidth - strip.clientWidth
-      if (max <= 0) return
-      const dir = event.deltaY > 0 ? 1 : -1
-      if (dir < 0 ? strip.scrollLeft <= 1 : strip.scrollLeft >= max - 1) return
-
-      event.preventDefault()
-      const now = event.timeStamp
-      if (now < lock) return
-      lock = now + 320
-      strip.scrollBy({ left: dir * BLOCK, behavior: behavior() })
-    }
-
-    strip.addEventListener('wheel', onWheel, { passive: false })
-    return () => strip.removeEventListener('wheel', onWheel)
-  }, [])
-
   useEffect(() => {
     const strip = stripRef.current
     if (!strip) return
