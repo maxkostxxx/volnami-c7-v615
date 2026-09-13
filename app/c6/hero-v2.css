@@ -1,0 +1,109 @@
+.c6-stage {
+  --c6-spot-x: 52%;
+  --c6-spot-y: 48%;
+  position: relative;
+  min-height: calc(100svh - var(--c6-header-height));
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(390px, 0.8fr);
+  overflow: hidden;
+  color: var(--c6-paper);
+  background: var(--c6-ink);
+}
+
+.c6-stage-image {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  height: calc(100svh - var(--c6-header-height));
+  min-height: 620px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.c6-stage-image-mono {
+  filter: grayscale(1) contrast(1.12) brightness(0.66);
+}
+
+.c6-stage-image-color {
+  z-index: 2;
+  clip-path: circle(clamp(130px, 17vw, 330px) at var(--c6-spot-x) var(--c6-spot-y));
+}
+
+.c6-stage:not([data-spotlight='active']) .c6-stage-image-color {
+  clip-path: circle(clamp(110px, 13vw, 250px) at 52% 48%);
+}
+
+.c6-stage-copy {
+  position: relative;
+  z-index: 4;
+  grid-column: 2;
+  grid-row: 1;
+  padding: clamp(42px, 4.5vw, 82px) clamp(28px, 3.8vw, 68px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-left: 1px solid var(--c6-line-light);
+  background: var(--c6-ink);
+}
+
+.c6-stage h1 {
+  max-width: 6.6ch;
+  margin: 0 0 34px;
+  font: 500 clamp(62px, 6.2vw, 120px) / 0.78 var(--c6-display);
+  letter-spacing: -0.065em;
+}
+
+.c6-stage h1 span { display: block; overflow-wrap: normal; word-break: normal; hyphens: none; }
+
+.c6-stage-copy > p {
+  max-width: 34ch;
+  margin: 0;
+  font: 520 17px / 1.5 var(--c6-body);
+}
+
+@media (max-width: 900px) {
+  .c6-stage {
+    min-height: 0;
+    display: block;
+    overflow: visible;
+  }
+
+  .c6-stage-image {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .c6-stage-image-mono { display: none; }
+
+  .c6-stage .c6-stage-image-color,
+  .c6-stage:not([data-spotlight='active']) .c6-stage-image-color {
+    display: block;
+    clip-path: none;
+  }
+
+  .c6-stage-copy {
+    min-height: 0;
+    padding: 46px var(--c6-gutter) 64px;
+    display: block;
+    border-top: 1px solid var(--c6-line-light);
+    border-left: 0;
+  }
+
+  .c6-stage h1 {
+    margin: 0 0 26px;
+    font-size: clamp(58px, 16vw, 88px);
+    max-width: 7ch;
+  }
+
+  .c6-stage-copy > p { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c6-stage .c6-stage-image-color,
+  .c6-stage:not([data-spotlight='active']) .c6-stage-image-color { clip-path: none; }
+  .c6-stage-image-mono { display: none; }
+}

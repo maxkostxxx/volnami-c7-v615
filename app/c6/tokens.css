@@ -1,0 +1,33 @@
+.c6 {
+  --c6-ink: #000000;
+  --c6-paper: #ffffff;
+  --c6-silver: #bfc4cc;
+  --c6-pink: #f8c6ce;
+  --c6-pink-ink: #37131b;
+  --c6-line-light: rgba(255, 255, 255, 0.52);
+  --c6-line-dark: rgba(0, 0, 0, 0.34);
+  --c6-scrim: rgba(0, 0, 0, 0.74);
+  --c6-display: var(--font-cormorant);
+  --c6-body: var(--font-golos);
+  --c6-page: min(calc(100% - 48px), 1640px);
+  --c6-gutter: max(24px, calc((100vw - 1640px) / 2));
+  --c6-header-height: 78px;
+  --c6-section-y: clamp(104px, 11vw, 184px);
+  --c6-display-xl: clamp(72px, 10vw, 172px);
+  --c6-display-lg: clamp(58px, 7.5vw, 128px);
+  --c6-display-md: clamp(42px, 5.4vw, 88px);
+  --c6-body-lg: clamp(22px, 2vw, 34px);
+  --c6-body-md: clamp(17px, 1.25vw, 21px);
+  --c6-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --focus-ring: var(--c6-pink);
+  --focus-ring-contrast: var(--c6-ink);
+}
+
+@media (max-width: 900px) {
+  .c6 {
+    --c6-page: calc(100% - 40px);
+    --c6-gutter: 20px;
+    --c6-header-height: 66px;
+    --c6-section-y: 84px;
+  }
+}

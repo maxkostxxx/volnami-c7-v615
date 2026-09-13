@@ -1,0 +1,1360 @@
+/*
+  Концепт 1 — тёмный кинематографичный.
+  Все селекторы в неймспейсе .c1-*, чтобы стили концептов не протекали.
+
+  Порядок файла = порядок каскада:
+    1. токены
+    2. сброс на :where() — нулевая специфичность
+    3. каркас и сетка
+    4. типографика
+    5. хром (плашка, меню)
+    6. секции сверху вниз
+    7. страница кейса
+    8. подвал
+    9. движение и prefers-reduced-motion
+
+  Сброс намеренно завёрнут в :where(): иначе `.c1-root p { margin: 0 }`
+  (0,1,1) перебивает одноклассовые правила вроде `.c1-hero-sub` (0,1,0)
+  и молча съедает отступы между секциями.
+*/
+
+/* ------------------------------------------------------------------ токены */
+
+.c1-root {
+  --c1-abyss: #071a2b;
+  --c1-surface: #0e2c42;
+  --c1-foam: #eaf1f4;
+  --c1-caustic: #e3b04b;
+  --c1-deep-ink: #1a1206;
+
+  /* доли foam подобраны так, чтобы контраст к abyss оставался ≥ 4.5:1 */
+  --c1-foam-dim: rgba(234, 241, 244, 0.75);
+  --c1-foam-mute: rgba(234, 241, 244, 0.62);
+  /* волосяной линии в токенах больше нет: единственным её местом были
+     разделители секций и плашка, а полноширинных линеек в концепте не
+     осталось ни одной — секции разводит глубина фона */
+  --c1-stroke: rgba(234, 241, 244, 0.3);
+  --c1-arrow: rgba(234, 241, 244, 0.4);
+  /* затемнение под подписями поверх кадра */
+  --c1-shade: 3, 16, 28;
+
+  /*
+    Кольца фокуса из общего слоя перекрашиваются под палитру концепта:
+    внутреннее — акцентное, внешнее — цвет фона страницы. На тёмном видно
+    жёлтое кольцо, на светлом кадре его подпирает тёмное.
+  */
+  --focus-ring: var(--c1-caustic);
+  --focus-ring-contrast: var(--c1-abyss);
+
+  /* ритм: 8 · 24 · 64 · 160 · 240; 240 между секциями набирается
+     двумя половинами по 120, чтобы отступы соседей не схлопывались */
+  --c1-s1: 8px;
+  --c1-s2: 24px;
+  --c1-s3: 64px;
+  --c1-s4: 160px;
+  --c1-half: 120px;
+
+  /* сетка */
+  --c1-edge: 64px;
+  --c1-gap: 24px;
+  --c1-measure: 720px; /* максимальная ширина текстовой колонки по спецификации */
+
+  /*
+    Две плоскости глубины. Ими — и только ими — отделяются секции друг
+    от друга: разделительных линеек на странице не осталось ни одной.
+    Соседние секции всегда лежат на разных плоскостях, поэтому шов виден
+    сам по себе. Отношение яркостей near/mid — 1.22, на сплошном поле
+    это читается, а новых цветов в палитру не вводит.
+  */
+  --c1-plane-near: var(--c1-surface);
+  --c1-plane-mid: var(--c1-abyss);
+
+  /*
+    Кегль титра. Заголовок мал относительно кадра и живёт в левом поле,
+    но обязан оставаться крупнее H3 (28) — иначе имя секции и имя услуги
+    читаются как один уровень. Верх шкалы подобран по самому длинному
+    слову в самом узком поле: «работаем?» в колонках 1–2 на 1280.
+  */
+  --c1-titre: clamp(34px, 2.7vw, 44px);
+
+  /* собственный гэп полосы «Как мы работаем»: полоса переехала
+     из двенадцати колонок в десять, шаг между створами уже страничного */
+  --c1-proc-gap: 40px;
+
+  background: var(--c1-abyss);
+  color: var(--c1-foam);
+  font-family: var(--font-golos);
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 400;
+  min-height: 100vh;
+}
+
+.c1-skip {
+  position: fixed;
+  z-index: 200;
+  top: 12px;
+  left: 12px;
+  padding: 12px 16px;
+  color: var(--c1-deep-ink);
+  background: var(--c1-caustic);
+  border: 2px solid var(--c1-foam);
+  transform: translateY(-180%);
+}
+.c1-skip:focus-visible { transform: none; }
+
+/* фон за пределами документа при оверскролле */
+body:has(.c1-root) {
+  background: #071a2b;
+}
+
+/* ------------------------------------------------------------------- сброс */
+
+:where(.c1-root) :where(h1, h2, h3, p, ul, ol, figure) {
+  margin: 0;
+}
+
+:where(.c1-root) :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+:where(.c1-root) :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.c1-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------- каркас и сетка */
+
+.c1-wrap {
+  padding-inline: var(--c1-edge);
+}
+
+/* 12 колонок, гэп 24 — общая координатная сетка всех секций.
+   Левый край один на всю страницу: и текст, и полосы, и полоса отзывов
+   начинаются на одной вертикали. Воздух уходит вправо. */
+.c1-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--c1-gap);
+}
+
+/* секция = 120 сверху + 120 снизу, в сумме 240 между соседями */
+.c1-section {
+  padding-block: var(--c1-half);
+  scroll-margin-top: var(--c1-half);
+}
+
+.c1-section--tight-bottom {
+  padding-bottom: 0;
+}
+
+/*
+  Плоскости глубины. Секции идут по странице через одну и потому имеют
+  видимый шов без единой линейки. Тот же приём, что держит ленты кейсов,
+  только там глубина набирается шейдом толщи, а здесь — сменой плоскости.
+*/
+.c1-plane--near {
+  background: var(--c1-plane-near);
+}
+
+.c1-plane--mid {
+  background: var(--c1-plane-mid);
+}
+
+/* ------------------------------------------------------ титровая секция */
+
+/*
+  Устройство любой секции ниже первого экрана.
+
+  Заголовок вынесен в левое поле (колонки 1–2) и стоит вверху своей полосы,
+  содержание идёт колонкой справа (колонки 3–8) на той же горизонтали.
+  Заголовок не сдвигает текст вниз и не занимает всю ширину: он работает
+  как титр на полях киноплёнки — мал относительно кадра, читается первым
+  по положению, а не по кеглю.
+
+  Отсюда же следует: линеек во всю ширину нет, отбивать секцию нечем,
+  кроме глубины фона и полноширинных кадров. Так и сделано.
+*/
+.c1-h2,
+.c1-case-heading {
+  grid-column: 1 / span 2;
+  align-self: start;
+  font-family: var(--font-cormorant);
+  font-weight: 400;
+  font-size: var(--c1-titre);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  /* доводка до верхней линии знаков соседней текстовой колонки:
+     у антиквы 32–40 и у гротеска 17 разные полудлины интерлиньяжа */
+  margin-top: 2px;
+  /* длинный заголовок в узком поле переносится по словам, а не рвётся */
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+
+/*
+  Содержание каждой секции ставится в колонки 3–8 (текст, мера 720)
+  или 3–12 (полоса шагов, полоса отзывов) — правилами своих секций ниже.
+  Общего класса для этого нет намеренно: у секций разная ширина створа,
+  и один класс на всех прятал бы это различие.
+*/
+
+/* --------------------------------------------------------------- шрифты */
+
+/*
+  Ролей десять, и каждая живёт ровно в одном правиле — иначе кегли
+  расползаются по файлу и шкала перестаёт существовать.
+*/
+
+/* слоган первого экрана */
+.c1-slogan {
+  font-family: var(--font-cormorant);
+  font-weight: 300;
+  /* пол поднят до 112: на 1280 антиква обязана стоять заметно крупнее,
+     чем в соседних концептах, иначе первые экраны читаются как одна работа */
+  font-size: clamp(112px, 7.1vw, 128px);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+}
+
+/* название кейса: в две строки, чтобы уместиться в тёмную часть кадра */
+.c1-case-title {
+  font-family: var(--font-cormorant);
+  font-weight: 300;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  max-width: 6em;
+}
+
+/* H2 — титр; его правило стоит выше, в разделе «титровая секция»,
+   потому что это не только кегль, но и место в сетке */
+
+/* H3: услуга, шаг, имя в отзыве, значение контакта */
+.c1-h3,
+.c1-quote-name,
+.c1-contacts-value {
+  font-family: var(--font-cormorant);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.c1-body,
+.c1-step-text,
+.c1-quote-text,
+.c1-case-text {
+  max-width: var(--c1-measure);
+}
+
+.c1-body + .c1-body {
+  margin-top: var(--c1-s2);
+}
+
+.c1-quote-text p + p {
+  margin-top: var(--c1-s1);
+}
+
+/* закрывающая реплика услуги — курсив как часть системы, не подсветка */
+.c1-aside {
+  font-family: var(--font-cormorant);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.45;
+  max-width: 26em;
+}
+
+/* подписи и навигация — одно правило на весь концепт */
+.c1-btn,
+.c1-cases-link,
+.c1-contacts-label,
+.c1-quote-role,
+.c1-footer-nav a {
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.c1-link {
+  border-bottom: 1px solid var(--c1-stroke);
+  padding-bottom: 2px;
+}
+
+.c1-link:hover {
+  border-bottom-color: var(--c1-caustic);
+}
+
+/* кнопка: прямоугольник, заливка caustic, тёмный текст, без стрелки */
+.c1-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c1-caustic);
+  color: var(--c1-deep-ink);
+  font-family: var(--font-golos);
+  letter-spacing: 0.01em;
+  padding: 16px 24px;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.c1-btn--lg {
+  font-size: 17px;
+  padding: 24px 40px;
+}
+
+/* ------------------------------------------------------- верхняя плашка */
+
+.c1-topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: var(--c1-s2) var(--c1-edge);
+}
+
+/* плашка ниже первого экрана получает фон и размытие; линейки под ней
+   больше нет — полноширинных линеек в концепте не осталось ни одной */
+.c1-topbar--lifted {
+  background: rgba(7, 26, 43, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.c1-topbar-left {
+  grid-column: 1;
+  justify-self: start;
+}
+
+/* знак в плашке — единственный путь на главную со страницы кейса */
+.c1-topbar-home img {
+  display: block;
+  width: 132px;
+  height: auto;
+}
+
+.c1-topbar-center {
+  grid-column: 2;
+  display: flex;
+  align-items: stretch;
+  gap: var(--c1-s1);
+}
+
+.c1-topbar-right {
+  grid-column: 3;
+  justify-self: end;
+}
+
+.c1-icon-btn {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--c1-stroke);
+  /* плашка лежит поверх кадра: без подложки иконка теряется на светлом */
+  background: rgba(var(--c1-shade), 0.55);
+  color: var(--c1-foam);
+  padding: 0;
+  cursor: pointer;
+}
+
+.c1-icon-btn:hover {
+  border-color: var(--c1-caustic);
+  color: var(--c1-caustic);
+}
+
+.c1-icon-btn svg {
+  display: block;
+}
+
+.c1-burger-lines {
+  display: block;
+  width: 22px;
+}
+
+.c1-burger-lines i {
+  display: block;
+  height: 1px;
+  background: currentColor;
+}
+
+.c1-burger-lines i + i {
+  margin-top: var(--c1-s1);
+}
+
+/* ----------------------------------------------------- полноэкранное меню */
+
+.c1-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--c1-abyss);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--c1-s2) var(--c1-edge);
+}
+
+/* меню — не безымянный список: знак стоит там же, где в плашке */
+.c1-menu-mark {
+  position: absolute;
+  top: var(--c1-s2);
+  left: var(--c1-edge);
+  width: 132px;
+  height: auto;
+}
+
+.c1-menu-close {
+  position: absolute;
+  top: var(--c1-s2);
+  right: var(--c1-edge);
+}
+
+.c1-menu-list li + li {
+  margin-top: var(--c1-s1);
+}
+
+.c1-menu-list a {
+  display: inline-block;
+  font-family: var(--font-cormorant);
+  font-weight: 300;
+  font-size: 64px;
+  line-height: 1.15;
+}
+
+.c1-menu-list a:hover {
+  color: var(--c1-caustic);
+}
+
+/* ------------------------------------------------------------ первый экран */
+
+.c1-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  padding-block: var(--c1-s4) var(--c1-half);
+  background: var(--c1-abyss);
+  scroll-margin-top: 0;
+}
+
+/*
+  Носитель кадра первого экрана и scroll-driven погружения.
+  Заливка осталась подложкой под фотографией: она держит цвет, пока кадр
+  грузится, и не даёт светлой вспышки. Поверх лежит .c1-depth-img.
+*/
+.c1-depth {
+  position: absolute;
+  inset: -12% -8%;
+  background:
+    radial-gradient(
+      40% 30% at 88% -4%,
+      rgba(227, 176, 75, 0.26) 0%,
+      rgba(227, 176, 75, 0.07) 48%,
+      rgba(227, 176, 75, 0) 74%
+    ),
+    radial-gradient(
+      132% 106% at 88% -8%,
+      #17435f 0%,
+      #103351 22%,
+      #0a2337 46%,
+      #061a2a 68%,
+      #030f1a 100%
+    );
+}
+
+/*
+  Каустические полосы. Размытие обязательно: без него трапеции читаются
+  геометрическим лучевым узором, а не светом в воде — у луча в толще
+  жёсткой кромки не бывает.
+*/
+.c1-depth-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Свет держится в верхней трети, нижняя левая четверть остаётся тёмной —
+     туда ложится слоган. Точка кадрирования выбрана под это. */
+  object-position: center 42%;
+  display: block;
+}
+
+/*
+  Затухание с глубиной. Лежит поверх полос, а не под ними: свет гаснет
+  в массе воды, а не подкрашивается ею. Нижняя треть кадра, где стоит
+  слоган, за счёт этого остаётся тёмной толщей.
+*/
+.c1-depth::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 16, 28, 0) 0%,
+    rgba(3, 16, 28, 0.12) 34%,
+    rgba(3, 16, 28, 0.58) 62%,
+    rgba(3, 16, 28, 0.88) 86%,
+    rgba(3, 16, 28, 0.94) 100%
+  );
+}
+
+/* flex вместо потока: отступы внутри героя не схлопываются */
+.c1-hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.c1-hero-logo {
+  display: block;
+  width: 280px;
+  height: auto;
+  /* компенсация служебных полей внутри SVG: знак встаёт вровень со слоганом */
+  margin-left: -23px;
+  margin-bottom: -46px;
+}
+
+.c1-slogan {
+  margin-top: var(--c1-s3);
+}
+
+.c1-slogan i {
+  font-style: italic;
+}
+
+.c1-hero-sub {
+  margin-top: var(--c1-s3);
+  font-size: 20px;
+  line-height: 1.5;
+  max-width: 30em;
+  color: var(--c1-foam-dim);
+}
+
+/* ------------------------------------------------------------------ о нас */
+
+/* колонка стоит справа от титра и на одной с ним горизонтали:
+   собственного верхнего отступа у неё нет — иначе титр перестал бы
+   быть титром и снова оказался «заголовком сверху» */
+.c1-about-body {
+  grid-column: 3 / span 6;
+  max-width: var(--c1-measure);
+}
+
+/* ------------------------------------------------------- как мы работаем */
+
+/*
+  Геометрия полосы разведена намеренно, чтобы она не совпадала с полосами
+  соседних концептов:
+    · доли створов неравные — ширину шага задаёт длина его описания,
+      а четвёртому отдан самый широкий створ: там разгон и точка;
+    · номер не стоит над шагом, а вынесен в левое поле створа и сидит
+      на общей линии с именем шага;
+    · описания посажены не под номером, а с втяжкой — по вертикали имени,
+      правее номерного поля.
+  Две строки — имена и описания — общие для всех четырёх шагов (subgrid),
+  имена прижаты к низу своей строки и стоят на одной линии. Пустота под
+  четвёртым шагом приходится ровно на строку описаний: это пауза, а не обрыв.
+*/
+.c1-process {
+  /* полоса встала справа от титра, на его горизонтали, и занимает
+     все десять колонок до правого поля */
+  grid-column: 3 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1.14fr 1.2fr 1.5fr;
+  grid-template-rows: auto auto;
+  column-gap: var(--c1-proc-gap);
+  row-gap: var(--c1-s2);
+}
+
+.c1-step {
+  display: grid;
+  grid-row: 1 / span 2;
+  grid-template-rows: subgrid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--c1-s2);
+}
+
+.c1-step-num {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  /* доводка до базовой линии имени: у номера кегль вчетверо мельче */
+  margin-bottom: 3px;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--c1-foam-mute);
+}
+
+.c1-step-title {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+}
+
+.c1-step-text {
+  grid-column: 2;
+  grid-row: 2;
+  color: var(--c1-foam-dim);
+}
+
+/* пустая ячейка на месте описания — та самая пауза; высоту ей задаёт
+   общая строка subgrid, собственной высоты у неё нет */
+.c1-step-pause {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 0;
+}
+
+/* линия с наконечником в промежутке между шагами: сидит на той же линии,
+   что и имена шагов, поэтому строка имён читается как одна траектория */
+.c1-step-arrow {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  align-self: end;
+  position: relative;
+  left: var(--c1-s1);
+  margin-bottom: 14px;
+  width: calc(var(--c1-proc-gap) - var(--c1-s1) * 2);
+  height: 1px;
+  background: var(--c1-arrow);
+}
+
+.c1-step-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--c1-arrow);
+  border-right: 1px solid var(--c1-arrow);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/*
+  Разгон перед четвёртым шагом: стрелка вдвое длиннее и уходит не влево,
+  на имя третьего шага, а вправо — в промежуток и в поле четвёртого.
+  Сдвиг ровно на прирост длины, поэтому левый конец стрелки остаётся там же,
+  где у обычных, и на узких ширинах она не подчёркивает «Стратегию».
+*/
+.c1-step--before-final .c1-step-arrow {
+  width: calc((var(--c1-proc-gap) - var(--c1-s1) * 2) * 2);
+  left: calc(var(--c1-s1) + var(--c1-proc-gap) - var(--c1-s1) * 2);
+}
+
+.c1-step--final {
+  padding-left: var(--c1-proc-gap);
+}
+
+.c1-step--final .c1-step-title {
+  font-family: var(--font-cormorant);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--c1-caustic);
+  max-width: 240px;
+}
+
+/* ---------------------------------------------------------------- услуги */
+
+/*
+  Услуги живут в колонках 3–8, справа от титра и на его горизонтали.
+  Разделительных линеек нет ни между услугами, ни внутри перечня — паузу
+  держит воздух, иерархию внутри услуги держат гарнитура и яркость.
+*/
+.c1-services {
+  grid-column: 3 / span 6;
+  max-width: var(--c1-measure);
+}
+
+.c1-service + .c1-service {
+  margin-top: var(--c1-s4);
+}
+
+.c1-service-lead {
+  margin-top: var(--c1-s2);
+  color: var(--c1-foam-dim);
+}
+
+/* перечень набран в полную яркость: это и есть содержание услуги.
+   Втяжка вместо линейки — сдвиг говорит о вложенности не хуже */
+.c1-service-items {
+  margin-top: var(--c1-s2);
+  padding-left: var(--c1-s2);
+}
+
+.c1-service-items li + li {
+  margin-top: var(--c1-s1);
+}
+
+.c1-service-closing {
+  margin-top: var(--c1-s2);
+  color: var(--c1-foam-dim);
+}
+
+/* ---------------------------------------------------------------- кейсы */
+
+/* ссылка на портфолио — содержание титровой полосы «Кейсы»: она стоит
+   справа от титра и на его горизонтали, а не под ним и не в углу */
+.c1-cases-link {
+  grid-column: 3 / span 6;
+  justify-self: start;
+  align-self: start;
+  /* доводка на разницу полудлин: подпись 15/1.4 против антиквы 32–40/1.15 */
+  margin-top: 10px;
+}
+
+.c1-bands {
+  margin-top: var(--c1-half);
+}
+
+/*
+  Лента идёт во всю ширину окна, ленты стоят встык: ни линеек между ними,
+  ни промежутков, чтобы взгляд не выныривал между кейсами.
+
+  Общего роста у лент нет намеренно. Рост назначает то, что в ленте
+  есть: кадру нужен полный рост, тексту — только его собственный.
+*/
+.c1-band {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+/* лента с кадром — 60vh: рост держится под визуал */
+.c1-band--visual {
+  height: 60vh;
+}
+
+/*
+  Лента кейса без кадра резерва под картинку не держит: её рост — это
+  рост подписи, то есть название с тизером плюс то же поле 64, которым
+  подпись отбита на высокой ленте. Половины экрана пустоты под
+  несуществующий визуал не остаётся, а разница масштаба между высокой
+  и низкой лентой прямо показывает, где работа предъявлена, а где пока
+  только названа.
+
+  Заливка каждой следующей уводится глубже — тем же шейдом толщи
+  (--c1-shade), которым гаснет свет в первом экране. Новых цветов это
+  не вводит: surface просто уходит на глубину и к последней ленте
+  приходит в abyss, откуда страница продолжается дальше. Заодно это
+  единственное, что даёт лентам встык видимую границу: линеек между
+  ними нет.
+*/
+.c1-band--type {
+  background:
+    linear-gradient(
+      rgba(var(--c1-shade), var(--c1-band-depth, 0)),
+      rgba(var(--c1-shade), var(--c1-band-depth, 0))
+    ),
+    var(--c1-surface);
+}
+
+.c1-band--type:nth-of-type(2) {
+  --c1-band-depth: 0.14;
+}
+
+.c1-band--type:nth-of-type(3) {
+  --c1-band-depth: 0.28;
+}
+
+.c1-band--type:nth-of-type(4) {
+  --c1-band-depth: 0.42;
+}
+
+.c1-band--type:nth-of-type(5) {
+  --c1-band-depth: 0.55;
+}
+
+.c1-band-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  /* preflight держит на img max-width: 100% и гасит сдвиг */
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  /*
+    Кадр посажен по упаковке: в ленту обязана попасть сама коробка-кулёк
+    с набранным на ней логотипом. Брендинг — предмет этого кейса, кадр
+    из одной картошки фри показывает не то, что было сделано.
+  */
+  object-position: 50% 88%;
+}
+
+/*
+  Затемнение — не украшение, а условие читаемости названия поверх кадра.
+  Глухой левой трети у него больше нет: кадр идёт во всю ширину ленты,
+  а название держит мягкий доводчик снизу.
+*/
+.c1-band-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to right,
+      rgba(var(--c1-shade), 0.62) 0%,
+      rgba(var(--c1-shade), 0.26) 32%,
+      rgba(var(--c1-shade), 0) 60%
+    ),
+    linear-gradient(
+      to top,
+      rgba(var(--c1-shade), 0.92) 0%,
+      rgba(var(--c1-shade), 0.66) 20%,
+      rgba(var(--c1-shade), 0.2) 46%,
+      rgba(var(--c1-shade), 0) 72%
+    );
+}
+
+/*
+  Подпись — в нижнем левом углу ленты, и правило на обе ленты одно.
+  На высокой она прижата к низу кадра, на низкой сама задаёт рост:
+  поле, название, поле. Посадка от этого не меняется — название стоит
+  на том же боковом поле страницы и с тем же отбивом снизу.
+*/
+.c1-band-caption {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: var(--c1-s3) var(--c1-edge);
+  box-sizing: border-box;
+}
+
+.c1-band-title {
+  font-family: var(--font-cormorant);
+  font-weight: 400;
+  font-size: 56px;
+  line-height: 1.05;
+}
+
+/*
+  Тизер стоит только на ленте без кадра: там, где у соседней ленты
+  работает визуал, здесь работает текст. Мера общая с текстом страницы,
+  и колонка начинается на той же вертикали, что название над ней.
+*/
+.c1-band-teaser {
+  max-width: var(--c1-measure);
+  margin-top: var(--c1-s2);
+  color: var(--c1-foam-dim);
+}
+
+/* рабочая ссылка помечена подчёркиванием названия постоянно, а не по ховеру:
+   иначе она внешне не отличается от лент, которые никуда не ведут */
+.c1-band--link .c1-band-title span {
+  border-bottom: 1px solid var(--c1-stroke);
+}
+
+.c1-band--link:hover .c1-band-title span {
+  border-bottom-color: var(--c1-caustic);
+}
+
+/* кольцо фокуса у полноширинных объектов уходит внутрь: снаружи его боковые
+   стороны оказываются за краем окна и читаются как две случайные линейки */
+.c1-band:focus-visible,
+.c1-strip:focus-visible {
+  outline-offset: -6px;
+  box-shadow: inset 0 0 0 6px rgba(var(--c1-shade), 0.9);
+}
+
+/* ---------------------------------------------------------------- отзывы */
+
+/*
+  Полоса — содержание титровой секции: она начинается на третьей колонке,
+  справа от титра и на его горизонтали, и уходит встык к правому краю окна.
+  Отрицательное поле ровно равно боковому полю страницы, поэтому за окно
+  полоса не выходит и горизонтального скролла страницы не создаёт.
+*/
+.c1-strip {
+  grid-column: 3 / -1;
+  margin-right: calc(-1 * var(--c1-edge));
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c1-stroke) transparent;
+  cursor: grab;
+}
+
+.c1-strip--dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.c1-strip-track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--c1-gap);
+}
+
+/* правое поле во флекс-контейнере не учитывается в scrollWidth,
+   поэтому оно ставится отдельным элементом */
+.c1-strip-track::after {
+  content: '';
+  flex: 0 0 var(--c1-edge);
+}
+
+.c1-quote {
+  flex: 0 0 520px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  /* карточка стоит ближней плоскостью на дальней: линейка сверху,
+     которой раньше держалась её граница, снята — линеек на странице нет */
+  background: var(--c1-plane-near);
+  padding: var(--c1-s3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--c1-s3);
+  box-sizing: border-box;
+}
+
+/* подпись прижата к своему тексту: при выравнивании карточек по самой
+   длинной space-between оставлял под коротким отзывом 300 px пустоты */
+.c1-quote-name {
+  display: block;
+}
+
+.c1-quote-role {
+  display: block;
+  margin-top: var(--c1-s1);
+  color: var(--c1-foam-dim);
+}
+
+/* -------------------------------------------------------------- контакты */
+
+/* титр слева, разговор посередине, каналы связи справа — все три
+   на одной горизонтали, ни один не сдвинут вниз другим */
+.c1-contacts-body {
+  grid-column: 3 / span 6;
+  max-width: var(--c1-measure);
+}
+
+.c1-contacts-cta {
+  margin-top: var(--c1-s3);
+}
+
+.c1-contacts-list {
+  grid-column: 10 / span 3;
+  align-self: start;
+}
+
+.c1-contacts-list li + li {
+  margin-top: var(--c1-s2);
+}
+
+.c1-contacts-label {
+  display: block;
+  color: var(--c1-foam-mute);
+}
+
+/* у Cormorant цифры минускульные — номер телефона иначе читается
+   как текст, а не как номер */
+.c1-contacts-value {
+  font-variant-numeric: lining-nums;
+  font-feature-settings: 'lnum' 1;
+}
+
+/* ------------------------------------------------------------ кейс: страница */
+
+.c1-case-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 88vh;
+  display: flex;
+  align-items: flex-end;
+  background: var(--c1-abyss);
+}
+
+.c1-case-hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* кадр посажен так, чтобы упаковка целиком стояла в кадре */
+  object-position: 50% 78%;
+}
+
+/*
+  Два слоя затемнения: сверху — под плашку, чтобы жёлтая кнопка и иконка
+  не стояли на светлой картошке; снизу — доводчик под название.
+  Глухой левой половины больше нет: кадр идёт во всю ширину окна встык
+  к его краям, как и заявлено, а не собирается в правую половину экрана.
+*/
+.c1-case-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(var(--c1-shade), 0.85) 0%,
+      rgba(var(--c1-shade), 0.6) 7%,
+      rgba(var(--c1-shade), 0.2) 14%,
+      rgba(var(--c1-shade), 0) 22%
+    ),
+    linear-gradient(
+      to right,
+      rgba(var(--c1-shade), 0.6) 0%,
+      rgba(var(--c1-shade), 0.24) 34%,
+      rgba(var(--c1-shade), 0) 62%
+    ),
+    linear-gradient(
+      to top,
+      rgba(var(--c1-shade), 0.9) 0%,
+      rgba(var(--c1-shade), 0.68) 18%,
+      rgba(var(--c1-shade), 0.26) 42%,
+      rgba(var(--c1-shade), 0) 68%
+    );
+}
+
+.c1-case-hero-caption {
+  position: relative;
+  width: 100%;
+  padding-block: var(--c1-s3);
+}
+
+/* лид стоит на той же вертикали, что и все текстовые колонки страницы;
+   титра у него нет — это не секция, а вступление */
+.c1-case-lead {
+  grid-column: 3 / span 6;
+  font-family: var(--font-cormorant);
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 1.25;
+  max-width: 20em;
+}
+
+.c1-case-section {
+  padding-block: var(--c1-half);
+}
+
+/* .c1-case-heading набирается тем же правилом, что и титр главной:
+   страница кейса устроена так же, разными их делает только содержание */
+
+.c1-case-text {
+  grid-column: 3 / span 6;
+  max-width: var(--c1-measure);
+}
+
+.c1-case-text p + p {
+  margin-top: var(--c1-s2);
+}
+
+/*
+  Блоки внутри одной плоскости стоят лесенкой: титр каждого — в левом поле,
+  текст — справа. Отбив между ними 160, чтобы соседние титры не слипались
+  в столбик подписей.
+*/
+/* внутри одной плоскости всё — лид, титровые блоки, макеты — отбивается
+   одним шагом 160; между плоскостями работает 120 + 120 = 240 */
+.c1-case-section > * + * {
+  margin-top: var(--c1-s4);
+}
+
+.c1-case-figures {
+  row-gap: var(--c1-s2);
+}
+
+/*
+  Печатные макеты живут в колонках сетки, а не встык к краю окна: это листы,
+  а не кадры, и на всю ширину их пришлось бы растягивать выше собственного
+  разрешения. Максимальная ширина у каждого — по натуральному размеру файла.
+*/
+.c1-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* макеты сдвинуты на ту же третью колонку, что и текст: у страницы одна
+   левая вертикаль, и левое поле целиком отдано титрам */
+.c1-figure--half-left {
+  grid-column: 3 / span 5;
+}
+
+.c1-figure--half-right {
+  grid-column: 8 / span 5;
+}
+
+.c1-figure--wide {
+  grid-column: 3 / span 7;
+  max-width: 987px;
+}
+
+.c1-figure--sheet {
+  grid-column: 3 / span 10;
+  max-width: 1400px;
+}
+
+/* закрывающий разворот: два кадра одной пропорции встык к краям окна */
+.c1-figure-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.c1-figure-spread figure {
+  aspect-ratio: 987 / 1310;
+  overflow: hidden;
+}
+
+.c1-figure-spread img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------ подвал */
+
+/* подвал отбит от последней секции сменой плоскости, а не линейкой */
+.c1-footer {
+  background: var(--c1-plane-mid);
+}
+
+.c1-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--c1-s3);
+  padding-block: var(--c1-s3);
+}
+
+.c1-footer-mark {
+  display: block;
+}
+
+.c1-footer-mark img {
+  display: block;
+  width: 168px;
+  height: auto;
+  /* та же компенсация служебных полей SVG, что и в первом экране */
+  margin-left: -14px;
+}
+
+.c1-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--c1-s2) var(--c1-s3);
+}
+
+.c1-footer-nav a {
+  color: var(--c1-foam-dim);
+}
+
+.c1-footer-nav a:hover {
+  color: var(--c1-caustic);
+}
+
+/* ------------------------------------------------------------- движение */
+
+/*
+  Единственный момент движения на странице: кадр первого экрана
+  медленно уходит вглубь на протяжении первого экрана прокрутки.
+  Только scroll-driven — без таймера, поэтому вне поддержки просто не работает.
+*/
+@supports (animation-timeline: scroll()) {
+  .c1-depth {
+    will-change: transform;
+    animation-name: c1-sink;
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 100vh;
+  }
+}
+
+@keyframes c1-sink {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.08) translateY(6%);
+  }
+}
+
+/* Mobile acceptance layer: the same cinematic system, reflowed instead of scaled. */
+@media (max-width: 900px) {
+  .c1-root {
+    --c1-edge: 32px;
+    --c1-gap: 18px;
+    --c1-half: 88px;
+    --c1-s4: 112px;
+    --c1-proc-gap: 24px;
+    --c1-titre: clamp(34px, 6vw, 46px);
+  }
+
+  .c1-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .c1-h2,
+  .c1-case-heading { grid-column: 1 / -1; margin-bottom: 42px; }
+  .c1-about-body,
+  .c1-services,
+  .c1-cases-link,
+  .c1-contacts-body,
+  .c1-contacts-list,
+  .c1-case-lead,
+  .c1-case-text { grid-column: 1 / -1; }
+
+  .c1-slogan { font-size: clamp(68px, 12vw, 92px); }
+  .c1-hero-logo { width: 220px; }
+  .c1-hero { min-height: 760px; padding-block: 150px 88px; }
+  .c1-hero-sub { font-size: 18px; }
+
+  .c1-process {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    gap: 44px 34px;
+  }
+  .c1-step {
+    grid-row: auto;
+    grid-template-columns: 30px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 15px;
+  }
+  .c1-step--final { padding-left: 0; }
+  .c1-step--final .c1-step-title { max-width: none; font-size: 35px; }
+  .c1-step-arrow { display: none; }
+
+  .c1-cases-link { margin-top: 0; }
+  .c1-band--visual { height: 54vh; min-height: 430px; }
+  .c1-band-title { font-size: clamp(39px, 7vw, 52px); }
+  .c1-band-caption { padding-block: 48px; }
+
+  .c1-strip { grid-column: 1 / -1; }
+  .c1-quote { flex-basis: min(520px, calc(100vw - 96px)); }
+
+  .c1-contacts-list { margin-top: 54px; }
+  .c1-contacts-value { overflow-wrap: anywhere; }
+
+  .c1-case-title { max-width: 8em; font-size: clamp(64px, 11vw, 86px); }
+  .c1-case-hero { min-height: 76vh; }
+  .c1-case-lead { font-size: clamp(30px, 5vw, 40px); }
+  .c1-figure--half-left { grid-column: 1 / span 3; }
+  .c1-figure--half-right { grid-column: 4 / span 3; }
+  .c1-figure--wide,
+  .c1-figure--sheet { grid-column: 1 / -1; }
+}
+
+@media (max-width: 520px) {
+  .c1-root {
+    --c1-edge: 20px;
+    --c1-gap: 14px;
+    --c1-half: 72px;
+    --c1-s3: 48px;
+    --c1-s4: 88px;
+    --c1-titre: 38px;
+    font-size: 16px;
+  }
+
+  .c1-topbar { padding: 14px var(--c1-edge); }
+  .c1-topbar-center { gap: 6px; }
+  .c1-topbar-center .c1-btn {
+    height: 42px;
+    padding: 0 9px;
+    display: inline-flex;
+    white-space: nowrap;
+    font-size: 11.5px;
+  }
+  .c1-topbar .c1-icon-btn { width: 42px; height: 42px; }
+  .c1-topbar-home img,
+  .c1-menu-mark { width: 92px; }
+  .c1-menu-mark { top: 18px; left: var(--c1-edge); }
+  .c1-menu-close { top: 16px; right: var(--c1-edge); }
+  .c1-menu { padding-inline: var(--c1-edge); }
+  .c1-menu-list a { font-size: clamp(43px, 12vw, 58px); }
+
+  .c1-hero { min-height: 700px; padding-block: 132px 72px; }
+  .c1-hero-logo { width: 176px; margin-left: -14px; margin-bottom: -28px; }
+  .c1-slogan { font-size: clamp(50px, 14.2vw, 66px); line-height: 0.97; }
+  .c1-hero-sub { max-width: 29ch; font-size: 16px; }
+
+  .c1-grid { grid-template-columns: minmax(0, 1fr); }
+  .c1-h2,
+  .c1-case-heading { grid-column: 1; margin-bottom: 34px; }
+  .c1-about-body,
+  .c1-services,
+  .c1-cases-link,
+  .c1-contacts-body,
+  .c1-contacts-list,
+  .c1-case-lead,
+  .c1-case-text { grid-column: 1; }
+
+  .c1-process { grid-column: 1; grid-template-columns: 1fr; gap: 46px; }
+  .c1-step--final .c1-step-title { font-size: 34px; }
+  .c1-service + .c1-service { margin-top: 76px; }
+  .c1-service-items { padding-left: 18px; }
+
+  .c1-bands { margin-top: 72px; }
+  .c1-band--visual { height: 62vh; min-height: 420px; }
+  .c1-band-title { max-width: 100%; font-size: clamp(34px, 10vw, 44px); overflow-wrap: anywhere; }
+  .c1-band-caption { padding: 38px var(--c1-edge); }
+  .c1-band-teaser { font-size: 15px; }
+
+  .c1-strip { grid-column: 1; margin-right: calc(-1 * var(--c1-edge)); }
+  .c1-strip-track { gap: 16px; }
+  .c1-strip-track::after { flex-basis: var(--c1-edge); }
+  .c1-quote { flex-basis: calc(100vw - 60px); padding: 36px 28px; }
+  .c1-quote-name,
+  .c1-contacts-value { font-size: 25px; }
+
+  .c1-contacts-list { min-width: 0; }
+  .c1-contacts-list li { min-width: 0; }
+  .c1-contacts-value { display: inline; max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+  .c1-btn--lg { padding: 20px 24px; }
+
+  .c1-case-hero { min-height: 68vh; }
+  .c1-case-hero-media { object-position: 58% 78%; }
+  .c1-case-title { max-width: 7.5em; font-size: clamp(50px, 14vw, 64px); }
+  .c1-case-section > * + * { margin-top: var(--c1-s4); }
+  .c1-case-lead { font-size: 30px; }
+  .c1-figure--half-left,
+  .c1-figure--half-right,
+  .c1-figure--wide,
+  .c1-figure--sheet { grid-column: 1; }
+  .c1-figure-spread { grid-template-columns: 1fr; }
+  .c1-footer-inner { align-items: flex-start; }
+  .c1-footer-nav { gap: 14px 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c1-depth {
+    animation: none;
+    transform: none;
+    /* без анимации слой не надо держать на отдельном композитном слое */
+    will-change: auto;
+  }
+
+  .c1-strip {
+    scroll-behavior: auto;
+  }
+}

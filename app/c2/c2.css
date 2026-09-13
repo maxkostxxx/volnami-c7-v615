@@ -1,0 +1,1483 @@
+/*
+  Концепт 2 — светлый предметный.
+
+  Все классы начинаются с c2-, все переменные — с --c2-, файл подключается
+  только страницами /c2 и /c2/case. Стили концептов не пересекаются.
+
+  Правило по специфичности: сбросов вида «.c2-root p { margin: 0 }» здесь
+  нет вообще. Каждый отступ назначен своему классу явно, поэтому одно-
+  классовые правила ничем не перебиваются.
+*/
+
+:root {
+  /* ---------------------------------------------------------- палитра */
+  --c2-paper: #eef1ee; /* холодный серо-зелёный белый, не кремовый */
+  --c2-card: #ffffff;
+  --c2-ink: #314237;
+  --c2-muted: #5e6b60;
+  /* Приглушённый по бумаге — работает только на заливке ink (5.52:1).
+     Розового `blush` в палитре концепта больше нет: цвет закреплён
+     за третьим концептом, единственный цветной удар страницы теперь
+     фирменный зелёный. */
+  --c2-muted-ink: #b5bcb7;
+  --c2-hair: rgb(49 66 55 / 0.12);
+  --c2-scrim: rgb(49 66 55 / 0.25);
+
+  /* ------------------------------------------------------- гарнитуры */
+  --c2-display: var(--font-playfair);
+  --c2-text: var(--font-commissioner);
+
+  /* ------------------------------------------------------------ сетка */
+  --c2-container: 1120px;
+  --c2-gap: 32px;
+  --c2-gutter: 40px;
+  --c2-measure: 620px; /* мера набора по спецификации */
+  --c2-bar: 72px;
+
+  /* -------------------------------------------------- вертикальный ритм */
+  --c2-x1: 12px;
+  --c2-x2: 32px;
+  --c2-x3: 80px;
+  --c2-x4: 128px;
+}
+
+body:has(.c2-root) {
+  background: var(--c2-paper);
+
+  /* Кольца фокуса общего слоя, перекрашенные в палитру концепта.
+     Внутреннее кольцо — чернила, внешнее — бумага: пара остаётся видимой
+     и на залитой чернилами пилюле, и на бумаге, и на полосе процесса.
+     currentColor здесь недопустим — на пилюле он равен цвету фона. */
+  --focus-ring: var(--c2-ink);
+  --focus-ring-contrast: var(--c2-paper);
+}
+
+/* ================================================================ каркас */
+
+.c2-root {
+  background: var(--c2-paper);
+  color: var(--c2-ink);
+  font-family: var(--c2-text);
+  font-weight: 400;
+}
+
+.c2-skip {
+  position: fixed;
+  z-index: 100;
+  top: 12px;
+  left: 12px;
+  padding: 12px 16px;
+  color: var(--c2-paper);
+  background: var(--c2-ink);
+  border: 2px solid var(--c2-card);
+  transform: translateY(-180%);
+}
+.c2-skip:focus-visible { transform: none; }
+
+.c2-wrap {
+  width: min(var(--c2-container), 100% - var(--c2-gutter) * 2);
+  margin-inline: auto;
+}
+
+.c2-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--c2-gap);
+}
+
+/* ================================================================= полосы */
+
+/*
+  Устройство секции ниже первого экрана.
+
+  Линеек во всю ширину на странице нет ни одной. Соседние секции разделяет
+  смена фона: `paper` и `card` идут через одну, и страница читается как
+  стопка горизонтальных полос разной светлоты, каждая во всю ширину окна.
+  Граница секции — ступенька тона, а не штрих.
+
+  Полоса процесса залита `ink` и в чередование не входит: она из него
+  выпадает намеренно и остаётся единственным сплошным цветным ударом.
+
+  Разница #EEF1EE и #FFFFFF намеренно тонкая, поэтому тон держит границу
+  не в одиночку. Падинг привязан к тону: светлая полоса берёт крупный шаг
+  шкалы (128), полоса по бумаге — средний (80). Стопка читается и по тону,
+  и по высоте полос — а высота видна и на уменьшенном до 200px силуэте,
+  где разница светлот уже почти неразличима.
+
+  Внутри полосы работает прежняя геометрия: контейнер 1120px по центру,
+  мера набора 620px, заголовок по центру над текстом.
+*/
+.c2-band {
+  padding-block: var(--c2-band-pad, var(--c2-x3));
+  scroll-margin-top: calc(var(--c2-bar) + 24px);
+}
+
+.c2-band--paper {
+  background: var(--c2-paper);
+}
+
+.c2-band--card {
+  --c2-band-pad: var(--c2-x4);
+
+  background: var(--c2-card);
+}
+
+.c2-band--ink {
+  --c2-band-pad: var(--c2-x4);
+
+  background: var(--c2-ink);
+  color: var(--c2-paper);
+}
+
+/* Тесная полоса. Там, где полосы идут стопкой из однородных по смыслу
+   кусков — четыре услуги, — падинг у всех один и тон работает в чистом
+   виде: выходит ровная линованная стопка, а не чередование высоких
+   и низких. 64 + 64 = 128 между именами услуг — шаг из той же шкалы.
+   Этим же классом набран подвал: он служебный и не должен занимать
+   столько же, сколько содержательная полоса.
+   Правило стоит после тоновых, иначе тон его перебьёт. */
+.c2-band--tight {
+  --c2-band-pad: 64px;
+}
+
+/* Крайние полосы стопки набирают крупный шаг наружу, чтобы вся стопка
+   отбилась от соседних секций так же, как отбивается одиночная полоса. */
+.c2-band--open {
+  padding-top: var(--c2-x4);
+}
+
+.c2-band--close {
+  padding-bottom: var(--c2-x4);
+}
+
+/* Полноширинный кадр — сам себе полоса: он стоит встык к соседним, без
+   падинга, и его собственные края и есть границы полосы. */
+.c2-band--flush {
+  --c2-band-pad: 0px;
+}
+
+.c2-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* ============================================================ типографика */
+
+.c2-serviceword {
+  font-style: italic;
+}
+
+.c2-h2 {
+  margin: 0 0 var(--c2-x2);
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Заголовок каждой секции стоит на одной оси — по центру полосы, над
+   своим содержанием. Ось выравнивания концепта одна на всю страницу,
+   исключений из неё нет: раньше «Кейсы» и «Отзывы» были прижаты влево,
+   и на прищуренном силуэте страница читалась левофланговой, как соседние
+   концепты. Ось — то, чем этот концепт от них отличается. */
+
+/* Заголовок стопки полос отбивается от первого её пункта крупным шагом:
+   иначе «Услуги» липнут к «Стратегии» и читаются её надзаголовком. */
+.c2-h2--group {
+  margin-bottom: var(--c2-x3);
+}
+
+.c2-measure {
+  max-width: var(--c2-measure);
+}
+
+.c2-measure--center {
+  margin-inline: auto;
+}
+
+.c2-p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.c2-p + .c2-p {
+  margin-top: var(--c2-x1);
+}
+
+.c2-link {
+  color: var(--c2-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+
+/* Пилюля одинаково работает и ссылкой, и кнопкой: «Рассчитать проект» —
+   именно кнопка, у неё в данных нет и не должно быть адреса. */
+.c2-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--c2-ink);
+  color: var(--c2-paper);
+  font-family: var(--c2-text);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.c2-pill--lg {
+  padding: 18px 40px;
+  font-size: 17px;
+}
+
+/* ========================================================= верхняя плашка */
+
+.c2-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--c2-bar);
+  background: var(--c2-paper);
+  border-bottom: 1px solid var(--c2-hair);
+  color: var(--c2-ink);
+  font-family: var(--c2-text);
+}
+
+.c2-topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.c2-topbar-mark {
+  position: absolute;
+  left: var(--c2-gutter);
+  top: 50%;
+  width: 132px;
+  height: 30px;
+  overflow: hidden;
+  transform: translateY(-50%);
+}
+
+.c2-topbar-mark img {
+  display: block;
+  width: 158px;
+  height: 51px;
+  max-width: none;
+  margin: -10px 0 0 -13px;
+}
+
+.c2-tg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--c2-ink);
+}
+
+.c2-tg-mark {
+  display: block;
+}
+
+.c2-burger {
+  position: absolute;
+  right: var(--c2-gutter);
+  top: 50%;
+  display: grid;
+  align-content: center;
+  justify-items: end;
+  gap: 7px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c2-ink);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.c2-burger-bar {
+  display: block;
+  width: 26px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+.c2-burger .c2-burger-bar:last-child {
+  width: 17px;
+}
+
+/* ============================================================= меню-панель */
+
+.c2-menu-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.c2-menu-layer[hidden] {
+  display: none;
+}
+
+.c2-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--c2-scrim);
+  cursor: pointer;
+  animation: c2-fade 0.3s ease;
+}
+
+.c2-menu {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+  max-width: 100%;
+  padding: 96px 48px 48px;
+  background: var(--c2-paper);
+  color: var(--c2-ink);
+  font-family: var(--c2-text);
+  overflow-y: auto;
+  animation: c2-slide 0.38s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.c2-burger--close {
+  top: 14px;
+  gap: 0;
+  justify-items: center;
+  transform: none;
+}
+
+.c2-burger--close .c2-burger-bar {
+  grid-area: 1 / 1;
+  width: 22px;
+}
+
+.c2-burger--close .c2-burger-bar:first-child {
+  transform: rotate(45deg);
+}
+
+.c2-burger--close .c2-burger-bar:last-child {
+  width: 22px;
+  transform: rotate(-45deg);
+}
+
+.c2-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--c2-x1);
+}
+
+.c2-menu-link {
+  display: block;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.25;
+  color: var(--c2-ink);
+  text-decoration: none;
+}
+
+.c2-menu-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@keyframes c2-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes c2-slide {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================================ первый экран */
+
+/* Шапка липкая, но остаётся в потоке — её высоту нельзя закладывать
+   в отступ ещё раз, иначе предметный кадр уезжает под линию сгиба. */
+.c2-hero {
+  padding: var(--c2-x3) 0 calc(var(--c2-x4) / 2);
+  scroll-margin-top: calc(var(--c2-bar) + 24px);
+}
+
+/* Первый экран собран по оси симметрии: лок-ап, слоган, подзаголовок
+   и предметный кадр стоят один под другим по центру контейнера.
+   Так требует спецификация («выравнивание по центру на первом экране»)
+   и так первый экран отличается от двух левофланговых соседей. */
+.c2-hero .c2-grid {
+  row-gap: var(--c2-x2);
+  justify-items: center;
+}
+
+.c2-hero-logo {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 190px;
+  height: 104px;
+  overflow: hidden;
+}
+
+.c2-hero-logo img {
+  display: block;
+  width: 226px;
+  height: 160px;
+  max-width: none;
+  margin: -19px 0 0 -18px;
+}
+
+.c2-slogan {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 88px;
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  text-align: center;
+}
+
+.c2-slogan-line {
+  display: block;
+}
+
+.c2-hero-sub {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  align-self: start;
+  max-width: var(--c2-measure);
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Кадр стоит четвёртой строкой по центру, шириной в четыре модуля,
+   и отбит крупным шагом шкалы: 32 (row-gap) + 48 = 80. */
+.c2-hero-object {
+  grid-column: 5 / span 4;
+  grid-row: 4;
+  justify-self: stretch;
+  margin-top: calc(var(--c2-x3) - var(--c2-x2));
+}
+
+.c2-object {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--c2-card);
+}
+
+.c2-object-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ======================================================= как мы работаем */
+
+/* Единственный сплошной цветной удар страницы — полоса процесса во всю
+   ширину окна. Заливка фирменная зелёная: розовый закреплён за третьим
+   концептом, и держать его здесь на четверть экрана нельзя.
+
+   Саму заливку ставит тоновый класс полосы `.c2-band--ink`. В чередовании
+   paper / card эта полоса не участвует: она из него выпадает и потому
+   остаётся единственным цветным ударом, а не одной из светлот стопки. */
+
+.c2-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 72px;
+}
+
+.c2-step {
+  position: relative;
+}
+
+.c2-step-no {
+  display: block;
+  color: var(--c2-muted-ink);
+  font-family: var(--c2-text);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.c2-step-title {
+  margin: var(--c2-x1) 0 0;
+  font-family: var(--c2-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.c2-step-text {
+  margin: var(--c2-x1) 0 0;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* Четвёртый шаг — сплошная плашка, вырезанная в заливке полосы: бумага
+   на чернилах. Текст в ней стоит на тех же линиях, что у соседей —
+   отрицательные поля компенсируют внутренние, — а место, где у первых
+   трёх шагов описание, у четвёртого остаётся пустым полем бумаги.
+   Пустота внутри плашки и есть смысл шага: пауза перед работой,
+   а не обрезанная строка. */
+.c2-step--plate {
+  margin: -24px 0 -24px -24px;
+  padding: 24px;
+  background: var(--c2-paper);
+  color: var(--c2-ink);
+}
+
+/* Номер внутри плашки живёт на бумаге, а не на чернилах, — своя пара. */
+.c2-step--plate .c2-step-no {
+  color: var(--c2-muted);
+}
+
+.c2-arrow {
+  position: absolute;
+  left: calc(100% + 6px);
+  top: 38px; /* оптическая середина строки заголовка шага */
+  color: var(--c2-paper);
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .c2-process {
+      view-timeline-name: --c2-flow;
+      view-timeline-axis: block;
+    }
+
+    /* Единственный момент движения на странице: три стрелки
+       прочерчиваются слева направо, когда полоса входит в вид, и остаются.
+
+       Базовое состояние — стрелка нарисована, и никогда не наоборот:
+       ТЗ требует полосу со стрелочками между шагами, значит в покое,
+       в печати, в статичном рендере и без поддержки scroll-timeline
+       стрелки обязаны быть на месте. Поэтому fill-mode: none, а не both:
+       вне диапазона действует базовое правило выше.
+
+       Прочерчивание начинается на cover 0% — в этот момент верхний край
+       полосы только коснулся нижней границы окна, а сами стрелки лежат
+       ещё на 190px ниже сгиба. Схлопывание в ноль происходит за кадром,
+       а в кадр стрелки въезжают уже наполовину прочерченными
+       и дорисовываются на глазах. */
+    .c2-arrow {
+      animation: c2-wipe 1s linear;
+      animation-timeline: --c2-flow;
+      animation-fill-mode: none;
+    }
+
+    .c2-arrow--1 {
+      animation-range: cover 0% cover 26%;
+    }
+
+    .c2-arrow--2 {
+      animation-range: cover 6% cover 32%;
+    }
+
+    .c2-arrow--3 {
+      animation-range: cover 12% cover 38%;
+    }
+  }
+}
+
+/* Плашка четвёртого шага выехала на 24px влево отрицательным полем —
+   остриё третьей стрелки едет за ней, иначе оно упирается в заливку:
+   зазор был 2px против 26px у первых двух. */
+.c2-arrow--3 {
+  left: calc(100% - 18px);
+}
+
+@keyframes c2-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ================================================================= услуги */
+
+/* Услуги — центрированный набор, а не двухколоночная таблица.
+   Имя услуги стоит над своим текстом на оси симметрии страницы, колонка
+   держит меру набора и центрирована в контейнере: секция живёт по той же
+   оси, что первый экран, «О нас» и контакты.
+
+   Четыре услуги разложены по четырём полосам: каждая на своём фоне,
+   через одну. Разделителя между ними больше не требуется — раньше их
+   держал только вертикальный отбив, и четыре услуги подряд читались одним
+   столбиком в полторы тысячи пикселей. Волосяных линий здесь по-прежнему
+   нет: в этом концепте они разделяют строки кейсов и держат шапку,
+   и больше нигде не появляются. */
+.c2-services {
+  scroll-margin-top: calc(var(--c2-bar) + 24px);
+}
+
+.c2-service {
+  max-width: var(--c2-measure);
+  margin-inline: auto;
+}
+
+.c2-service-title {
+  margin: 0;
+  font-family: var(--c2-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.c2-service-body {
+  margin-top: var(--c2-x2);
+}
+
+.c2-service-lead {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* Перечень услуг: строка на строке, шаг 12. Ни линеек, ни маркеров —
+   короткие именные строки и так читаются как набор, а не как абзац. */
+.c2-service-items {
+  margin: var(--c2-x2) 0 0;
+}
+
+.c2-service-item {
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.c2-service-item + .c2-service-item {
+  margin-top: var(--c2-x1);
+}
+
+.c2-service-closing {
+  margin: var(--c2-x2) 0 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--c2-muted);
+}
+
+/* ================================================================== кейсы */
+
+.c2-cases {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--c2-gap);
+}
+
+.c2-cases-list {
+  grid-column: 1 / span 6;
+}
+
+.c2-case-row {
+  border-bottom: 1px solid var(--c2-hair);
+}
+
+.c2-case-row:first-child {
+  border-top: 1px solid var(--c2-hair);
+}
+
+/* Имя кейса — заголовок третьего уровня. Кегль и гарнитура те же,
+   что были: иерархия документа идёт по смыслу, а не по кеглю. */
+.c2-case-h {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.c2-case-name {
+  display: block;
+  padding: 24px 0;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.15;
+  color: var(--c2-ink);
+}
+
+/* У кейса со своей страницей подчёркивание стоит всегда: на странице
+   подчёркнутое — это ссылка, и по списку сразу видно, какая строка ведёт
+   дальше, а какая только показывает превью. */
+.c2-case-name--link {
+  text-decoration: underline;
+  text-decoration-color: rgb(49 66 55 / 0.3);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.c2-case-name--link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Строки без своей страницы всё равно берут фокус: иначе превью
+   открывается только мышью и половина секции недоступна с клавиатуры. */
+.c2-case-name--static {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.c2-quote-text p + p {
+  margin-top: var(--c2-x1);
+}
+
+/* Витрина кейсов. Поле 4:5 — то же, в котором на первом экране стоит
+   предмет; рамка волосяная, по той же причине, по которой обведены кадры
+   на странице кейса: она несёт границу кадра. Раньше поле пустовало, пока
+   посетитель не поведёт мышью по списку. На статичном экране — в скриншоте,
+   в презентации, у того, кто ещё не тронул мышь, — это читалось не как
+   пауза в композиции, а как непоказанная работа. Теперь в поле всегда
+   стоит кейс: при загрузке первый из списка, дальше наведение и фокус
+   его меняют, а уход курсора — нет.
+
+   Заливка `card` появилась вместе с содержимым: витрина с работой внутри
+   отделена от бумаги светом, как кадр героя. Пустой белый прямоугольник
+   раньше читался бы как неподгрузившаяся картинка — теперь ему нечего
+   изображать, он всегда занят. */
+.c2-cases-panel {
+  position: relative;
+  grid-column: 8 / -1;
+  align-self: start;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--c2-hair);
+  background: var(--c2-card);
+}
+
+/* Кейсы лежат стопкой в одном поле и меняются простым кроссфейдом:
+   уходящий гаснет чуть быстрее, чем разгорается приходящий, поэтому
+   подмена читается как замена кадра, а не как въезд нового.
+   Ни сдвига, ни масштаба — только прозрачность. */
+.c2-vitrine {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 28px;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.12s ease-in,
+    visibility 0s 0.12s;
+}
+
+.c2-vitrine[data-on='true'] {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 0.2s ease-out,
+    visibility 0s;
+}
+
+/* Кадр занимает всю свободную высоту витрины и вписывается в неё целиком.
+   Кадрирования по полю здесь нет намеренно: почти все визуалы
+   горизонтальные, и посадка «по объекту» отрезала бы от баннера больше
+   половины ширины вместе с набором. Показать работу мельче, но целиком,
+   честнее, чем показать её куском. */
+.c2-vitrine-frame {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Кадр посажен абсолютом, а не процентной высотой: высота витрины приходит
+   из флексбокса, и `height: 100%` внутри флекс-элемента разрешать не в чем. */
+.c2-vitrine-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Прижат к верху поля, а не посажен по центру: визуалы разной высоты,
+     и по центру верхний край кадра гулял бы от кейса к кейсу. Прижатый
+     верх плюс закреплённая высота подписи держат витрину неподвижной —
+     меняется только то, что в ней стоит. */
+  object-position: 50% 0;
+}
+
+/* У кейсов без визуалов работой в витрине становится само название,
+   набранное дидоном во весь размах поля. Это не заглушка на месте
+   картинки: верх витрины занят так же, как у кадра, и по той же причине —
+   там стоит то, что показывают. Название начинается там же, где верхний
+   край кадра у соседей, — витрина при переходе по списку не прыгает. */
+.c2-vitrine-name {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.12;
+  color: var(--c2-ink);
+}
+
+/* Подпись — низ витрины, отбитый волосяной линией. Она нужна и в покое:
+   пока мышь не тронута, в поле стоит первый кейс списка, и без имени
+   было бы непонятно, чей это кадр. */
+.c2-vitrine-foot {
+  margin: 24px 0 0;
+  /* Высота подписи закреплена по самому высокому варианту — название плюс
+     две строки выдержки. Иначе волосяная линия стояла бы у кейсов с кадром
+     и без кадра на разной высоте и подпрыгивала при переходе по списку. */
+  min-height: 106px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c2-hair);
+}
+
+.c2-vitrine-title {
+  display: block;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.25;
+  color: var(--c2-ink);
+}
+
+/* Выдержка из текста кейса. Выдержки бывают длинными, поэтому текст
+   обрезается по строке, а не вылезает из витрины. Обрезка визуальная:
+   в разметке и у скринридера строка остаётся целой. Под кадром места
+   меньше, под названием больше. */
+.c2-vitrine-teaser {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--c2-muted);
+}
+
+.c2-vitrine--shot .c2-vitrine-teaser {
+  margin-top: 8px;
+  -webkit-line-clamp: 2;
+}
+
+.c2-portfolio {
+  margin: var(--c2-x2) 0 0;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* ================================================================= отзывы */
+
+.c2-strip {
+  display: flex;
+  align-items: flex-start; /* без растяжения: иначе под коротким отзывом
+                              открывается 365px пустоты до подписи */
+  gap: var(--c2-gap);
+  margin-top: var(--c2-x2);
+  padding-block: 8px;
+  padding-inline: max(
+    var(--c2-gutter),
+    calc((100% - var(--c2-container)) / 2)
+  );
+  overflow-x: auto;
+  /* proximity, а не mandatory: mandatory возвращал полосу в ноль после
+     каждого тика колеса — полоса не листалась и заодно держала страницу.
+     scroll-snap-stop: always снят по той же причине. */
+  scroll-snap-type: x proximity;
+  scroll-padding-inline-start: max(
+    var(--c2-gutter),
+    calc((100% - var(--c2-container)) / 2)
+  );
+  overscroll-behavior-x: contain;
+  /* Нативную полосу прокрутки на macOS не видно (overlay-скроллбар),
+     и `scrollbar-width` её не возвращает — вместо неё под полосой стоит
+     своя линия прокрутки, см. .c2-strip-rail. */
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.c2-strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* Линия прокрутки: волосяной след во всю меру контейнера и отрезок на нём
+   в долю видимой части. Единственное, что сообщает, что полоса листается
+   и сколько её осталось. Читается, а не нажимается: это индикатор. */
+.c2-strip-rail {
+  position: relative;
+  width: min(var(--c2-container), 100% - var(--c2-gutter) * 2);
+  height: 2px;
+  margin: var(--c2-x2) auto 0;
+  background: var(--c2-hair);
+}
+
+.c2-strip-thumb {
+  position: absolute;
+  inset-block: 0;
+  background: var(--c2-ink);
+}
+
+/* Пока полосу ведут колесом или тащат мышью, снэп отключён — иначе он
+   возвращает её назад быстрее, чем она успевает сдвинуться. */
+.c2-strip--free {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.c2-strip--drag {
+  cursor: grabbing;
+  user-select: none;
+}
+
+/* Рамка фокуса по всей ширине окна читалась как случайный штрих поверх
+   карточек. Фокус показывается на той карточке, которая сейчас в полосе. */
+.c2-strip:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.c2-strip:focus-visible .c2-quote--current {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--focus-ring-contrast);
+}
+
+.c2-quote {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 460px;
+  margin: 0;
+  padding: 32px;
+  border: 1px solid var(--c2-hair);
+  border-radius: 4px;
+  scroll-snap-align: start;
+}
+
+.c2-quote-text {
+  margin: 0;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.c2-quote-by {
+  padding-top: var(--c2-x2);
+}
+
+.c2-quote-name {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.c2-quote-role {
+  display: block;
+  margin-top: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--c2-muted);
+}
+
+/* =============================================================== контакты */
+
+.c2-contacts-cta {
+  margin: var(--c2-x3) 0 0;
+  text-align: center;
+}
+
+.c2-contacts-list {
+  display: flex;
+  justify-content: center;
+  gap: var(--c2-x3);
+  margin: var(--c2-x3) 0 0;
+}
+
+.c2-contact-label {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--c2-muted);
+}
+
+.c2-contact-value {
+  margin: var(--c2-x1) 0 0;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+/* ================================================================= подвал */
+
+/* Подвал — последняя полоса стопки, и живёт по её правилам: свой фон,
+   свой падинг, никакой линии сверху. Волосяная линия, которая раньше
+   отделяла подвал от контактов, снята: границу держит смена тона. */
+.c2-footer {
+  color: var(--c2-ink);
+  font-family: var(--c2-text);
+}
+
+.c2-footer-inner {
+  text-align: center;
+}
+
+.c2-footer-mark {
+  display: block;
+  width: 132px;
+  height: 30px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.c2-footer-mark img {
+  display: block;
+  width: 158px;
+  height: 51px;
+  max-width: none;
+  margin: -10px 0 0 -13px;
+}
+
+.c2-footer-nav {
+  margin-top: var(--c2-x2);
+}
+
+.c2-footer-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--c2-x1) var(--c2-x2);
+}
+
+.c2-footer-link {
+  color: var(--c2-ink);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.c2-footer-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.c2-footer-tg {
+  margin: var(--c2-x2) 0 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.c2-footer-legal {
+  margin: var(--c2-x3) 0 0;
+  color: var(--c2-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* =========================================================== кейс: страница */
+
+.c2-case-head {
+  padding: calc(var(--c2-bar) + var(--c2-x3)) 0 calc(var(--c2-x4) / 2);
+}
+
+.c2-case-head .c2-grid {
+  row-gap: var(--c2-x3);
+}
+
+.c2-case-title {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin: 0;
+  font-family: var(--c2-display);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.c2-case-lead {
+  grid-column: 1 / span 7;
+  grid-row: 2;
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+/* Полноширинный кадр стоит встык к соседним полосам: он и есть полоса,
+   его края — её границы. Отбивы вокруг кадра сняты, их держит полоса. */
+.c2-bleed {
+  margin: 0;
+}
+
+.c2-bleed-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* У кадров в колонке собственный светлый фон — без волосяной рамки их края
+   растворяются в фоне страницы. Рамка здесь несёт информацию о границе
+   изображения, а не украшает. */
+.c2-plate {
+  width: min(900px, 100% - var(--c2-gutter) * 2);
+  margin-inline: auto;
+  border: 1px solid var(--c2-hair);
+}
+
+/* Вертикальный кадр в колонке 900px вырастал бы почти в полтора экрана —
+   портретам своя, более узкая мера. */
+.c2-plate--portrait {
+  width: min(560px, 100% - var(--c2-gutter) * 2);
+}
+
+.c2-plate-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.c2-sheets {
+  display: flex;
+  align-items: stretch;
+  gap: var(--c2-gap);
+  width: min(900px, 100% - var(--c2-gutter) * 2);
+  margin-inline: auto;
+}
+
+.c2-sheet {
+  flex-basis: 0;
+  flex-shrink: 1;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--c2-hair);
+}
+
+.c2-sheet-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Путь назад, а не заголовок следующей секции: набран навигационным
+   кеглем Commissioner, как пункты меню и подписи, а не дисплейной антиквой. */
+.c2-back {
+  font-family: var(--c2-text);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+/* ====================================================== адаптивная приёмка */
+
+/* Сохраняем центрическую «предметную» композицию концепта, но на узких
+   экранах переводим двенадцатиколоночные раскладки в реальный поток.
+   Раньше сетка, 88-пиксельный слоган и четыре шага продолжали жить в
+   десктопной геометрии и расширяли документ почти вдвое. */
+@media (max-width: 900px) {
+  :root {
+    --c2-gap: 20px;
+    --c2-gutter: 28px;
+    --c2-x3: 64px;
+    --c2-x4: 96px;
+  }
+
+  .c2-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .c2-slogan {
+    font-size: clamp(56px, 9vw, 72px);
+  }
+
+  .c2-hero-object {
+    grid-column: 2 / span 4;
+  }
+
+  .c2-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 56px 64px;
+  }
+
+  .c2-step--plate {
+    margin: -20px;
+    padding: 20px;
+  }
+
+  .c2-step:nth-child(2) .c2-arrow,
+  .c2-step:nth-child(4) .c2-arrow {
+    display: none;
+  }
+
+  .c2-arrow--3 {
+    left: calc(100% + 6px);
+  }
+
+  .c2-cases-list {
+    grid-column: 1 / span 3;
+  }
+
+  .c2-cases-panel {
+    grid-column: 4 / -1;
+  }
+
+  .c2-contacts-list {
+    gap: 48px;
+  }
+
+  .c2-case-title,
+  .c2-case-lead {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --c2-gutter: 20px;
+    --c2-gap: 16px;
+    --c2-bar: 64px;
+    --c2-x2: 24px;
+    --c2-x3: 56px;
+    --c2-x4: 72px;
+  }
+
+  .c2-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .c2-topbar-mark {
+    left: var(--c2-gutter);
+    width: 92px;
+    height: 24px;
+  }
+
+  .c2-topbar-mark img {
+    width: 112px;
+    height: auto;
+    margin: -7px 0 0 -10px;
+  }
+
+  .c2-topbar-center .c2-pill {
+    padding: 10px 8px;
+    display: inline-flex;
+    white-space: nowrap;
+    font-size: 11.5px;
+  }
+
+  .c2-topbar-center {
+    gap: 6px;
+    margin-left: auto;
+    margin-right: 52px;
+  }
+  .c2-tg { width: 36px; height: 36px; }
+
+  .c2-burger {
+    right: 12px;
+  }
+
+  .c2-menu {
+    width: 100%;
+    padding: 88px 24px 32px;
+  }
+
+  .c2-menu-link {
+    font-size: 30px;
+  }
+
+  .c2-hero {
+    padding: 48px 0 56px;
+  }
+
+  .c2-hero .c2-grid {
+    row-gap: 24px;
+  }
+
+  .c2-hero-logo {
+    grid-column: 1;
+    width: 150px;
+    height: 78px;
+  }
+
+  .c2-hero-logo img {
+    width: 180px;
+    height: auto;
+    margin: -14px 0 0 -15px;
+  }
+
+  .c2-slogan {
+    grid-column: 1;
+    font-size: clamp(39px, 10.6vw, 50px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    overflow-wrap: normal;
+  }
+
+  .c2-slogan-line {
+    width: 100%;
+  }
+
+  .c2-hero-sub {
+    grid-column: 1;
+    width: 100%;
+    font-size: 17px;
+  }
+
+  .c2-hero-object {
+    grid-column: 1;
+    width: min(66vw, 250px);
+    justify-self: center;
+    margin-top: 20px;
+  }
+
+  .c2-h2 {
+    font-size: 38px;
+  }
+
+  .c2-h2--group {
+    margin-bottom: 48px;
+  }
+
+  .c2-band--tight {
+    --c2-band-pad: 48px;
+  }
+
+  .c2-band--open {
+    padding-top: var(--c2-x4);
+  }
+
+  .c2-band--close {
+    padding-bottom: var(--c2-x4);
+  }
+
+  .c2-steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+
+  .c2-step {
+    min-width: 0;
+  }
+
+  .c2-step--plate {
+    margin: 0;
+    padding: 24px;
+  }
+
+  .c2-arrow {
+    display: none;
+  }
+
+  .c2-cases {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 40px;
+  }
+
+  .c2-cases-list,
+  .c2-cases-panel {
+    grid-column: 1;
+  }
+
+  .c2-case-name {
+    font-size: 30px;
+  }
+
+  .c2-vitrine {
+    padding: 20px;
+  }
+
+  .c2-vitrine-title {
+    font-size: 23px;
+  }
+
+  .c2-strip {
+    gap: 16px;
+    padding-inline: var(--c2-gutter);
+    scroll-padding-inline-start: var(--c2-gutter);
+  }
+
+  .c2-quote {
+    flex-basis: calc(100vw - var(--c2-gutter) * 2);
+    padding: 24px;
+  }
+
+  .c2-contacts-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .c2-contact-value,
+  .c2-contact-value .c2-link {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .c2-footer-legal {
+    margin-top: 48px;
+  }
+
+  .c2-case-head {
+    padding: calc(var(--c2-bar) + 48px) 0 48px;
+  }
+
+  .c2-case-head .c2-grid {
+    row-gap: 32px;
+  }
+
+  .c2-case-title,
+  .c2-case-lead {
+    grid-column: 1;
+  }
+
+  .c2-case-title {
+    font-size: clamp(44px, 13vw, 56px);
+    overflow-wrap: anywhere;
+  }
+
+  .c2-sheets {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/*
+  Общий слой намеренно тонкий.
+  Здесь только то, что объективно общее для всех шести концептов:
+  фирменные цвета из брендбука и фирменные гарнитуры.
+
+  Палитры, шкалы кеглей, отступы, радиусы, тени — НЕ здесь.
+  Каждый концепт объявляет своё в app/<роут>/<роут>.css.
+  Всё, что попадёт сюда, гарантированно сделает концепты одинаковыми.
+*/
+
+@theme {
+  /* Брендбук Volnami, страница «Цветовая гамма» */
+  --color-brand-green: #314237; /* Pantone 553 */
+  --color-brand-pink: #f8c6ce; /* Pantone 669 */
+
+  /* Гарнитуры, подключены через next/font/local в app/fonts.ts.
+     Каждый концепт берёт только свою пару, чужие не трогает. */
+  --font-cannonade: var(--font-cannonade-var), "Helvetica Neue", Arial, sans-serif;
+  --font-kreadon: var(--font-kreadon-var), "Helvetica Neue", Arial, sans-serif;
+  --font-cormorant: var(--font-cormorant-var), Georgia, "Times New Roman", serif;
+  --font-golos: var(--font-golos-var), "Helvetica Neue", Arial, sans-serif;
+  --font-playfair: var(--font-playfair-var), Georgia, "Times New Roman", serif;
+  --font-commissioner: var(--font-commissioner-var), "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Базовая гигиена, одинаковая для любого дизайна. */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+  Видимый фокус с клавиатуры. Tailwind Preflight убирает outline у :focus,
+  поэтому фокус возвращается явно и глобально — это требование доступности,
+  а не дизайнерское решение. Концепт может перекрасить его под свою палитру,
+  но не имеет права убрать.
+
+  ВАЖНО: здесь НЕЛЬЗЯ использовать currentColor. На залитой кнопке цвет
+  текста часто равен цвету фона страницы (светлый текст на тёмной пилюле),
+  и обводка currentColor ложится на фон с контрастом 1:1 — фокус исчезает.
+  Это реально случилось и было поймано аудитом.
+
+  Поэтому обводка двойная: внутреннее кольцо --focus-ring и внешнее
+  --focus-ring-contrast противоположной светлоты. Такая пара остаётся
+  видимой на любом фоне, даже если концепт забыл переопределить цвета.
+  Концепт задаёт свои значения на своём корневом элементе.
+*/
+:root {
+  --focus-ring: #ffffff;
+  --focus-ring-contrast: #000000;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--focus-ring-contrast);
+}
+
+/* Полное отключение анимации по требованию пользователя. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

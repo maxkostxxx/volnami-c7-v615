@@ -1,0 +1,11 @@
+.c4 {
+  --c4-paper: #e7ecf3;
+  --c4-white: #ffffff;
+  --c4-depth: #081e4b;
+  --c4-signal: #d94a2d;
+  --c4-ink: #000000;
+  --c4-muted: #586273;
+  --c4-display: var(--font-playfair);
+  --c4-body: var(--font-commissioner);
+  --c4-page: min(100% - 48px, 1560px);
+}

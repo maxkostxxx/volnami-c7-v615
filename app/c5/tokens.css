@@ -1,0 +1,34 @@
+.c5 {
+  --c5-paper: #f7f7f5;
+  --c5-sheet: #ffffff;
+  --c5-ink: #000000;
+  --c5-muted: #555552;
+  --c5-wash: #deded9;
+  --c5-reverse: #000000;
+  --c5-reverse-ink: #ffffff;
+
+  --c5-display: var(--font-kreadon);
+  --c5-body: var(--font-cannonade);
+
+  --c5-rail: clamp(76px, 6.4vw, 108px);
+  --c5-mobile-bar: 66px;
+  --c5-page: 1540px;
+  --c5-gutter: clamp(20px, 3.4vw, 58px);
+  --c5-section-space: clamp(96px, 11vw, 184px);
+  --c5-row-space: clamp(28px, 3.5vw, 58px);
+  --c5-gap: clamp(20px, 2.8vw, 48px);
+
+  --c5-rule: 1px solid var(--c5-ink);
+  --c5-rule-strong: 3px solid var(--c5-ink);
+  --c5-rule-reverse: 1px solid var(--c5-reverse-ink);
+
+  --c5-display-xl: clamp(58px, 8.2vw, 138px);
+  --c5-display-lg: clamp(48px, 6.2vw, 102px);
+  --c5-display-md: clamp(34px, 4.2vw, 68px);
+  --c5-copy-lg: clamp(23px, 2.2vw, 36px);
+  --c5-copy-md: clamp(18px, 1.35vw, 22px);
+  --c5-copy-sm: clamp(15px, 1vw, 17px);
+
+  --focus-ring: #ffffff;
+  --focus-ring-contrast: #000000;
+}

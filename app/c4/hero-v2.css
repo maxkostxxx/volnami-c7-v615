@@ -1,0 +1,111 @@
+.c4:not(.c4-case-page) .c4-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 30;
+  color: var(--c4-ink);
+  background: transparent;
+  border-color: rgba(0, 0, 0, 0.35);
+}
+
+.c4:not(.c4-case-page) .c4-home img {
+  filter: brightness(0);
+}
+
+.c4:not(.c4-case-page) .c4-brief,
+.c4:not(.c4-case-page) .c4-telegram,
+.c4:not(.c4-case-page) .c4-menu-button {
+  color: var(--c4-ink) !important;
+  background: var(--c4-white);
+  border-color: var(--c4-ink);
+}
+
+.c4:not(.c4-case-page) .c4-menu-button i { background: var(--c4-ink); }
+
+.c4-space {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  color: var(--c4-ink);
+  background: var(--c4-paper);
+}
+
+.c4-space-copy {
+  position: absolute;
+  z-index: 5;
+  inset: 0 auto 0 0;
+  width: 46%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 140px 2vw 7vh max(28px, calc((100vw - 1680px) / 2 + 58px));
+}
+
+.c4-space h1 {
+  max-width: 7.8ch;
+  margin: 0;
+  font-family: var(--c4-display);
+  font-size: clamp(58px, 5.45vw, 108px);
+  font-weight: 540;
+  line-height: 0.79;
+  letter-spacing: -0.065em;
+}
+
+.c4-space h1 span,
+.c4-space h1 em { display: block; overflow-wrap: normal; word-break: normal; hyphens: none; }
+.c4-space h1 em { font-weight: 430; }
+
+.c4-space-copy > p {
+  max-width: 37ch;
+  margin: 34px 0 0;
+  font: 520 clamp(16px, 1.2vw, 20px) / 1.48 var(--c4-body);
+}
+
+.c4-stage {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 65%;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--c4-paper);
+  cursor: crosshair;
+}
+
+.c4-stage canvas,
+.c4-stage-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.c4-stage canvas {
+  z-index: 2;
+  opacity: 0;
+}
+
+.c4-stage.is-ready canvas { opacity: 1; }
+
+.c4-stage-fallback {
+  object-fit: cover;
+  object-position: 60% center;
+  filter: grayscale(1) contrast(0.78) brightness(1.24);
+}
+
+@media (max-width: 900px) {
+  .c4-space {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(300px, 38svh) auto;
+  }
+
+  .c4-stage { position: relative; inset: auto; grid-row: 1; width: 100%; height: 38svh; min-height: 300px; }
+  .c4-space-copy { position: relative; inset: auto; grid-row: 2; width: auto; padding: 34px 20px 54px; }
+  .c4-space h1 { font-size: clamp(49px, 13.2vw, 76px); max-width: 8ch; }
+  .c4-space-copy > p { margin-top: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c4-stage { cursor: default; }
+}
