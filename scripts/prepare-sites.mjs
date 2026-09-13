@@ -16,6 +16,24 @@ await mkdir(path.join(dist, 'server'), { recursive: true })
 await cp(out, path.join(dist, 'client'), { recursive: true })
 
 const worker = `const filePattern = /\\/[^/]+\\.[^/]+$/
+const contentTypes = new Map([
+  ['.webp', 'image/webp'],
+  ['.woff2', 'font/woff2'],
+])
+
+function normalizeContentType(response, pathname) {
+  const extension = pathname.slice(pathname.lastIndexOf('.')).toLowerCase()
+  const contentType = contentTypes.get(extension)
+  if (!contentType || response.status === 404) return response
+
+  const headers = new Headers(response.headers)
+  headers.set('Content-Type', contentType)
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  })
+}
 
 export default {
   async fetch(request, env) {
@@ -36,7 +54,7 @@ export default {
       response = await env.ASSETS.fetch(new Request(indexUrl.toString(), request))
     }
 
-    if (response.status !== 404) return response
+    if (response.status !== 404) return normalizeContentType(response, url.pathname)
 
     const fallbackUrl = new URL('/404.html', url)
     const fallback = await env.ASSETS.fetch(new Request(fallbackUrl.toString(), request))
