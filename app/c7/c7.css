@@ -1700,12 +1700,13 @@ html.c7-poster-capture .c7-landscape::after {
 .c7-wave-reveal__front path { fill: none; stroke: var(--c7-sun); stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .c7-wave-reveal__front path:first-child { stroke-width: 2.5; }
 .c7-wave-reveal__front path:last-child { stroke: var(--c7-sun-warm); stroke-width: 1; opacity: .8; }
-.c7-wave-reveal[data-wave-state="running"] .c7-wave-reveal__front { animation: c7-wave-front-right 760ms cubic-bezier(.16,.72,.2,1) both; }
+.c7-wave-reveal[data-wave-state="shown"] .c7-wave-reveal__front { display: none; }
+.c7-wave-reveal[data-wave-state="running"] .c7-wave-reveal__front { display: block; animation: c7-wave-front-right 760ms cubic-bezier(.16,.72,.2,1) both; }
 .c7-wave-reveal[data-wave-direction="down"] .c7-wave-reveal__front { animation-name: c7-wave-front-left; }
 .c7-motion-item.is-motion-pending { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * -.35), var(--c7-wave-rise), 0) rotate(-.6deg); }
 .c7-motion-item.is-motion-pending.is-motion-from-top { transform: translate3d(calc(var(--c7-wave-travel) * .25), calc(var(--c7-wave-rise) * -.72), 0) rotate(.45deg); }
-.c7-motion-item.is-motion-running { will-change: transform, opacity, clip-path; animation: c7-wave-item-rise var(--c7-wave-duration) var(--c7-wave-ease) var(--c7-wave-delay, 0ms) both, c7-wave-wipe-right var(--c7-wave-duration) var(--c7-wave-ease) var(--c7-wave-delay, 0ms) both; }
-.c7-motion-item.is-motion-running.is-motion-from-top { animation-name: c7-wave-item-fall, c7-wave-wipe-left; }
+.c7-motion-item.is-motion-running { will-change: transform, opacity; animation: c7-wave-item-rise var(--c7-wave-duration) var(--c7-wave-ease) var(--c7-wave-delay, 0ms) both; }
+.c7-motion-item.is-motion-running.is-motion-from-top { animation-name: c7-wave-item-fall; }
 @keyframes c7-wave-item-rise {
   0% { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * -.35), var(--c7-wave-rise), 0) rotate(-.6deg); }
   56% { opacity: 1; transform: translate3d(.22rem, -.18rem, 0) rotate(.08deg); }

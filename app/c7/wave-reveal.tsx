@@ -118,6 +118,9 @@ export function C7WaveReveal({ children, className = '', intro = false, ...props
     items.forEach(item => observer.observe(item.element))
     items.filter(item => item.state === 'armed' && item.element.getBoundingClientRect().bottom > 0 && item.element.getBoundingClientRect().top < innerHeight).forEach(enter)
     panel.addEventListener('animationend', onAnimationEnd)
+    // A cancelled compositor animation must never leave a coloured wave front
+    // or an invisible card behind after a fast touch scroll / orientation change.
+    panel.addEventListener('animationcancel', onAnimationEnd)
     panel.addEventListener('focusin', showAll)
     reduced.addEventListener('change', sync)
     document.addEventListener('visibilitychange', sync)
@@ -126,6 +129,7 @@ export function C7WaveReveal({ children, className = '', intro = false, ...props
       disposed = true
       observer.disconnect()
       panel.removeEventListener('animationend', onAnimationEnd)
+      panel.removeEventListener('animationcancel', onAnimationEnd)
       panel.removeEventListener('focusin', showAll)
       reduced.removeEventListener('change', sync)
       document.removeEventListener('visibilitychange', sync)
