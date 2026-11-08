@@ -2,10 +2,13 @@ node_modules/
 .next/
 out/
 dist/
+.aft/
 screenshots/
 input/
 .presentation/
-design/
+/design/*
+!/design/*.md
+!/design/*.csv
 reports/
 next-env.d.ts
 *.tsbuildinfo
@@ -16,3 +19,31 @@ PRESENTATION*.html
 Volnami-*.html
 /*.md
 /CHECKSUMS.sha256
+
+# Local research, generated exports and preservation archives.
+/artifacts/
+/backups/
+/evidence/
+/output/
+/research/
+/aft.json
+/lab/*
+!/lab/c7-scene/
+/lab/c7-scene/assets/sky/research/
+/public/diag-*.html
+/public/worker-*.html
+/public/3d/c7/runtime-*/
+!/public/3d/c7/runtime-v641/
+!/public/3d/c7/runtime-v645/
+!/public/3d/c7/runtime-v646/
+/scripts/__pycache__/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Curated project documentation is part of the source snapshot.
+!/README.md

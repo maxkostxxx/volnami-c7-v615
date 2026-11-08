@@ -1,0 +1,29 @@
+{
+  "base": "http://127.0.0.1:3212",
+  "rows": [
+    {
+      "path": "/c7/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "sameSHA": true
+    },
+    {
+      "path": "/3d/c7/runtime-v646/world.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "sameSHA": true
+    },
+    {
+      "path": "/3d/c7/runtime-v646/worker-entry.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "sameSHA": true
+    },
+    {
+      "path": "/3d/c7/runtime-v646/grass-prep-entry.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "sameSHA": true
+    }
+  ]
+}

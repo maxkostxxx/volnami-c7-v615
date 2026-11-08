@@ -1,0 +1,9 @@
+{
+  "beforeWorldSha256": "06aa8befcd11328cc85ab80a4420ed6bca201f3ea98b62af420e79ee364e2fe6",
+  "afterWorldSha256": "5177e71de0b14c50beafb52dc0049a3b3d84bfa260853966c3e94e9449d49ece",
+  "proof": "Replacing only the post-hydration helper-result release block restores the previous world source byte-for-byte. Reused renderer experiments do not pass a helper worker, therefore grassResult is null and the changed branch is not executed. Startup, ownership, current wide, visual, fault and UI suites rerun.",
+  "reused": [
+    "final-other-pairs.json",
+    "actual-flight.json"
+  ]
+}

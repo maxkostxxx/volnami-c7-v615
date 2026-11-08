@@ -1,0 +1,6 @@
+import * as T from 'three';import {createHash} from 'node:crypto';import{mkdir,writeFile}from'node:fs/promises';
+import{heightAt}from'../lab/c7-scene/terrain.js';import{createAtmosphere}from'../lab/c7-scene/atmosphere.js';import{createAtmosphereAsync}from'../lab/c7-snapshots/cooperative-atmosphere-v408/atmosphere.js';
+const options={heightAt,sunDirection:new T.Vector3(-.4,.2,-.8).normalize(),skyRadiance:new T.Vector3(1,.8,.7)};
+const signature=a=>createHash('sha256').update(a.uniforms.uC7SkyVisibility.value.image.data).update(JSON.stringify([a.stats.skyVisibility,a.stats.heightRange])).digest('hex');
+const before=createAtmosphere(options),expected=signature(before);before.dispose();let beats=0;const timer=setInterval(()=>beats++,10);const after=await createAtmosphereAsync(options),actual=signature(after);clearInterval(timer);after.dispose();const controller=new AbortController();setTimeout(()=>controller.abort(),50);let error;try{await createAtmosphereAsync(options,{signal:controller.signal})}catch(e){error=e.name;}
+const result={pass:expected===actual&&beats>10&&error==='AbortError',expected,actual,beats,abort:error};await mkdir('evidence/cooperative-atmosphere-v408',{recursive:true});await writeFile('evidence/cooperative-atmosphere-v408/construction.json',JSON.stringify(result,null,2));console.log(result);if(!result.pass)process.exitCode=1;

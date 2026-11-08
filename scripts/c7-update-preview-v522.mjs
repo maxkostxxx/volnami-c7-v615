@@ -1,0 +1,8 @@
+// Upload only an independently verified portable build to the existing review site.
+// Keep owner credentials outside the repository and never log the credential-bearing request URL.
+import fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';import crypto from 'node:crypto';
+const privateDir=path.join(os.homedir(),'.config/volnami-c7-preview'),previous=JSON.parse(await fs.readFile(path.join(privateDir,'harvis-v516.json'),'utf8')),receipt=path.join(privateDir,'harvis-v522.json');
+try{await fs.access(receipt);throw Error('Existing outcome receipt: inspect before retrying');}catch(e){if(e.code!=='ENOENT')throw e}
+const archive=await fs.readFile('artifacts/c7-preview-2026-10-27-v522.zip');if(crypto.createHash('sha256').update(archive).digest('hex')!=='400ce8c88edb02c85bec36845c74809939ae742c330aa3edeb261adb487a43b8')throw Error('Archive differs from verified package');
+const endpoint=new URL('https://harvis.dev/api/upload');endpoint.searchParams.set('name','Volnami C7 — preview');endpoint.searchParams.set('subdomain',previous.subdomain);endpoint.searchParams.set('deployToken',previous.deployToken);
+try{const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/zip'},body:archive,signal:AbortSignal.timeout(180000)});const raw=await response.text();await fs.writeFile(receipt,raw,{mode:0o600,flag:'wx'});const data=JSON.parse(raw);console.log({status:response.status,url:data.url,updated:data.updated,fileCount:data.fileCount,expiresAt:data.expiresAt,error:data.error?.code});if(!response.ok||data.url!==previous.url||data.updated!==true)process.exitCode=1;}catch(e){console.error('Upload outcome uncertain; inspect private receipt before any retry. Error type:',e.name);process.exitCode=1}

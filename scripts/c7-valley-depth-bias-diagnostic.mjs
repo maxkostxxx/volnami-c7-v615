@@ -1,0 +1,8 @@
+import{chromium}from'playwright';import fs from'node:fs/promises';
+const out='evidence/valley-artifact-v525-depth-bias';await fs.mkdir(out,{recursive:true});const b=await chromium.launch({headless:true,args:['--use-angle=metal','--disable-gpu-shader-disk-cache']}),p=await b.newPage({viewport:{width:1280,height:720},deviceScaleFactor:1}),errors=[],rows=[];p.on('pageerror',e=>errors.push(e.message));
+try{await p.goto('http://127.0.0.1:3027/lab/c7-scene/shared.html?clean&freeze');await p.waitForSelector('body.ready',{timeout:120000});for(const mode of['base','bias-2e5','bias-1e4','bias-3e4']){
+ rows.push(await p.evaluate(async mode=>{const s=sceneLab;for(const l of s.skyLight.lights)l.shadow.bias=mode==='bias-2e5'?-.00002:mode==='bias-1e4'?-.0001:mode==='bias-3e4'?-.0003:-.000002;s.skyHorizon.uniforms.uLocalMix.value=mode==='no-local-field'?0:1;s.grass.visible=s.farGrass.visible=mode!=='no-grass';s.trees.traverse(o=>{if(o.isMesh)o.castShadow=mode!=='no-tree-shadow'});
+ if(!window.__normalBaseline){window.__normalBaseline=[];s.ground.traverse(o=>{const n=o.geometry?.attributes.normal;if(n&&!window.__normalBaseline.some(r=>r.n===n))window.__normalBaseline.push({n,data:n.array.slice()});});}
+ for(const {n,data}of window.__normalBaseline){n.array.set(data);if(mode==='flat-normal')for(let i=0;i<n.count;i++)n.setXYZ(i,0,1,0);n.needsUpdate=true;}
+ s.renderer.shadowMap.needsUpdate=true;s.skyHorizon.update();s.set({sun:0,move:0,time:0});return{mode,state:s.state};},mode));await p.screenshot({path:out+'/'+mode+'.jpg',type:'jpeg',quality:95});console.log(mode);
+}}finally{await b.close();await fs.writeFile(out+'/results.json',JSON.stringify({kind:'Diagnostic omissions only. Product unchanged.',errors,rows},null,2));}

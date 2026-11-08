@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "kind": "C7 mobile quality derivatives; full terrain unchanged",
+  "inputs": {
+    "trees.js": "52dc56e9bffb36748b3eec3d0f8b566b479cff057d9a72165dfb5d38a367ef54",
+    "canvas-platform.js": "a3bf85ffa94e4bea89f2be18577190e9e2cd1bbfc0ef7f92a1c449d6f819585a",
+    "sky-horizon.js": "d6807d5a7468329b9bc412e5acabc7b3dd1ce9356ae9c68febaf3865fa937282",
+    "sky-data/field.rgba16f.gz": "e6f1af18fb4ec067da4ebf9c93ab164e70cd3288c8ba922b275c6eb2619df69b",
+    "left-sky-data/field.rgba16f.gz": "69b52a34c7862bfe452ea0bcddc71689ea8df2bd1ffd19f54ef5bc987029733d",
+    "assets/tree/leaves-oak.png": "24451223cf396d22910a4932b8bb996a7274e63d81e24128c96a430ab67822b1",
+    "assets/tree/bark-color-mips.webp": "86da71fbcb73436b1ba071d29638123dd2a5dd5af1fd81908a8821d339d46419",
+    "assets/tree/bark-normal-mips.webp": "beb241d0584513cf72571295f4d84ce7f0035be0c569a3d28bbaa35525c9608a",
+    "assets/tree/bark-roughness-mips.webp": "a55204b20500667069ca1d99aa266db682bac2d1b493c5766c7db05648dd4f02",
+    "assets/sky/cloud-coverage-4k.webp": "3518a7b9f1e740940e50ed4f45ebd4370f898f7b3ac128a0139ff0e2045b94d6"
+  },
+  "generatorSha256": "2b564a8252a472d296f5fab273d18f03f4415a6d296a5462f1487de173b0972f",
+  "files": {
+    "sky-data.gz": {
+      "bytes": 568121,
+      "sha256": "5cd77aa7407e322c9a7ad1447377a25929d76d9a9250687ae35a4bcafba62f6b",
+      "width": 256,
+      "height": 128,
+      "layers": 17,
+      "decodedSha256": "270c1bf7d4b9dbd9aea634c8832d6b03fa0bf0e7e35c6bff5579b1b77aa2bccb",
+      "approximation": "2x2 angle average; conservative distance/curvature guards"
+    },
+    "left-sky-data.gz": {
+      "bytes": 285851,
+      "sha256": "6e3c1d36b86287f8655d838a1cdc076d0a2892fcf47e53738bd5b43b0f7293c5",
+      "width": 128,
+      "height": 64,
+      "layers": 17,
+      "decodedSha256": "dff13663e45ebbbefe48de9d792364a1cda6ae089432c35d4866b1db3d4f3127",
+      "approximation": "2x2 angle average; conservative distance/curvature guards"
+    },
+    "leaves-mips.png": {
+      "bytes": 300086,
+      "sha256": "c0fa0b5aee2fd17502bbf821783e0b3659f1a3dbbf0efa69517649fab6d9cbc6",
+      "mipCount": 10,
+      "coverage": 0.25940418243408203,
+      "decodedSha256": "e1e7ae39f266ff5a933d073ac57902fcb8c92dd570f6a04748b009ba2ed09c85",
+      "retainedPixelsExact": true
+    },
+    "bark-color-mips.webp": {
+      "bytes": 30870,
+      "sha256": "1caefdaa2f4e6d5b46fbcc216f9201f9c02622161afef30c081d2d0bd91246e5",
+      "decodedSha256": "178c78aab8e29beb1d9aaa5a331c2175c799a6ede15e39b943d248e8e41d3431",
+      "retainedPixelsExact": true
+    },
+    "bark-normal-mips.webp": {
+      "bytes": 51306,
+      "sha256": "2978307fddf3a2048503e907f7b1bb8833fa481631915ca68501a833f79666d1",
+      "decodedSha256": "61f86c9c342c790e40791310f3a70197a43d8fdc23e02f5991397bf71ae66a1a",
+      "retainedPixelsExact": true
+    },
+    "bark-roughness-mips.webp": {
+      "bytes": 11862,
+      "sha256": "b1c80bdc367f30b36c27235dde765d2c4a1101e859b611dd4a46690dd77fca32",
+      "decodedSha256": "919dde8bad06412976e5b301a832cd3d090b142e7a2281587551fec45dddbea6",
+      "retainedPixelsExact": true
+    },
+    "cloud.webp": {
+      "bytes": 48584,
+      "sha256": "c694559f7d4e4f86a2df5cfac37c93bf50bb88b94483df96578c3a5aa3d3e1ae",
+      "approximation": "1024-wide mobile cloud coverage, WebP quality90"
+    }
+  }
+}

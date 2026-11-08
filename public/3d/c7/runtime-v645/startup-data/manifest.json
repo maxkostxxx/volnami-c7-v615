@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "format": "C7-startup-uint8-float64-v1",
+  "transport": "byteplanes24-v1",
+  "sources": {
+    "terrain.js": "a53d4666bae319ffa8bb46e5e74cb6af00c76803d00fa58b580663606e5a77f4",
+    "adaptive-terrain.js": "4516e7c21eff542a39ed41df1fe1807fbb945366903e9c2c99fc8f1b829f26ce",
+    "far-grass.js": "6e23f59ca1577efb77185590f482083e6985a3db9fa28aa48b21eefa623884af",
+    "atmosphere.js": "cb65822cac4d4212ceea9ac4547f222527c844be9ee7b8b58b49efddf5178ad4"
+  },
+  "parameters": {
+    "depthStretch": 2.1,
+    "depthPivot": 85,
+    "reference": {
+      "fov": 45,
+      "aspect": 1.7777777777777777,
+      "position": [
+        0,
+        37,
+        85
+      ],
+      "quaternion": [
+        -0.0028764473720988477,
+        0,
+        0,
+        0.9999958630167005
+      ]
+    }
+  },
+  "bytes": 422176,
+  "gzipBytes": 123816,
+  "sha256": "ed47ce7972230ab0a503d364f87a2dc7212a212a04932919a84ac464ad2a9f22",
+  "gzipSha256": "84e7a8a9439c2d4b662ab852d4063f1abea25f418611d0d44f52e95751e022c4",
+  "placement": {
+    "cells": 10464,
+    "fillCells": 4396
+  },
+  "atmosphere": {
+    "minimumHeight": -78.78,
+    "heightRange": 146.11043592160547,
+    "stats": {
+      "gridSize": 128,
+      "bounds": {
+        "minX": -700,
+        "maxX": 700,
+        "minZ": -820,
+        "maxZ": 390
+      },
+      "horizonSamples": 655360,
+      "buildMilliseconds": 0,
+      "skyVisibility": {
+        "min": 0.6060770891084176,
+        "max": 1,
+        "mean": 0.9737812007424206
+      },
+      "heightRange": [
+        -78.78,
+        67.33043592160547
+      ]
+    }
+  }
+}

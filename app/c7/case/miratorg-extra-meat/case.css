@@ -1,0 +1,332 @@
+.c7-project-page {
+  min-height: 100svh;
+  background: var(--c7-case-paper);
+  color: var(--c7-ink);
+}
+
+.c7-project-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 5.2rem;
+  padding: 0.85rem var(--c7-gutter);
+  background: var(--c7-deep);
+  color: var(--c7-white);
+}
+
+.c7-project-logo {
+  display: block;
+  width: clamp(7rem, 9vw, 9rem);
+  padding: 0.35rem;
+}
+
+.c7-project-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.c7-project-back,
+.c7-project-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: var(--c7-small);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.c7-project-back:hover,
+.c7-project-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+.c7-project-back span,
+.c7-project-footer a span {
+  font-family: Arial, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 0.7;
+}
+
+.c7-project-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  min-height: min(54rem, calc(100svh - 5.2rem));
+  background: var(--c7-case-stage);
+}
+
+.c7-project-hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(3.2rem, 7vw, 7.4rem) var(--c7-gutter);
+}
+
+.c7-project-eyebrow {
+  margin: 0 0 clamp(2.5rem, 7vw, 7.5rem);
+  color: var(--c7-case-caption);
+  font-size: var(--c7-small);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.c7-project-hero h1 {
+  max-width: 8ch;
+  margin: 0;
+  font-family: var(--c7-font-display);
+  font-size: clamp(4.5rem, 8.8vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  word-spacing: 0.1em;
+  line-height: 0.83;
+}
+
+.c7-project-lead {
+  max-width: 35ch;
+  margin: clamp(2rem, 3.4vw, 4rem) 0 0;
+  font-size: clamp(1.05rem, 1.4vw, 1.45rem);
+  line-height: 1.45;
+}
+
+.c7-project-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: clamp(2.5rem, 4.5vw, 5rem);
+  padding: 0 0 0.6rem;
+  border-bottom: 1px solid currentColor;
+  font-size: var(--c7-small);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.c7-project-scroll span {
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 0.7;
+}
+
+.c7-project-cover {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(1rem, 2.8vw, 2.8rem);
+  background: var(--c7-case-stage-light);
+}
+
+.c7-project-cover img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: min(77svh, 46rem);
+  object-fit: contain;
+}
+
+.c7-project-story {
+  width: min(100%, var(--c7-page));
+  margin: auto;
+  padding: clamp(3.5rem, 7vw, 7.5rem) var(--c7-gutter);
+}
+
+.c7-project-story-block {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.65fr) minmax(0, 1.35fr);
+  gap: clamp(1.5rem, 5vw, 7rem);
+  padding: clamp(2rem, 4vw, 4rem) 0;
+  border-top: 1px solid var(--c7-case-divider);
+}
+
+.c7-project-story-block h2 {
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--c7-font-display);
+  font-size: clamp(1.8rem, 2.8vw, 3.15rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+}
+
+.c7-project-story-text {
+  max-width: 72ch;
+  font-size: clamp(1rem, 1.12vw, 1.2rem);
+  line-height: 1.58;
+}
+
+.c7-project-story-text p {
+  margin: 0 0 1.2em;
+}
+
+.c7-project-story-text p:last-child {
+  margin-bottom: 0;
+}
+
+.c7-project-story-text ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c7-project-story-text li {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--c7-case-divider);
+}
+
+.c7-project-story-text li:first-child {
+  padding-top: 0;
+}
+
+.c7-project-story-text li:last-child {
+  border-bottom: 0;
+}
+
+.c7-project-subsection + .c7-project-subsection {
+  margin-top: 2.2rem;
+}
+
+.c7-project-subsection h3 {
+  margin: 0 0 0.55rem;
+  font-family: var(--c7-font-display);
+  font-size: clamp(1.3rem, 1.7vw, 1.75rem);
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+}
+
+.c7-project-gallery {
+  padding: clamp(3rem, 6vw, 6rem) var(--c7-gutter) clamp(4rem, 7vw, 7rem);
+  background: var(--c7-case-stage);
+}
+
+.c7-project-gallery-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+  width: min(100%, var(--c7-page));
+  margin: 0 auto clamp(2rem, 3vw, 3rem);
+}
+
+.c7-project-gallery-heading h2 {
+  margin: 0;
+  font-family: var(--c7-font-display);
+  font-size: var(--c7-section);
+  letter-spacing: -0.065em;
+  word-spacing: 0.1em;
+  line-height: 0.95;
+}
+
+.c7-project-gallery-heading p {
+  margin: 0;
+  color: var(--c7-case-caption);
+  font-size: var(--c7-small);
+  font-weight: 700;
+}
+
+.c7-project-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.55rem, 1.2vw, 1.2rem);
+  width: min(100%, var(--c7-page));
+  margin: auto;
+}
+
+.c7-project-gallery-grid figure {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  place-items: center;
+  background: var(--c7-case-paper);
+}
+
+.c7-project-gallery-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.c7-project-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 10rem;
+  padding: 2rem var(--c7-gutter);
+  background: var(--c7-deep);
+  color: var(--c7-white);
+}
+
+@media (max-width: 800px) {
+  .c7-project-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .c7-project-hero-copy {
+    padding-block: 4rem 3.5rem;
+  }
+
+  .c7-project-eyebrow {
+    margin-bottom: 3rem;
+  }
+
+  .c7-project-hero h1 {
+    font-size: clamp(4.25rem, 16vw, 7rem);
+  }
+
+  .c7-project-cover img {
+    height: min(65svh, 38rem);
+  }
+
+  .c7-project-story-block {
+    grid-template-columns: 1fr;
+  }
+
+  .c7-project-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .c7-project-header {
+    min-height: 4.5rem;
+  }
+
+  .c7-project-hero-copy {
+    padding-block: 3rem;
+  }
+
+  .c7-project-hero h1 {
+    font-size: clamp(3.8rem, 18vw, 5.6rem);
+  }
+
+  .c7-project-lead {
+    margin-top: 2rem;
+  }
+
+  .c7-project-cover {
+    padding: 0.75rem;
+  }
+
+  .c7-project-cover img {
+    height: min(62svh, 30rem);
+  }
+
+  .c7-project-gallery-heading,
+  .c7-project-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .c7-project-gallery-heading {
+    gap: 0.7rem;
+  }
+
+  .c7-project-footer {
+    justify-content: center;
+    min-height: 9rem;
+  }
+}

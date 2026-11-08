@@ -1,0 +1,34 @@
+{
+  "schema": 2,
+  "encoding": "C7TIv001-plane-fixed-point",
+  "transport": "byteplanes32-v1",
+  "three": "186",
+  "nx": 871,
+  "nz": 954,
+  "bytes": 17145378,
+  "gzipBytes": 942273,
+  "sourceSha256": "a53d4666bae319ffa8bb46e5e74cb6af00c76803d00fa58b580663606e5a77f4",
+  "payloadSha256": "2d110a979be59fc3e5cecc2ae7a411e11bbdc1f1719ccdaecbf6aa6d905e2bbc",
+  "gzipSha256": "f9d1372b6650dc42c6e0114de7ed96b643dd1d2dac30e4803f3ebd54ecc33ea6",
+  "geometryHashes": {
+    "position": "0f12a90a22f3f9659bae9de996104ff6feff00997bf40ab9e63b9d9103ce7bce",
+    "normal": "cd9ad57342fb61a03cfc310de23284d5a4dfae6f91e63931528228f864d9b81e",
+    "aShore": "0d6f2733f1a8927ff99cb2841fc14552c7c1ce479f50e065ee00e2f58e1a5200",
+    "index": "03d2d0b268003431dc1afa07a806fa5a1aa0542c5baf824e2d6081e7f5e180b8"
+  },
+  "seconds": 8.351154375,
+  "kind": "Exact integer residuals of existing v607 attributes, including negative zero bits; no new quantization or topology change.",
+  "precision": {
+    "positionY": 0.000244140625,
+    "normalComponent": 0.000244140625,
+    "shore": 0.0009765625,
+    "kind": "Rounded to nearest step, maximum component error half a step; x/z axes exact"
+  },
+  "exactSourceRevalidation": {
+    "before": "8b984849e17cde7e9f26b45983985d97b3b6a5f5b2d576cfbfafeb1d75dcdbc9",
+    "after": "a53d4666bae319ffa8bb46e5e74cb6af00c76803d00fa58b580663606e5a77f4",
+    "evidence": "evidence/c7-v620-fast-start-2026-11-02/source-equivalence.json",
+    "proofSha256": "2680c63105d77689fc809206fb5f3d251812cecb3c8e1a4ffe2f506942a3eb82",
+    "basis": "All ten initialized terrain fields exact, including every SDF Float64/Float32 value; only exact distance search and independent fill-loop order changed; binary payload unchanged"
+  }
+}

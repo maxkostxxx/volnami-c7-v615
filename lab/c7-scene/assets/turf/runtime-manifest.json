@@ -1,0 +1,22 @@
+{
+  "Color": {
+    "sourceSha256": "735b141c8f1972e70a45879424f1238fea9f887324173097785f4ac36e67e9a3",
+    "runtimeSha256": "953ef063dbc0a2760b8517a600fe0042716f23aaa7a39e395d058ff807b8f90b",
+    "bytes": 1912092
+  },
+  "NormalGL": {
+    "sourceSha256": "15ccad231764049d6581a52076d02bb6b627df77895cb0508e4017d8a4877fef",
+    "runtimeSha256": "80db0f6ef936cf8eb2dea43a37cf0dc16395ec75e909f9c66e61d942317bcde5",
+    "bytes": 10361980
+  },
+  "Roughness": {
+    "sourceSha256": "c449fdf1e779eb7be5a19c1d58ee28cc155ed0523a141b151f3cbc843c4ae2e3",
+    "runtimeSha256": "3b7c114e0495e8495ab1a3844d5acb94172c784fecb084696e06774e5cb1d3fb",
+    "bytes": 3246150
+  },
+  "AmbientOcclusion": {
+    "sourceSha256": "0f9180993db4c7b9479ad2a4b65763d90e8668fb7e800baff68cac1883a9dff5",
+    "runtimeSha256": "8e0416636a9f3f4633d0bd4be98abebd6fb42113b2fe49bc2bff7ffad8ef1fe9",
+    "bytes": 3575890
+  }
+}

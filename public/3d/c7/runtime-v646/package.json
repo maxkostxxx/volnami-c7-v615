@@ -1,0 +1,409 @@
+{
+  "kind": "Self-contained C7 ES-module runtime, no source symlinks",
+  "version": "runtime-v646",
+  "bundler": {
+    "webpack": "5.98.0",
+    "sources": {
+      "world.js": {
+        "source": "lab/c7-scene/world.js",
+        "sha256": "1c85e3b984d95820aeec0f0caaf1afc1b46d808ade37d0e89e26406fe9965d9f"
+      },
+      "spot-receivers.js": {
+        "source": "lab/c7-scene/spot-receivers.js",
+        "sha256": "8573a1f131373b4b47ca34ea0d3c375f25c5043d0d94066f332b85a1f1bd68d6"
+      },
+      "grass-packet.js": {
+        "source": "lab/c7-scene/grass-packet.js",
+        "sha256": "5d3ce4d6609abd5068078d6ec63f56b2453ae6e8c13f338a6fa237c1d3f9737e"
+      },
+      "pmrem-sample-cache.js": {
+        "source": "lab/c7-scene/pmrem-sample-cache.js",
+        "sha256": "9949c71463736accc0cb89f356b45c2e23c0f2e173d899763cbd0b4a7157132c"
+      },
+      "fused-ground-sky.js": {
+        "source": "lab/c7-scene/fused-ground-sky.js",
+        "sha256": "199b7fffa80363515f44daac0eb3b1abe66c9006355b20f537cb0ba10c46c338"
+      },
+      "binary-transfer.js": {
+        "source": "lab/c7-scene/binary-transfer.js",
+        "sha256": "93cef5b5c44a64a8d0d5c70691c8f284d9eaf2bb311a8e76b70bb50c3a63ac24"
+      },
+      "vendor/zstd/zstddec.js": {
+        "source": "lab/c7-scene/vendor/zstd/zstddec.js",
+        "sha256": "5948bfb51ce8dca0b043991b4007d0a384997ba9bfee5710ed4eecd0492395f0"
+      },
+      "vendor/zstd/wasm-source.js": {
+        "source": "lab/c7-scene/vendor/zstd/wasm-source.js",
+        "sha256": "b3750a1d6b263235487021c0c7bf5593e14fc0b59751e68fbe066522dfee4d29"
+      },
+      "binary-transports.js": {
+        "source": "lab/c7-scene/binary-transports.js",
+        "sha256": "f9650252014b562a3f9490da7f342c2e315806f8ac9dfa417c46afe318904d4d"
+      },
+      "static-light-scalars.js": {
+        "source": "lab/c7-scene/static-light-scalars.js",
+        "sha256": "4b81e07b99787fd5b529438d80b420f3cbbdc9ec24566b2c707625ac2f55fa50"
+      },
+      "static-shadow-receiver.js": {
+        "source": "lab/c7-scene/static-shadow-receiver.js",
+        "sha256": "6353a066061894d1b773e73cfa1eea0af6d9e74de5f91ab7727112e2a74ea1b5"
+      },
+      "grass.js": {
+        "source": "lab/c7-scene/grass.js",
+        "sha256": "d113436a1be971b5bdac75acd386b91eb2fb41a976c24a4967d4c327ab52e464"
+      },
+      "grass-static.js": {
+        "source": "lab/c7-scene/grass-static.js",
+        "sha256": "a3b785ca57ee1d753cd1d09728699468307a9b69b1b638ded6c2a98cdeca5b6c"
+      },
+      "cooperative-build.js": {
+        "source": "lab/c7-scene/cooperative-build.js",
+        "sha256": "c3cd45a3612a6d5ebb4787f70bbb343b7e73d65332e2778610127fcefec7db52"
+      },
+      "meadow-profile.js": {
+        "source": "lab/c7-scene/meadow-profile.js",
+        "sha256": "603690fd2d3b16ef28312937ab5c44d1b27626efc090a248a58e3a0f697d1715"
+      },
+      "terrain-chunks.js": {
+        "source": "lab/c7-scene/terrain-chunks.js",
+        "sha256": "c8c967a1d802bd4c0adafbfb282c46323a1e6c119a4023826066c63244dfe5e8"
+      },
+      "direct-zero-guard.js": {
+        "source": "lab/c7-scene/direct-zero-guard.js",
+        "sha256": "7ce331240ef725a6919426e4f0111bd9fd8f98accefd58432069ce5d7c3b9734"
+      },
+      "compact-grass-shadows.js": {
+        "source": "lab/c7-scene/compact-grass-shadows.js",
+        "sha256": "781e88a0a6e0e2bf1e935f18f52008fc101e3ed82825b9eb2144fa2ae66790bc"
+      },
+      "startup-data.js": {
+        "source": "lab/c7-scene/startup-data.js",
+        "sha256": "9cbe32eb48795b2a11055d7c872959be362dfabaec680de88993ce58aae0a02e"
+      },
+      "startup-data-key.js": {
+        "source": "lab/c7-scene/startup-data-key.js",
+        "sha256": "f33d3fcc4c781ff37c58ef1099f79c474fe5f819e36887b0b303454ed3591325"
+      },
+      "sky-horizon.js": {
+        "source": "lab/c7-scene/sky-horizon.js",
+        "sha256": "27db9f445bd4f110ae55c62b342e372cc5694ec0bdfb4d7094aeda69fdf2a506"
+      },
+      "sky-tree-atlas.js": {
+        "source": "lab/c7-scene/sky-tree-atlas.js",
+        "sha256": "f39647b81b8b9b7016c82db31c71d0a072c90361aab5375ef461b12614c5ec3a"
+      },
+      "shadow-disk.js": {
+        "source": "lab/c7-scene/shadow-disk.js",
+        "sha256": "813da1f25666a697d1da26855b3786d666f3e2aba16fa0ed60c1049b8ac45acc"
+      },
+      "sky.js": {
+        "source": "lab/c7-scene/sky.js",
+        "sha256": "eaa9db297f8b043f3ca0b1e33db3654b1c3fc25d2ecb66914bcec8037dcfa05d"
+      },
+      "canvas-platform.js": {
+        "source": "lab/c7-scene/canvas-platform.js",
+        "sha256": "a4b06ad0f43e7f93aa629ef3ed24c87bcbf4807a5025d881467cd6b44da95bd2"
+      },
+      "adaptive-terrain.js": {
+        "source": "lab/c7-scene/adaptive-terrain.js",
+        "sha256": "061484fdfe611eaf7b969d33586185c5db47410f4b1ce9317350be9ba1a513a2"
+      },
+      "terrain-cache.js": {
+        "source": "lab/c7-scene/terrain-cache.js",
+        "sha256": "6fb6c21cd4c803dedd78465524a942ab1eb640a89574312bf19e89d1ea0e99db"
+      },
+      "terrain-sampler.js": {
+        "source": "lab/c7-scene/terrain-sampler.js",
+        "sha256": "cc4ff7e55b59c51c543af9d0293128d7c41064e5727beae2b937b39f43d766ce"
+      },
+      "atmosphere.js": {
+        "source": "lab/c7-scene/atmosphere.js",
+        "sha256": "fa5c7313d6f5d69f08867e80a424007bf2b698bbe7622cb3830ea044228db782"
+      },
+      "terrain.js": {
+        "source": "lab/c7-scene/terrain.js",
+        "sha256": "961819283bf387a1e833b2a00b36dd3a35058367f15efc18285fba92230ee8a8"
+      },
+      "materials.js": {
+        "source": "lab/c7-scene/materials.js",
+        "sha256": "b83d4f9308a4f12b6e8040ca2bbb54d24b557f1e4a1f9b146a6e5003eb9a2e9d"
+      },
+      "lake.js": {
+        "source": "lab/c7-scene/lake.js",
+        "sha256": "c43b99e9ddf7180f9113782676ec3a1769d1b730b11af68d3e37d0e8fb6f47cc"
+      },
+      "trees.js": {
+        "source": "lab/c7-scene/trees.js",
+        "sha256": "363c89980b1a56776549abf0e4345d1a4ddf55822e209ef7a645a1a63daeaaca"
+      },
+      "vendor/ez-tree/tree.js": {
+        "source": "lab/c7-scene/vendor/ez-tree/tree.js",
+        "sha256": "899553211412ab500cc1b9ccd5f507713aaf45addf8c87cdc5a9e6cf5f9b3e1f"
+      },
+      "vendor/ez-tree/rng.js": {
+        "source": "lab/c7-scene/vendor/ez-tree/rng.js",
+        "sha256": "e4f2bfff79a0a6af3f909f106876e9208be1bb88cc7f7d1541a6858cbaa0c3c8"
+      },
+      "vendor/ez-tree/branch.js": {
+        "source": "lab/c7-scene/vendor/ez-tree/branch.js",
+        "sha256": "a5d9c1ddcd7559c9b8f048f02215abbfb38be515fef51546a2d728aa4b5a5419"
+      },
+      "vendor/ez-tree/enums.js": {
+        "source": "lab/c7-scene/vendor/ez-tree/enums.js",
+        "sha256": "d83df789447a421baaecfd18cc8187bf3f80f6cf6e7ba7866812ed527f104092"
+      },
+      "vendor/ez-tree/options.js": {
+        "source": "lab/c7-scene/vendor/ez-tree/options.js",
+        "sha256": "542dc3d646eae22b4870ab0ce04a03265113bded825903e9df1fe3cf04124436"
+      },
+      "vendor/ez-tree/presets/index.js": {
+        "source": "lab/c7-scene/vendor/ez-tree/presets/index.js",
+        "sha256": "622c0d7a5e5dc28b94ec7310e460561784bf65edb7b539622bca2d18a4228b86"
+      },
+      "vendor/ez-tree/trellis.js": {
+        "source": "lab/c7-scene/vendor/ez-tree/trellis.js",
+        "sha256": "729cc39a28417fcdb3659c342dd5ef46f7dcdc1e902926e64295b26e842ec4b7"
+      },
+      "tree-runtime.js": {
+        "source": "lab/c7-scene/tree-runtime.js",
+        "sha256": "818551fb7bccc243b398cf8e090a3ae833d3a0db2fa62dc0548ba7dd38b795c6"
+      },
+      "sky-light.js": {
+        "source": "lab/c7-scene/sky-light.js",
+        "sha256": "d25ea3bae9e42af65a2f9202a7cd8cedaf81903e052c55de5d11ab087b4e73a5"
+      },
+      "far-grass.js": {
+        "source": "lab/c7-scene/far-grass.js",
+        "sha256": "f661805dc5f1cbf79d51158d617f31cf4c05e6675241a1ac0ca2f48baa084ae5"
+      },
+      "canopy-occlusion.js": {
+        "source": "lab/c7-scene/canopy-occlusion.js",
+        "sha256": "a8439dfcb3465f7a7a9a08222e6c68fd349160be498765403f201b6eeff05049"
+      },
+      "microcanopy.js": {
+        "source": "lab/c7-scene/microcanopy.js",
+        "sha256": "53e673bd43a1915dceee3644651286118dc38a1ccff0a95b667afaa63121b7c6"
+      },
+      "rear-meadow.js": {
+        "source": "lab/c7-scene/rear-meadow.js",
+        "sha256": "ddfdc521d2c71d4043afcf8d6bbf971921d8c6416bb2872608b7b8c9fc921818"
+      },
+      "rear-meadow-data.js": {
+        "source": "lab/c7-scene/rear-meadow-data.js",
+        "sha256": "77c9455d150ce4f495d44ebb4d7c6341cf4896033eeb296812377bff270bba21"
+      },
+      "rear-fill.js": {
+        "source": "lab/c7-scene/rear-fill.js",
+        "sha256": "6e132eee92cf2a04001aa1ee08a928c9558847f8419e0b7c7233e4f0ac354e5c"
+      }
+    }
+  },
+  "bytes": 15130991,
+  "files": {
+    "terrain-cache/geometry.bin.zst": {
+      "bytes": 841092,
+      "sha256": "811ee91289fd8b6becabe82b81000de6527aef9b64bc4069f195590a26a6d2f6",
+      "source": "lab/c7-scene/terrain-cache/geometry.bin.zst"
+    },
+    "terrain-cache/geometry.bin.br": {
+      "bytes": 810994,
+      "sha256": "a877e612027b4005533908592785556c02f3b52b03ec7253b41848192b8b7b07",
+      "source": "lab/c7-scene/terrain-cache/geometry.bin.br"
+    },
+    "startup-data/fields.bin.zst": {
+      "bytes": 118750,
+      "sha256": "3fd0ea3abe3b781c366c5a8fe13ef9f328f9c16ab2b5d44844a991660bc194d0",
+      "source": "lab/c7-scene/startup-data/fields.bin.zst"
+    },
+    "startup-data/fields.bin.br": {
+      "bytes": 113670,
+      "sha256": "da5f8ed7dfb0856efa4bf51f2944a67ff465c1a4e021fb9889782425ebfe3f70",
+      "source": "lab/c7-scene/startup-data/fields.bin.br"
+    },
+    "mobile-data/sky-data.zst": {
+      "bytes": 522533,
+      "sha256": "c116b0301d638477b4d554994930223b4f33dd3f8595ea614020c3de1b602ad5",
+      "source": "lab/c7-scene/mobile-data/sky-data.zst"
+    },
+    "mobile-data/sky-data.br": {
+      "bytes": 498298,
+      "sha256": "6a58f8a4661f078be1aa18e0cde1443384f0fc9ec383afa416997be9379eb970",
+      "source": "lab/c7-scene/mobile-data/sky-data.br"
+    },
+    "mobile-data/left-sky-data.zst": {
+      "bytes": 270015,
+      "sha256": "81b4f5b55dcdc4a258eb6d214138d3fd382a116a84733c79a09b36aad5f6555f",
+      "source": "lab/c7-scene/mobile-data/left-sky-data.zst"
+    },
+    "mobile-data/left-sky-data.br": {
+      "bytes": 254606,
+      "sha256": "9b2677dbd348d1bdc40e5f0c3468074e6092fe1ecb29b74c64828e3129314d84",
+      "source": "lab/c7-scene/mobile-data/left-sky-data.br"
+    },
+    "sky-data/field.rgba16f.zst": {
+      "bytes": 1572807,
+      "sha256": "2a2b70b19f828b23446b2144abcd8f38c843e71de3c40a298389fc947c5075aa",
+      "source": "lab/c7-scene/sky-data/field.rgba16f.zst"
+    },
+    "sky-data/field.rgba16f.br": {
+      "bytes": 1573562,
+      "sha256": "33793176b1088eab2b1df5b94972f86692b9a1c6c6f6e128b47d85c6a35da50a",
+      "source": "lab/c7-scene/sky-data/field.rgba16f.br"
+    },
+    "left-sky-data/field.rgba16f.zst": {
+      "bytes": 816503,
+      "sha256": "469b235a929dbaf48d02ebf85ca1e9933442de8b187b4cd31307378e17d21862",
+      "source": "lab/c7-scene/left-sky-data/field.rgba16f.zst"
+    },
+    "left-sky-data/field.rgba16f.br": {
+      "bytes": 781802,
+      "sha256": "e779110660454e817559d7cf90c2e0547920d4ae82580b3345590965ecc63e1b",
+      "source": "lab/c7-scene/left-sky-data/field.rgba16f.br"
+    },
+    "terrain.js": {
+      "bytes": 59846,
+      "sha256": "961819283bf387a1e833b2a00b36dd3a35058367f15efc18285fba92230ee8a8",
+      "source": "lab/c7-scene/terrain.js"
+    },
+    "world.js": {
+      "bytes": 919933,
+      "sha256": "5287798df43624f07c12267c88a916d121ac88f66d802762d667fa70e37432b0",
+      "source": "Bundled lab/c7-scene/world.js dependency graph"
+    },
+    "startup-inputs.js": {
+      "bytes": 5823,
+      "sha256": "bc129c42fde9f94669e5bcc83220e754889e2c12afb8a549753d2ed092897d23",
+      "source": "Bundled lab/c7-scene/startup-inputs.js dependency graph"
+    },
+    "worker-entry.js": {
+      "bytes": 5176,
+      "sha256": "4747ad0be03f1e7abe476d786be5915b933bb09ed80ae81e3116db8f936a50c7",
+      "source": "lab/c7-scene/worker-entry.js"
+    },
+    "grass-prep-entry.js": {
+      "bytes": 554,
+      "sha256": "92bd73e89de78ce545ea70c95417eddabd138ed0434d568473e7302783146bb2",
+      "source": "lab/c7-scene/grass-prep-entry.js"
+    },
+    "startup-data/manifest.json": {
+      "bytes": 1568,
+      "sha256": "a3266586cccca97e20a654c3f730960d413d05555e5ad3c705ac1af90075c9cb",
+      "source": "lab/c7-scene/startup-data/manifest.json"
+    },
+    "startup-data/fields.bin.gz": {
+      "bytes": 123816,
+      "sha256": "84e7a8a9439c2d4b662ab852d4063f1abea25f418611d0d44f52e95751e022c4",
+      "source": "lab/c7-scene/startup-data/fields.bin.gz"
+    },
+    "assets/sky/cloud-coverage-4k.webp": {
+      "bytes": 443394,
+      "sha256": "3518a7b9f1e740940e50ed4f45ebd4370f898f7b3ac128a0139ff0e2045b94d6",
+      "source": "lab/c7-scene/assets/sky/cloud-coverage-4k.webp"
+    },
+    "assets/tree/leaves-oak-lossless.webp": {
+      "bytes": 193806,
+      "sha256": "7dc6c29bfb9b940315642337dc9958638188e9ce094d389518483eccd3b4201a",
+      "source": "lab/c7-scene/assets/tree/leaves-oak-lossless.webp"
+    },
+    "assets/tree/bark-color-mips.webp": {
+      "bytes": 119090,
+      "sha256": "86da71fbcb73436b1ba071d29638123dd2a5dd5af1fd81908a8821d339d46419",
+      "source": "lab/c7-scene/assets/tree/bark-color-mips.webp"
+    },
+    "assets/tree/bark-normal-mips.webp": {
+      "bytes": 216942,
+      "sha256": "beb241d0584513cf72571295f4d84ce7f0035be0c569a3d28bbaa35525c9608a",
+      "source": "lab/c7-scene/assets/tree/bark-normal-mips.webp"
+    },
+    "assets/tree/bark-roughness-mips.webp": {
+      "bytes": 50230,
+      "sha256": "a55204b20500667069ca1d99aa266db682bac2d1b493c5766c7db05648dd4f02",
+      "source": "lab/c7-scene/assets/tree/bark-roughness-mips.webp"
+    },
+    "sky-data/field.rgba16f.gz": {
+      "bytes": 1747695,
+      "sha256": "e6f1af18fb4ec067da4ebf9c93ab164e70cd3288c8ba922b275c6eb2619df69b",
+      "source": "lab/c7-scene/sky-data/field.rgba16f.gz"
+    },
+    "left-sky-data/field.rgba16f.gz": {
+      "bytes": 883499,
+      "sha256": "69b52a34c7862bfe452ea0bcddc71689ea8df2bd1ffd19f54ef5bc987029733d",
+      "source": "lab/c7-scene/left-sky-data/field.rgba16f.gz"
+    },
+    "terrain-cache/geometry.bin.gz": {
+      "bytes": 942273,
+      "sha256": "f9d1372b6650dc42c6e0114de7ed96b643dd1d2dac30e4803f3ebd54ecc33ea6",
+      "source": "lab/c7-scene/terrain-cache/geometry.bin.gz"
+    },
+    "mobile-data/manifest.json": {
+      "bytes": 3488,
+      "sha256": "a18815b236f888c52b0e1645f385dfb01960aea5e5b2101636014d2361cb2d4f",
+      "source": "lab/c7-scene/mobile-data/manifest.json"
+    },
+    "mobile-data/sky-data.gz": {
+      "bytes": 568121,
+      "sha256": "5cd77aa7407e322c9a7ad1447377a25929d76d9a9250687ae35a4bcafba62f6b",
+      "source": "lab/c7-scene/mobile-data/sky-data.gz"
+    },
+    "mobile-data/left-sky-data.gz": {
+      "bytes": 285851,
+      "sha256": "6e3c1d36b86287f8655d838a1cdc076d0a2892fcf47e53738bd5b43b0f7293c5",
+      "source": "lab/c7-scene/mobile-data/left-sky-data.gz"
+    },
+    "mobile-data/leaves-mips-lossless.webp": {
+      "bytes": 232988,
+      "sha256": "579ce95c90e60cb986a80e8e256fcee8e8b14cb9cbbe1a010aead8babcf47521",
+      "source": "lab/c7-scene/mobile-data/leaves-mips-lossless.webp"
+    },
+    "mobile-data/bark-color-mips.webp": {
+      "bytes": 30870,
+      "sha256": "1caefdaa2f4e6d5b46fbcc216f9201f9c02622161afef30c081d2d0bd91246e5",
+      "source": "lab/c7-scene/mobile-data/bark-color-mips.webp"
+    },
+    "mobile-data/bark-normal-mips.webp": {
+      "bytes": 51306,
+      "sha256": "2978307fddf3a2048503e907f7b1bb8833fa481631915ca68501a833f79666d1",
+      "source": "lab/c7-scene/mobile-data/bark-normal-mips.webp"
+    },
+    "mobile-data/bark-roughness-mips.webp": {
+      "bytes": 11862,
+      "sha256": "b1c80bdc367f30b36c27235dde765d2c4a1101e859b611dd4a46690dd77fca32",
+      "source": "lab/c7-scene/mobile-data/bark-roughness-mips.webp"
+    },
+    "mobile-data/cloud.webp": {
+      "bytes": 48584,
+      "sha256": "c694559f7d4e4f86a2df5cfac37c93bf50bb88b94483df96578c3a5aa3d3e1ae",
+      "source": "lab/c7-scene/mobile-data/cloud.webp"
+    },
+    "terrain-cache/manifest.json": {
+      "bytes": 1730,
+      "sha256": "56929aec038072666231c9ae40a83fcdea7c0c77359a3ed1acea5bd042d29793",
+      "source": "lab/c7-scene/terrain-cache/manifest.json"
+    },
+    "vendor/three/LICENSE": {
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc",
+      "source": "node_modules/three/LICENSE"
+    },
+    "vendor/zstd/LICENSE": {
+      "bytes": 2617,
+      "sha256": "8d078b49fc02bd63c1beaf4ddc629a8b48e4ba6a435415408c8209e2a5c3aacf",
+      "source": "lab/c7-scene/vendor/zstd/LICENSE"
+    },
+    "vendor/ez-tree/LICENSE": {
+      "bytes": 1073,
+      "sha256": "20e4afadfb10c67952b3d73cd2982d21d165ab4ae82b0dd9e4d6f2166ee349b6",
+      "source": "lab/c7-scene/vendor/ez-tree/LICENSE"
+    },
+    "vendor/ez-tree/TEXTURE-LICENSE.md": {
+      "bytes": 1378,
+      "sha256": "c4c67cf955536e61d9ac3fdf13830114edcd4c19c9aa0356ed0862cedf64140a",
+      "source": "lab/c7-scene/vendor/ez-tree/TEXTURE-LICENSE.md"
+    },
+    "assets/sky/runtime-manifest.json": {
+      "bytes": 1765,
+      "sha256": "82523d21628470ee234d19ba3a0a2a057ba68348d4b846de7d173bde040fc0bd",
+      "source": "lab/c7-scene/assets/sky/runtime-manifest.json"
+    }
+  }
+}

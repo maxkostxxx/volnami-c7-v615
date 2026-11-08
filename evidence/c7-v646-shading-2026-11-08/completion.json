@@ -1,0 +1,44 @@
+{
+  "status": "VERIFIED_LOCAL_WITH_OPEN_PERFORMANCE_TARGET",
+  "currentURL": "http://127.0.0.1:3212/c7/",
+  "runtime": "runtime-v646",
+  "package": "artifacts/c7-preview-2026-11-08-v646-local",
+  "packageFiles": 111,
+  "packageBytes": 22475701,
+  "head": "4cfcc9a390454919a0af8c32a5a2bb0b145c316d",
+  "trackedPreserved": true,
+  "referencesPreserved": true,
+  "qaStages": 11,
+  "freshStages": 9,
+  "reusedStages": [
+    "other-pairs",
+    "actual-flight"
+  ],
+  "chromeFixedAgainst645": 42,
+  "chromeFixedAgainst641": 42,
+  "chromeLiveControls": 14,
+  "pixelMax": 1,
+  "webkitExact": [
+    {
+      "width": 390,
+      "equal": 11,
+      "total": 11
+    },
+    {
+      "width": 1440,
+      "equal": 11,
+      "total": 11
+    }
+  ],
+  "firstScrollRuns": 6,
+  "report": "design/c7-v646-shading-result-2026-11-08.md",
+  "target75To100Met": false,
+  "physicalMobile": "NOT_RUN",
+  "nativeSafari": "NOT_RUN",
+  "nativeHidden": "NOT_RUN",
+  "displayFPS": "NOT_RUN",
+  "publication": false,
+  "push": false,
+  "commit": false,
+  "agents": false
+}

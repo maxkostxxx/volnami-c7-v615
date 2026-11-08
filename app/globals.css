@@ -1,4 +1,6 @@
-@import "tailwindcss";
+/* UI classes live in app/. Exclude diagnostic snapshots and generated runtimes
+   from class discovery: they are not page components and can exhaust the build. */
+@import "tailwindcss" source("./");
 
 /*
   Общий слой намеренно тонкий.

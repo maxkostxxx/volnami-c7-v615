@@ -1,0 +1,62 @@
+{
+  "width": 512,
+  "height": 256,
+  "depth": 17,
+  "traceWidth": 1024,
+  "traceHeight": 512,
+  "bounds": [
+    -330,
+    -405,
+    660,
+    280
+  ],
+  "firstAzimuth": -22.5,
+  "step": 2.5,
+  "canopyHeight": 0.32,
+  "guardRange": [
+    2,
+    8
+  ],
+  "encoding": "C7HQv001-fixed-point-xyz",
+  "kind": "Finite terrain horizons, layer-major little-endian RGBA16F. RG ground/32cm canopy angles; BA capped conservative blocker distance. Linear spatial/azimuth sampling, smooth2..8m fallback to ordinary shadows.",
+  "source": {
+    "terrain.js": "a53d4666bae319ffa8bb46e5e74cb6af00c76803d00fa58b580663606e5a77f4",
+    "adaptive-terrain.js": "edefe06dea9c303a7e4cb7792c01a360ca4cacc353c060088e58e5b7383809d7"
+  },
+  "bytes": 17825792,
+  "gzipBytes": 1747695,
+  "sha256": "5f3fb06029b73747e54d79539934ef121fdf3e385e0e3b89ea6f1193a8ffaac0",
+  "gzipSha256": "e6f1af18fb4ec067da4ebf9c93ab164e70cd3288c8ba922b275c6eb2619df69b",
+  "seconds": 676.3342837499999,
+  "precision": {
+    "scales": [
+      2048,
+      2048,
+      32,
+      32
+    ],
+    "kind": "Quantized authoring field; full dimensions/layers retained",
+    "maxAbsoluteError": [
+      0.000244140625,
+      0.000244140625,
+      0.015625,
+      0.015625
+    ]
+  },
+  "originalRawSha256": "1d0252f4b9c9b29c1f97e4305f3c94984002ff3f3d230f4663a76abfbfb5b206",
+  "rawSha256": "5f3fb06029b73747e54d79539934ef121fdf3e385e0e3b89ea6f1193a8ffaac0",
+  "exactSourceRevalidation": {
+    "before": "8b984849e17cde7e9f26b45983985d97b3b6a5f5b2d576cfbfafeb1d75dcdbc9",
+    "after": "a53d4666bae319ffa8bb46e5e74cb6af00c76803d00fa58b580663606e5a77f4",
+    "evidence": "evidence/c7-v620-fast-start-2026-11-02/source-equivalence.json",
+    "proofSha256": "2680c63105d77689fc809206fb5f3d251812cecb3c8e1a4ffe2f506942a3eb82",
+    "basis": "All ten initialized terrain fields exact, including every SDF Float64/Float32 value; only exact distance search and independent fill-loop order changed; binary payload unchanged"
+  },
+  "adaptiveTraversalRevalidation": {
+    "before": "e6ef429cde09d187afcbac0027a9deb94fc7b6d8190b06517d109d9454ab4cbd",
+    "after": "4516e7c21eff542a39ed41df1fe1807fbb945366903e9c2c99fc8f1b829f26ce",
+    "evidence": "evidence/c7-v623-speed-2026-11-03/terrain-equivalence.json",
+    "proofSha256": "4e1469d142dc45cbb7aba4ab8a911a1f8e075fe94e1521690c4a23aae53cb89d",
+    "basis": "Only traversal of sorted boundary ranges changed; identical complete indices/positions/normals/shore for cached rounded and procedural unrounded terrain. Sampling formula unchanged; 4000 sampled heights/normals Float64 exact. All cached sky fields unchanged."
+  }
+}

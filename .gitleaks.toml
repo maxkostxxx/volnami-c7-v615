@@ -1,0 +1,13 @@
+[extend]
+useDefault = true
+
+# This public value is SHA-256(startup-data/manifest.json), not a credential.
+# Keep all secret rules; allow only the exact generated declaration and file.
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "Generated startup manifest integrity digest"
+condition = "AND"
+paths = ['''^lab/c7-scene/startup-data-key\.js$''']
+regexTarget = "match"
+regexes = ['''startupDataKey\s*=\s*'[a-f0-9]{64}''']

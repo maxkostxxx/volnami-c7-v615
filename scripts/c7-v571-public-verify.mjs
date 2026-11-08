@@ -1,0 +1,3 @@
+import{spawn}from'node:child_process';import fs from'node:fs/promises';import{openSync,closeSync}from'node:fs';
+const root='evidence/c7-v571-public';await fs.mkdir(root,{recursive:true});const rows=[];
+for(const engine of['chromium','firefox','webkit']){const fd=openSync(root+'/'+engine+'.log','w');const code=await new Promise(resolve=>{spawn(process.execPath,['scripts/c7-v570-cross-browser.mjs'],{stdio:['ignore',fd,fd],env:{...process.env,QA_BASE_URL:'https://breezy-hazel-428.harvis.page',QA_OUTPUT:root+'/'+engine,QA_ENGINE:engine}}).on('exit',resolve)});closeSync(fd);rows.push({engine,code});await fs.writeFile(root+'/results.json',JSON.stringify(rows,null,2));console.log(engine,code);if(code!==0){process.exitCode=1;break;}}

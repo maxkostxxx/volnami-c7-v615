@@ -1,0 +1,29 @@
+// Audit only: inject markers into intercepted responses, never change source/runtime.
+import{chromium}from'playwright';import fs from'node:fs/promises';
+const out='evidence/c7-performance-audit-2026-10-29';const original=await fs.readFile('lab/c7-scene/world.js','utf8');
+let instrumented=original;
+for(const[a,b]of[
+ ['function draw(){','function draw(){ globalThis.__c7Stage?.("setup");'],
+ ['fitWorldShadows();skyHorizon.update();','fitWorldShadows();globalThis.__c7Stage?.("tree-atlas");skyHorizon.update();globalThis.__c7Stage?.("light-cpu");'],
+ ['if(!reuseEnvironment)env?.dispose();env=pmrem.fromScene','globalThis.__c7Stage?.("environment");if(!reuseEnvironment)env?.dispose();env=pmrem.fromScene'],
+ ['scene.environment=env.texture;','globalThis.__c7Stage?.("light-cpu");scene.environment=env.texture;'],
+ ['if(reflected){lake.reflect(renderer,scene,camera,lookAt);','if(reflected){globalThis.__c7Stage?.("reflection");lake.reflect(renderer,scene,camera,lookAt);globalThis.__c7Stage?.("setup");'],
+ ['renderer.render(scene,camera);frames++;','globalThis.__c7Stage?.("main");renderer.render(scene,camera);globalThis.__c7Stage?.("finish");frames++;'],
+]){if(instrumented.split(a).length!==2)throw Error('Expected unique profiling anchor '+a);instrumented=instrumented.replace(a,b);}
+const b=await chromium.launch({headless:true,args:['--use-angle=metal']}),runs=[],errors=[];
+try{for(const[width,height,detail]of[[390,844,false],[1440,900,false],[2560,1080,false],[1440,900,true]]){
+ const p=await b.newPage({viewport:{width,height}});p.on('pageerror',e=>errors.push(e.message));await p.route('**/lab/c7-scene/world.js',r=>r.fulfill({contentType:'application/javascript',body:instrumented}));await p.goto('http://127.0.0.1:3027/lab/c7-scene/shared.html?clean&freeze'+(width===390?'&quality=low':''));await p.waitForSelector('body.ready',{timeout:90000});
+ await p.evaluate(detail=>{
+  const w=sceneLab,r=w.renderer,gl=r.getContext(),ext=gl.getExtension('EXT_disjoint_timer_query_webgl2');if(!ext)throw Error('GPU timer unavailable');r.setAnimationLoop(null);
+  let enabled=false,current=null,base='setup',frame=null,startCPU=0,queue=[],samples=[],invalid=0;
+  const end=()=>{if(current){gl.endQuery(ext.TIME_ELAPSED_EXT);frame.parts.push(current);current=null;}};
+  const segment=name=>{if(!enabled)return;if(current?.name===name)return;end();const q=gl.createQuery();gl.beginQuery(ext.TIME_ELAPSED_EXT,q);current={name,q};};
+  window.__c7Stage=name=>{base=name;segment(name);};
+  const shadow=r.shadowMap.render.bind(r.shadowMap);r.shadowMap.render=(...args)=>{if(!enabled||!r.shadowMap.enabled||(!r.shadowMap.autoUpdate&&!r.shadowMap.needsUpdate))return shadow(...args);const before=base;__c7Stage('shadow-maps');try{return shadow(...args)}finally{__c7Stage(before)}};
+  if(detail){const kinds=new WeakMap();for(const[group,kind]of[[w.ground,'ground'],[w.grass,'near-grass'],[w.farGrass,'far-grass'],[w.trees,'trees'],[w.atmosphere.mesh,'sky'],[w.lake.mesh,'water']])group?.traverse(o=>{if(o.isMesh)kinds.set(o,kind)});const draw=r.renderBufferDirect.bind(r);r.renderBufferDirect=(cam,scene,g,m,o,group)=>{if(enabled&&['main','reflection'].includes(base)){let kind=kinds.get(o)||'other';if(m.colorWrite===false)kind='depth';else if(kind==='trees')kind=m.userData.leafUniforms?'leaves':'bark';segment(base+':'+kind);}return draw(cam,scene,g,m,o,group)};}
+  const drain=()=>{if(gl.getParameter(ext.GPU_DISJOINT_EXT)){invalid+=queue.length;for(const f of queue)for(const part of f.parts)gl.deleteQuery(part.q);queue=[];return;}while(queue.length&&queue[0].parts.every(q=>gl.getQueryParameter(q.q,gl.QUERY_RESULT_AVAILABLE))){const f=queue.shift(),gpu={};for(const part of f.parts){gpu[part.name]=(gpu[part.name]||0)+gl.getQueryParameter(part.q,gl.QUERY_RESULT)/1e6;gl.deleteQuery(part.q);}delete f.parts;f.gpuMs=gpu;f.gpuTotalMs=Object.values(gpu).reduce((a,b)=>a+b,0);samples.push(f);}};
+  window.runAudit=async(profile,duration=6000)=>{samples=[];queue=[];invalid=0;let first,last,count=0;const cpu=[],interval=[];await new Promise(resolve=>requestAnimationFrame(function tick(t){drain();first??=t;if(last!==undefined)interval.push(t-last);last=t;const phase=.5-.5*Math.cos((t-first)/duration*2*Math.PI);enabled=profile;frame={phase,parts:[]};startCPU=performance.now();w.render(phase,t/1000);end();enabled=false;frame.cpuMs=performance.now()-startCPU;frame.calls=w.state.calls;frame.triangles=w.state.triangles;frame.reflected=w.state.reflectionRendered;frame.solar=w.state.solar;cpu.push(frame.cpuMs);if(profile)queue.push(frame);count++;if(t-first<duration)requestAnimationFrame(tick);else resolve();}));for(let i=0;queue.length&&i<300;i++){await new Promise(r=>setTimeout(r,10));drain();}const stats=a=>{const s=a.slice().sort((a,b)=>a-b);return{mean:s.reduce((a,b)=>a+b,0)/s.length,p50:s[Math.floor(s.length*.5)],p95:s[Math.floor(s.length*.95)]}};return{profile,actualFrames:count,actualFPS:(count-1)*1000/(last-first),cpuMs:stats(cpu),frameMs:stats(interval),invalid,pending:queue.length,glError:gl.getError(),samples};};
+ },detail);
+ await p.evaluate(()=>runAudit(false,1800));const data=[];for(const enabled of[false,true,false]){data.push(await p.evaluate(enabled=>runAudit(enabled,8000),enabled));}
+ const result={width,height,detail,data};runs.push(result);await fs.writeFile(out+'/gpu-timing.json',JSON.stringify({kind:'GPU elapsed queries, injected diagnostic markers; unprofiled/profiled/unprofiled controls. Actual one-render-per-rAF loop, not bare rAF. Same Mac, no physical devices.',errors,runs},null,2));console.log({width,detail,runs:data.map(d=>({profile:d.profile,fps:d.actualFPS,cpu:d.cpuMs,invalid:d.invalid,pending:d.pending}))});await p.close();
+}}finally{await b.close();}if(errors.length||runs.some(r=>r.data.some(d=>d.glError||d.invalid||d.pending)))process.exitCode=1;

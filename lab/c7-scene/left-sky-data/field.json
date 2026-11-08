@@ -1,0 +1,68 @@
+{
+  "kind": "Finite left-region ground/32cm canopy horizons; BA conservative stencil maximum of spatial/azimuth second differences in degrees, an empirical reconstruction confidence metric, NOT a rigorous error bound.",
+  "W": 256,
+  "H": 128,
+  "D": 17,
+  "bounds": [
+    -600,
+    -800,
+    340,
+    360
+  ],
+  "firstAzimuth": -22.5,
+  "azimuthStep": 2.5,
+  "rawBytes": 4456448,
+  "gzipBytes": 883499,
+  "rawSha256": "058a240a8100cda0a06597048316ea97a6b7a572246fa1e2a773eac6b68136df",
+  "gzipSha256": "69b52a34c7862bfe452ea0bcddc71689ea8df2bd1ffd19f54ef5bc987029733d",
+  "source": {
+    "terrain.js": "a53d4666bae319ffa8bb46e5e74cb6af00c76803d00fa58b580663606e5a77f4",
+    "adaptive-terrain.js": "edefe06dea9c303a7e4cb7792c01a360ca4cacc353c060088e58e5b7383809d7"
+  },
+  "seconds": 101.001989208,
+  "revalidatedBy": {
+    "proof": "evidence/foreground-crest-shore-guard-v499-domain/horizon-domain.json",
+    "method": "406997 ordered adaptive triangle positions touching z<=-125 byte-identical; rays remain north of -125. Binary field unchanged."
+  },
+  "previousSource": {
+    "terrain.js": "f83f7ca61c8842c21b63fa8506b333f60b7c4ed58b2da8da4d7b369e5a3d5bc7",
+    "adaptive-terrain.js": "e6ef429cde09d187afcbac0027a9deb94fc7b6d8190b06517d109d9454ab4cbd"
+  },
+  "revalidation": {
+    "at": "2026-10-29T13:38:06.380Z",
+    "proof": "evidence/c7-v599/left-field-proof.json",
+    "kind": "All ordered adaptive triangle positions touching z<=-440 are identical. Left-field rays start north of -440 and all authored azimuths run north; no field rebake claimed."
+  },
+  "encoding": "C7HQv001-fixed-point-xyz",
+  "precision": {
+    "scales": [
+      2048,
+      2048,
+      1024,
+      1024
+    ],
+    "kind": "Quantized authoring field; full dimensions/layers retained",
+    "maxAbsoluteError": [
+      0.000244140625,
+      0.000244140625,
+      0.00048828125,
+      0.00048828125
+    ]
+  },
+  "originalRawSha256": "6b749ff1320d1282eac70d8dd42ca1e04d338d1181d572dc4f1d262be63872a3",
+  "sha256": "058a240a8100cda0a06597048316ea97a6b7a572246fa1e2a773eac6b68136df",
+  "exactSourceRevalidation": {
+    "before": "8b984849e17cde7e9f26b45983985d97b3b6a5f5b2d576cfbfafeb1d75dcdbc9",
+    "after": "a53d4666bae319ffa8bb46e5e74cb6af00c76803d00fa58b580663606e5a77f4",
+    "evidence": "evidence/c7-v620-fast-start-2026-11-02/source-equivalence.json",
+    "proofSha256": "2680c63105d77689fc809206fb5f3d251812cecb3c8e1a4ffe2f506942a3eb82",
+    "basis": "All ten initialized terrain fields exact, including every SDF Float64/Float32 value; only exact distance search and independent fill-loop order changed; binary payload unchanged"
+  },
+  "adaptiveTraversalRevalidation": {
+    "before": "e6ef429cde09d187afcbac0027a9deb94fc7b6d8190b06517d109d9454ab4cbd",
+    "after": "4516e7c21eff542a39ed41df1fe1807fbb945366903e9c2c99fc8f1b829f26ce",
+    "evidence": "evidence/c7-v623-speed-2026-11-03/terrain-equivalence.json",
+    "proofSha256": "4e1469d142dc45cbb7aba4ab8a911a1f8e075fe94e1521690c4a23aae53cb89d",
+    "basis": "Only traversal of sorted boundary ranges changed; identical complete indices/positions/normals/shore for cached rounded and procedural unrounded terrain. Sampling formula unchanged; 4000 sampled heights/normals Float64 exact. All cached sky fields unchanged."
+  }
+}

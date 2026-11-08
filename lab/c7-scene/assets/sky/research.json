@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-24",
+  "scope": "Sky cloud structure only. No terrain, UI, publishing or GPU render changes.",
+  "selected": "citrus_orchard_road_puresky",
+  "candidates": [
+    {
+      "id": "kloppenheim_06_puresky",
+      "page": "https://polyhaven.com/a/kloppenheim_06_puresky",
+      "license": "CC0-1.0",
+      "authors": {
+        "Greg Zaal": "Original",
+        "Jarod Guest": "Sky edits"
+      },
+      "source2k": {
+        "size": 4434394,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/kloppenheim_06_puresky_2k.hdr",
+        "md5": "590a829b3cf71216451655e601d542c6"
+      },
+      "sourceSha256": "99451201586489ef3288c97bfac2a2ac232a5491c51a1faf0ec8ea39f3ccd533",
+      "preview": "research/kloppenheim_06_puresky-preview.jpg",
+      "detailPreview": "research/kloppenheim_06_puresky-upper-cloud-sector.png"
+    },
+    {
+      "id": "citrus_orchard_puresky",
+      "page": "https://polyhaven.com/a/citrus_orchard_puresky",
+      "license": "CC0-1.0",
+      "authors": {
+        "Dimitrios Savva": "Photography",
+        "Jarod Guest": "Processing"
+      },
+      "source2k": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/citrus_orchard_puresky_2k.hdr",
+        "md5": "e8ab0122b62fec49f798a7ca620bbd33",
+        "size": 4876223
+      },
+      "sourceSha256": "69c63bb63d22292aa19a817531cee340f5ca6148539aea847b478eea7d962a7a",
+      "preview": "research/citrus_orchard_puresky-preview.jpg",
+      "detailPreview": "research/citrus_orchard_puresky-upper-cloud-sector.png"
+    },
+    {
+      "id": "citrus_orchard_road_puresky",
+      "page": "https://polyhaven.com/a/citrus_orchard_road_puresky",
+      "license": "CC0-1.0",
+      "authors": {
+        "Dimitrios Savva": "Photography",
+        "Jarod Guest": "Processing"
+      },
+      "source2k": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/citrus_orchard_road_puresky_2k.hdr",
+        "md5": "50bf5084e6312056b0d662653ac39c38",
+        "size": 4978718
+      },
+      "sourceSha256": "b4e5f7d0e7ba17e53d42ee01d2cc5a215d5faea3c703b7911d5cf4fd39a7f541",
+      "preview": "research/citrus_orchard_road_puresky-preview.jpg",
+      "detailPreview": "research/citrus_orchard_road_puresky-upper-cloud-sector.png"
+    },
+    {
+      "id": "industrial_sunset_puresky",
+      "page": "https://polyhaven.com/a/industrial_sunset_puresky",
+      "license": "CC0-1.0",
+      "authors": {
+        "Jarod Guest": "Sky Edits",
+        "Sergej Majboroda": "Original"
+      },
+      "source2k": {
+        "size": 4344656,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/industrial_sunset_puresky_2k.hdr",
+        "md5": "54457ed6fc7e0dcd7fcdcd0603892a7d"
+      },
+      "sourceSha256": "799e6fa9a58dfbec1426d62486aa87fa097a85cf16bb121c79f9ee1125a54288",
+      "preview": "research/industrial_sunset_puresky-preview.jpg",
+      "detailPreview": "research/industrial_sunset_puresky-upper-cloud-sector.png"
+    }
+  ],
+  "assessment": {
+    "kloppenheim_06_puresky": "Sparse separated cumulus and too much clean blue sky; weaker match to the continuous thin reference layers.",
+    "citrus_orchard_puresky": "Natural irregular small structure, but larger clumps and brighter open blue patches.",
+    "citrus_orchard_road_puresky": "Chosen: soft irregular layers and fine broken filaments in the 10–40 degree elevation sector.",
+    "industrial_sunset_puresky": "Useful broad veil but comparatively heavy low cumulus. Full RGB is too cool, as with all candidates."
+  },
+  "method": {
+    "kind": "Estimated scalar cloud coverage from chromatic ratios; not measured optical depth",
+    "citation": "https://doi.org/10.5194/amt-5-2881-2012",
+    "source": "8K HDR, preserved unchanged",
+    "runtime": "4K lossless WebP, NoColorSpace, 1.84MB; no source RGB",
+    "worldSampling": "Equirectangular world azimuth with horizontalScale=2.1; sourceElevation=12deg+max(actualElevation,0)*2.5",
+    "sourceSunRemoval": "Source disk at altitude3.515625deg; scalar mask radius3–7deg; used forward field starts above12deg",
+    "illumination": "Authored directional color gradient and shared oneSun preserved. Same sky material must feed water reflection and PMREM.",
+    "integration": "const sky=createSky(...); await sky.readyPromise; capture PMREM only afterwards.",
+    "pmremTextureOwnership": "After ShaderMaterial.clone(), reassign cloned uniforms.uCloudMap.value to the original texture object before rendering to avoid per-update GPU copies."
+  },
+  "validation": {
+    "hdrHashes": "All downloaded 2K MD5 values and selected8K MD5 verified against primary API.",
+    "sourcePreview": "All4 sources and selected cloud sector visually inspected.",
+    "dataPreview": "Scalar map inspected; natural irregular structure survives extraction; lower hemisphere neutral, source sun masked.",
+    "syntax": "node --check lab/c7-scene/sky.js passed",
+    "gpu": "Not run by this agent. Final scene appearance, reflection, and shader compilation remain pending root GPU window.",
+    "periodicBoundary": "Maximum first/last-column scalar difference: 0/255",
+    "http": "Local asset HTTP200, image/webp"
+  }
+}

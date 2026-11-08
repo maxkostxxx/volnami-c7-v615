@@ -1,0 +1,15 @@
+# Prepared assets validate the exact source bytes; never apply CRLF conversion.
+lab/c7-scene/** -text
+public/3d/c7/** -text
+scripts/** -text
+content/legal/** -text
+design/*.csv -text
+
+*.hdr -text -diff
+*.gz -text -diff
+*.br -text -diff
+*.zst -text -diff
+*.webp -text -diff
+*.png -text -diff
+*.jpg -text -diff
+*.woff2 -text -diff

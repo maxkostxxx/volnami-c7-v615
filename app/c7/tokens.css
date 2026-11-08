@@ -1,0 +1,47 @@
+.c7 {
+  --c7-night: #11241b;
+  --c7-deep: #1e402d;
+  --c7-forest: #305741;
+  --c7-moss: #94b4a0;
+  --c7-paper: #f6f3ea;
+  --c7-surface: rgba(248, 240, 230, .84);
+  --c7-surface-light: rgba(248, 240, 230, .78);
+  --c7-wave-duration: 620ms;
+  --c7-wave-rise: 36px;
+  --c7-wave-stagger: 42ms;
+  --c7-wave-ease: cubic-bezier(.19,.65,.24,1);
+  --c7-paper-soft: #ece8dc;
+  --c7-sun: #f3c6d5;
+  --c7-sun-warm: #f4c99f;
+  --c7-ink: #162920;
+  --c7-white: #fefcf6;
+  --c7-rule: rgba(48, 87, 65, 0.26);
+  --c7-process-scrim: linear-gradient(180deg, rgba(12,35,20,0), rgba(12,35,20,.64) 3rem, rgba(12,35,20,.64) calc(100% - 3rem), rgba(12,35,20,0));
+
+  --c7-case-stage: #e8e1d8;
+  --c7-case-stage-light: #f4eee9;
+  --c7-case-paper: #fffaf6;
+  --c7-case-caption: #4c554d;
+  --c7-case-divider: rgba(22, 41, 32, 0.23);
+
+  --c7-font-display: var(--font-c7-kreadon), Arial, sans-serif;
+  --c7-font-body: var(--font-c7-cannonade), "Helvetica Neue", Arial, sans-serif;
+
+  --c7-page: 96rem;
+  --c7-gutter: clamp(1.15rem, 3.8vw, 4.5rem);
+  --c7-display: clamp(2.5rem, 4.2vw, 5rem);
+  --c7-section: clamp(2.5rem, 3.35vw, 4rem);
+  --c7-subhead: clamp(1.7rem, 2.5vw, 2.8rem);
+  --c7-copy: clamp(1rem, 0.96rem + 0.16vw, 1.14rem);
+  --c7-small: clamp(0.78rem, 0.74rem + 0.12vw, 0.88rem);
+
+  --c7-fast: 180ms;
+  --c7-slow: 720ms;
+  --c7-ease: cubic-bezier(0.2, 0.72, 0.2, 1);
+  --focus-ring: var(--c7-sun);
+  --focus-ring-contrast: var(--c7-night);
+}
+
+@media (max-width: 720px) {
+  .c7 { --c7-wave-duration: 540ms; --c7-wave-rise: 28px; --c7-wave-stagger: 32ms; }
+}

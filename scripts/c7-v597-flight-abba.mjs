@@ -1,0 +1,11 @@
+// Full-page active-rendered frames, paired B/C/C/B, one GPU browser at a time.
+import{chromium}from'playwright';import fs from'node:fs/promises';
+const out=process.env.QA_OUTPUT||'evidence/c7-v597-flight-abba';await fs.mkdir(out,{recursive:true});const b=await chromium.launch({headless:true,args:['--use-angle=metal']}),rows=[],errors=[];
+try{for(const[width,height]of[[390,844],[1440,900],[2560,1080]].filter(([w])=>!process.env.QA_WIDTHS||process.env.QA_WIDTHS.split(',').includes(String(w))))for(const mode of['baseline','candidate','candidate','baseline']){
+ const p=await b.newPage({viewport:{width,height},deviceScaleFactor:1});p.on('pageerror',e=>errors.push(e.message));const base=mode==='baseline'?'http://127.0.0.1:3047':'http://127.0.0.1:3007';await p.goto(base+'/c7/?c7-debug');await p.locator('.c7-landscape.is-ready').waitFor({timeout:90000});await p.waitForFunction(()=>getComputedStyle(document.querySelector('.c7-landscape canvas')).opacity==='1');
+ const result=await p.evaluate(async()=>{
+  const host=document.querySelector('.c7-landscape'),max=document.documentElement.scrollHeight-innerHeight,read=()=>JSON.parse(host.dataset.c7Debug);
+  const run=async ms=>{let start,last,previous=read(),initial=previous,activeMs=0,activeFrames=0,raf=0;await new Promise(resolve=>requestAnimationFrame(function tick(t){start??=t;const s=read();if(last!==undefined&&!s.renderSuspended&&!previous.renderSuspended){activeMs+=t-last;activeFrames+=Math.max(0,s.frames-previous.frames);}last=t;previous=s;raf++;const v=Math.min(1,(t-start)/ms);scrollTo({top:max*(.5-.5*Math.cos(v*2*Math.PI)),behavior:'instant'});if(v<1)requestAnimationFrame(tick);else resolve();}));return{activeRenderedFPS:activeFrames*1000/activeMs,activeFrames,activeMs,allRenderedFPS:(read().frames-initial.frames)*1000/(last-start),rafFPS:(raf-1)*1000/(last-start),quality:read().quality};};
+  await run(2000);await new Promise(r=>setTimeout(r,500));return await run(10000);
+ });rows.push({mode,width,height,...result});await p.close();console.log(rows.at(-1));await fs.writeFile(out+'/results.json',JSON.stringify({kind:'Same Mac, headless Chromium/Metal, emulated viewport, actual scene frames from debug counter; rAF is separate. B/C/C/B full-page flights, 2s warmup and 10s sample.',rows,errors},null,2));}
+}finally{await b.close();}if(errors.length)process.exitCode=1;

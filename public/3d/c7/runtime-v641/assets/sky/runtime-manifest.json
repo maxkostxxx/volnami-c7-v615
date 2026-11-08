@@ -1,0 +1,46 @@
+{
+  "source": "citrus_orchard_road_puresky_8k.hdr",
+  "sourceSha256": "d6a88bb8c31d8f0e99033b8a2ca5b93a20ac7491eae7064edd00c22f2b348ac3",
+  "output": "cloud-coverage-4k.webp",
+  "outputSha256": "3518a7b9f1e740940e50ed4f45ebd4370f898f7b3ac128a0139ff0e2045b94d6",
+  "outputBytes": 443394,
+  "width": 4096,
+  "height": 2048,
+  "encoding": "8-bit scalar, WebP quality85 effort6, 4096x2048 unchanged, NoColorSpace",
+  "license": "CC0-1.0",
+  "sourcePage": "https://polyhaven.com/a/citrus_orchard_road_puresky",
+  "authors": {
+    "Dimitrios Savva": "Photography",
+    "Jarod Guest": "Processing"
+  },
+  "algorithm": "linear HDR 2x2 average; log(red/blue); 6th/92nd percentile envelopes per elevation, Gaussian-smoothed sigma18 rows; smooth coverage; source sun 3–7 degree mask to neutral; neutral lower hemisphere; 8-column periodic edge feather",
+  "limitations": [
+    "Estimated cloud coverage, not calibrated physical optical depth.",
+    "No original RGB or radiance is included in the data texture.",
+    "4K angular detail is appropriate for thin soft clouds, not a sharp photographic background."
+  ],
+  "sourceSun": {
+    "u": 0.57958984375,
+    "vTop": 0.48046875,
+    "altitudeDegrees": 3.515625000000001,
+    "maskDegrees": [
+      3,
+      7
+    ]
+  },
+  "recommendedMapping": {
+    "centerU": 0.663,
+    "azimuthScale": 2.1,
+    "elevationOffsetDegrees": 12,
+    "elevationScale": 2.5
+  },
+  "generatedAt": "2026-10-24T18:13:09.862Z",
+  "originalOutputSha256": "bfb4820dc838b9d72df296fbc165188c44208dafb3566a2b00dea6ea9138387b",
+  "originalOutputBytes": 1843012,
+  "transportEvidence": "evidence/c7-v602-compact-2026-10-29/cloud-probe.json",
+  "precompressionCoverageStats12To40Degrees": {
+    "min": 0,
+    "max": 1,
+    "mean": 0.4444539443682499
+  }
+}

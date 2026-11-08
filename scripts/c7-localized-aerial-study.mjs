@@ -1,0 +1,6 @@
+import {chromium} from 'playwright';
+import {mkdir,writeFile} from 'node:fs/promises';
+const source='lab/c7-snapshots/hermite-s-v23',output='evidence/localized-aerial-v28';await mkdir(output,{recursive:true});
+const browser=await chromium.launch({headless:true,args:['--use-angle=metal']}),page=await browser.newPage({viewport:{width:1280,height:720},deviceScaleFactor:1});const errors=[],runs=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error')errors.push(e.text())});
+const cases=[['baseline',{}],['localized-west',{mistCenterX:-60,mistWidthX:25,mistOutsideWeight:.1,heightScale:160,mistExtinction:.12,hazeMaxLuminance:1,hazeSaturation:.9}],['localized-broad',{mistCenterX:-50,mistWidthX:35,mistOutsideWeight:.1,heightScale:160,mistExtinction:.12,hazeMaxLuminance:1,hazeSaturation:.7}]];
+try{await page.goto(`http://127.0.0.1:3027/${source}/?clean&freeze`);await page.waitForSelector('body.ready',{timeout:60000});for(const[name,params]of cases){const state=await page.evaluate(params=>{sceneLab.aerial.setParams(params);return sceneLab.set({});},params);await page.screenshot({path:`${output}/${name}.png`});runs.push({name,params,state});}}finally{await browser.close();await writeFile(`${output}/results.json`,JSON.stringify({source,errors,runs},null,2));}console.log({errors,runs:runs.length});

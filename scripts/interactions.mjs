@@ -2,7 +2,7 @@
 import { chromium } from 'playwright'
 
 const baseURL = process.env.QA_BASE_URL ?? `http://127.0.0.1:${Number(process.env.QA_PORT ?? 3000)}`
-const routes = Array.from({ length: 6 }, (_, index) => `/c${index + 1}/`)
+const routes = process.env.QA_ROUTES ? process.env.QA_ROUTES.split(',').map(r=>r.replace(/\/+$/,'')+'/') : Array.from({ length: 7 }, (_, index) => `/c${index + 1}/`)
 const viewports = [
   { name: 'mobile', width: 390, height: 844 },
   { name: 'desktop', width: 1440, height: 900 },
@@ -15,13 +15,14 @@ const testimonialSelector = {
   '/c4/': '.c4-quotes',
   '/c5/': '.c5-quotes',
   '/c6/': '.c6-quotes',
+  '/c7/': '.c7-quotes',
 }
 
 function record(level, route, viewport, check, detail) {
   findings.push({ level, route, viewport, check, detail })
 }
 
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, args: process.env.QA_GPU==='metal'?['--use-angle=metal']:[] })
 try {
   for (const viewport of viewports) {
     for (const route of routes) {
@@ -46,7 +47,7 @@ try {
       })
 
       try {
-        const response = await page.goto(route, { waitUntil: 'networkidle', timeout: 120_000 })
+        const response = await page.goto(route === '/c7/' ? route+'?c7-debug' : route, { waitUntil: 'networkidle', timeout: 120_000 })
         if (!response || response.status() >= 400) {
           record('error', route, viewport.name, 'route', `HTTP ${response?.status() ?? 'нет ответа'}`)
           continue
@@ -80,7 +81,8 @@ try {
           if (!targetIsMain) record('error', route, viewport.name, 'skip-link', `не ведёт к main: ${href}`)
         }
 
-        const headerCta = page.locator('header a[href$="#contacts"]').first()
+        const headerTarget = route.replace(/\/$/, '') === '/c7' ? '#brief' : '#contacts'
+        const headerCta = page.locator(`header a[href$="${headerTarget}"]`).first()
         if (await headerCta.count()) {
           await headerCta.click()
           await page.waitForTimeout(80)
@@ -88,11 +90,11 @@ try {
             hash: location.hash,
             active: document.activeElement?.id,
           }))
-          if (contactState.hash !== '#contacts' || contactState.active !== 'contacts') {
+          if (contactState.hash !== headerTarget || contactState.active !== headerTarget.slice(1)) {
             record('error', route, viewport.name, 'header-cta', JSON.stringify(contactState))
           }
         } else {
-          record('error', route, viewport.name, 'header-cta', 'ссылка на #contacts не найдена')
+          record('error', route, viewport.name, 'header-cta', `ссылка на ${headerTarget} не найдена`)
         }
 
         const contactCta = page.locator('#contacts a[href^="mailto:"]').first()
@@ -121,6 +123,14 @@ try {
         if (route === '/c4/') {
           await page.locator('.c4-stage.is-ready canvas').waitFor({ state: 'visible', timeout: 15_000 }).catch(() => {})
           const dimensions = await page.locator('.c4-stage canvas').evaluate((canvas) => ({ width: canvas.width, height: canvas.height })).catch(() => ({ width: 0, height: 0 }))
+          if (!dimensions.width || !dimensions.height) record('error', route, viewport.name, 'webgl', JSON.stringify(dimensions))
+        }
+
+        if (route === '/c7/') {
+          await page.locator('.c7-landscape.is-ready canvas').waitFor({ state: 'visible', timeout: 25_000 })
+          const ready = await page.locator('.c7-landscape').evaluate(e=>JSON.parse(e.dataset.c7Debug??'{}'))
+          if(ready.version!=='v613-deferred-image-readiness'||!(ready.frames>0)||!(ready.calls>0)||!(ready.triangles>0))record('error',route,viewport.name,'world-state',JSON.stringify(ready))
+          const dimensions = await page.locator('.c7-landscape canvas').evaluate((canvas) => ({ width: canvas.width, height: canvas.height })).catch(() => ({ width: 0, height: 0 }))
           if (!dimensions.width || !dimensions.height) record('error', route, viewport.name, 'webgl', JSON.stringify(dimensions))
         }
 
@@ -184,7 +194,7 @@ try {
     })
     const page = await context.newPage()
     try {
-      await page.goto(route, { waitUntil: 'networkidle', timeout: 120_000 })
+      await page.goto(route === '/c7/' ? route+'?c7-debug' : route, { waitUntil: 'networkidle', timeout: 120_000 })
       const matches = await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)
       if (!matches) record('error', route, 'mobile-reduced', 'reduced-motion', 'media query не активен')
       const infinite = await page.evaluate(() => document.getAnimations().filter((animation) => {

@@ -4,7 +4,7 @@ import { chromium } from 'playwright'
 const baseURL = (process.env.QA_BASE_URL ?? `http://127.0.0.1:${Number(process.env.QA_PORT ?? 3000)}`).replace(/\/+$/, '')
 const routes = process.env.QA_ROUTES
   ? process.env.QA_ROUTES.split(',').map((route) => `${route.trim().replace(/\/+$/, '')}/`)
-  : Array.from({ length: 6 }, (_, index) => `/c${index + 1}/`)
+  : Array.from({ length: 7 }, (_, index) => `/c${index + 1}/`)
 const hashes = ['#hero', '#about', '#services', '#cases', '#testimonials', '#contacts']
 const allViewports = [
   { name: 'mobile', width: 390, height: 844 },
@@ -19,7 +19,7 @@ function fail(route, viewport, check, detail) {
   findings.push({ route, viewport, check, detail })
 }
 
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, args: process.env.QA_GPU==='metal'?['--use-angle=metal']:[] })
 try {
   for (const viewport of viewports) {
     for (const route of routes) {
@@ -44,7 +44,7 @@ try {
         await page.evaluate(() => document.fonts.ready)
 
         const scrollBehavior = await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)
-        if (scrollBehavior !== 'smooth') fail(route, viewport.name, 'smooth-css', `scroll-behavior=${scrollBehavior}`)
+        if (route !== '/c7/' && scrollBehavior !== 'smooth') fail(route, viewport.name, 'smooth-css', `scroll-behavior=${scrollBehavior}`)
 
         const trigger = page.locator('button[aria-controls]').first()
         if (!(await trigger.count())) {
@@ -131,6 +131,20 @@ try {
           }
         }
 
+        if(route==='/c7/') {
+          // C7 deliberately leaves CSS auto for deep reload. Judge smooth
+          // behavior through the actual hero/footer actions instead.
+          for(const [selector,id]of [['.c7-scroll-cue','about'],['.c7-footer a[href="#hero"]','hero']]) {
+            const link=page.locator(selector)
+            await link.scrollIntoViewIfNeeded();await page.waitForTimeout(500)
+            await page.evaluate(()=>{window.__cueSamples=[scrollY];window.__cueListener=()=>window.__cueSamples.push(scrollY);addEventListener('scroll',window.__cueListener)})
+            await link.click()
+            await page.waitForFunction(id=>document.activeElement?.id===id,id)
+            await page.waitForTimeout(1500)
+            const state=await page.evaluate(()=>{removeEventListener('scroll',window.__cueListener);return {samples:[...new Set(window.__cueSamples)],hash:location.hash}})
+            if(state.samples.length<3||state.hash!==`#${id}`)fail(route,viewport.name,'anchor-motion',JSON.stringify(state))
+          }
+        }
         for (const detail of runtimeErrors) fail(route, viewport.name, 'runtime', detail)
       } catch (error) {
         fail(route, viewport.name, 'crash', error.stack || error.message)
@@ -158,23 +172,25 @@ try {
     }
   }
 
-  const context = await browser.newContext({ baseURL, viewport: { width: 1280, height: 900 } })
-  const page = await context.newPage()
-  try {
-    const response = await page.goto('/', { waitUntil: 'networkidle', timeout: 120_000 })
-    if (!response || response.status() >= 400) fail('/', 'desktop', 'route', `HTTP ${response?.status() ?? 'нет ответа'}`)
-    const launcher = await page.evaluate(() => ({
-      main: [...document.querySelectorAll('.index-links a')].filter((link) => /^\/c[1-6]\/?$/.test(new URL(link.href).pathname)).length,
-      cases: [...document.querySelectorAll('.index-links a')].filter((link) => /^\/c[1-6]\/case\/?$/.test(new URL(link.href).pathname)).length,
-      newTabs: [...document.querySelectorAll('.index-links a')].filter((link) => link.target === '_blank').length,
-      title: document.title,
-    }))
-    if (launcher.main !== 6 || launcher.cases !== 6 || launcher.newTabs !== 12) fail('/', 'desktop', 'launcher', JSON.stringify(launcher))
-    if (!launcher.title.includes('Шесть концептов')) fail('/', 'desktop', 'title', launcher.title)
-  } catch (error) {
-    fail('/', 'desktop', 'crash', error.stack || error.message)
-  } finally {
-    await context.close()
+  if (!process.env.QA_ROUTES) {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1280, height: 900 } })
+    const page = await context.newPage()
+    try {
+      const response = await page.goto('/', { waitUntil: 'networkidle', timeout: 120_000 })
+      if (!response || response.status() >= 400) fail('/', 'desktop', 'route', `HTTP ${response?.status() ?? 'нет ответа'}`)
+      const launcher = await page.evaluate(() => ({
+        main: [...document.querySelectorAll('.index-links a')].filter((link) => /^\/c[1-6]\/?$/.test(new URL(link.href).pathname)).length,
+        cases: [...document.querySelectorAll('.index-links a')].filter((link) => /^\/c[1-6]\/case\/?$/.test(new URL(link.href).pathname)).length,
+        newTabs: [...document.querySelectorAll('.index-links a')].filter((link) => link.target === '_blank').length,
+        title: document.title,
+      }))
+      if (launcher.main !== 6 || launcher.cases !== 6 || launcher.newTabs !== 12) fail('/', 'desktop', 'launcher', JSON.stringify(launcher))
+      if (!launcher.title.includes('Шесть концептов')) fail('/', 'desktop', 'title', launcher.title)
+    } catch (error) {
+      fail('/', 'desktop', 'crash', error.stack || error.message)
+    } finally {
+      await context.close()
+    }
   }
 } finally {
   await browser.close()

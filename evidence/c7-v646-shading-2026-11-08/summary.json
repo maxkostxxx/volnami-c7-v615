@@ -1,0 +1,227 @@
+{
+  "local": "http://127.0.0.1:3212/c7/",
+  "runtime": "runtime-v646",
+  "render": {
+    "wide": {
+      "641": {
+        "rate": 33.38000352342637,
+        "range": [
+          33.302189618985814,
+          33.38247976179784
+        ],
+        "p50": 30.599999994039536,
+        "p95": 35.900000005960464,
+        "over25_2Percent": 90.80779944289694,
+        "cpuP50": 8.900000005960464
+      },
+      "645": {
+        "rate": 39.92680086508068,
+        "range": [
+          39.87461648380238,
+          40.06231916314266
+        ],
+        "p50": 25.19999998807907,
+        "p95": 31.299999982118607,
+        "over25_2Percent": 49.58217270194986,
+        "cpuP50": 8.599999994039536
+      },
+      "646": {
+        "rate": 41.395011901122665,
+        "range": [
+          41.073384446962216,
+          41.41072537784448
+        ],
+        "p50": 24.69999998807907,
+        "p95": 30.799999982118607,
+        "over25_2Percent": 41.78272980501393,
+        "cpuP50": 8.400000005960464
+      }
+    },
+    "transition": {
+      "645": {
+        "rate": 49.460061000579884,
+        "range": [
+          49.2934604010006,
+          50.06257822277848
+        ],
+        "p50": 19,
+        "p95": 29.5,
+        "over25_2Percent": 15.32033426183844,
+        "cpuP50": 6.800000011920929
+      },
+      "646": {
+        "rate": 52.104440456293226,
+        "range": [
+          52.04041805789055,
+          52.72021673866882
+        ],
+        "p50": 18.5,
+        "p95": 27.599999994039536,
+        "over25_2Percent": 9.47075208913649,
+        "cpuP50": 7.299999982118607
+      }
+    },
+    "mobile": {
+      "645": {
+        "rate": 88.0281690142128,
+        "range": [
+          86.04823481631709,
+          88.1812614819351
+        ],
+        "p50": 11,
+        "p95": 15.5,
+        "over25_2Percent": 0,
+        "cpuP50": 5.200000017881393
+      },
+      "646": {
+        "rate": 96.2078088669998,
+        "range": [
+          95.56422712446434,
+          97.59535879880809
+        ],
+        "p50": 10.400000005960464,
+        "p95": 11.700000017881393,
+        "over25_2Percent": 0,
+        "cpuP50": 4.699999988079071
+      }
+    }
+  },
+  "loading": {
+    "loopback / 1440 cold": {
+      "v645": {
+        "median": 2.568,
+        "range": [
+          2.5552000000178814,
+          2.579800000011921
+        ]
+      },
+      "v646": {
+        "median": 2.2762000000178815,
+        "range": [
+          2.271800000011921,
+          2.332899999976158
+        ]
+      }
+    },
+    "loopback / 1440 warm": {
+      "v645": {
+        "median": 2.4777999999821185,
+        "range": [
+          2.4420999999940394,
+          2.5675
+        ]
+      },
+      "v646": {
+        "median": 2.1465999999940397,
+        "range": [
+          2.134800000011921,
+          2.1725999999940395
+        ]
+      }
+    },
+    "4Mbps+100ms / 390 emulation cold": {
+      "v645": {
+        "median": 5.1725,
+        "range": [
+          5.152300000011921,
+          5.184200000017881
+        ]
+      },
+      "v646": {
+        "median": 5.17859999999404,
+        "range": [
+          5.168799999982118,
+          5.190199999988079
+        ]
+      }
+    },
+    "4Mbps+100ms / 390 emulation warm": {
+      "v645": {
+        "median": 1.8500999999940395,
+        "range": [
+          1.8469000000059606,
+          1.908
+        ]
+      },
+      "v646": {
+        "median": 1.856699999988079,
+        "range": [
+          1.8482000000178813,
+          1.8582999999821186
+        ]
+      }
+    },
+    "4Mbps+100ms / 1440 cold": {
+      "v645": {
+        "median": 6.8122000000178815,
+        "range": [
+          6.805900000005961,
+          6.8505999999940395
+        ]
+      },
+      "v646": {
+        "median": 6.5835,
+        "range": [
+          6.582699999988079,
+          6.60959999999404
+        ]
+      }
+    },
+    "4Mbps+100ms / 1440 warm": {
+      "v645": {
+        "median": 2.554199999988079,
+        "range": [
+          2.5465,
+          2.578299999982119
+        ]
+      },
+      "v646": {
+        "median": 2.2954000000059605,
+        "range": [
+          2.2677999999821186,
+          2.3207000000178812
+        ]
+      }
+    }
+  },
+  "verification": {
+    "kind": "Local only, no commit/push/publish",
+    "head": "4cfcc9a390454919a0af8c32a5a2bb0b145c316d",
+    "trackedSha256": "6d9354b0884134d1675d272a4c7cbcc0c4b4683859fda357d63191c7a0ca78aa",
+    "trackedPreserved": true,
+    "referenceRuntimesPreserved": true,
+    "referencePackagesPreserved": true,
+    "runtime": "runtime-v646",
+    "package": "artifacts/c7-preview-2026-11-08-v646-local",
+    "bytes": 22475701,
+    "files": 111,
+    "buildSources": 90,
+    "bundledSources": 48,
+    "changed": [
+      "lab/c7-scene/startup-data-key.js",
+      "lab/c7-scene/world.js",
+      "lab/c7-scene/trees.js",
+      "lab/c7-scene/adaptive-terrain.js",
+      "lab/c7-scene/grass.js",
+      "lab/c7-scene/worker-entry.js",
+      "lab/c7-scene/mobile-data/manifest.json",
+      "lab/c7-scene/left-sky-data/field.json",
+      "lab/c7-scene/startup-data/manifest.json",
+      "lab/c7-scene/sky-data/field.json",
+      "app/c7/page.tsx",
+      "app/c7/scene/shared-world.ts",
+      "app/c7/scene/early-worker.ts",
+      "app/c7/scene/render-worker.ts",
+      "scripts/c7-package-world.mjs",
+      "scripts/c7-package-preview.mjs",
+      "lab/c7-scene/spot-receivers.js",
+      "lab/c7-scene/grass-packet.js",
+      "lab/c7-scene/grass-prep-entry.js",
+      "scripts/c7-build-local.mjs"
+    ],
+    "profiling": [],
+    "qaStages": 11,
+    "errors": [],
+    "pass": true
+  }
+}
