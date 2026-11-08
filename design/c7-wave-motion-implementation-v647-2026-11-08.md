@@ -8,8 +8,9 @@ a second scrolling engine or compete for the main thread.
 
 ## Design contract
 
-1. A section arrives through a single broad wave cue, then reading units rise
-   in their natural reading order.
+1. A visible two-line crest crosses a section horizontally. Each reading unit
+   opens behind its own matching wavy edge, then settles in natural reading
+   order.
 2. The same entrance runs after an item has fully left the viewport and the
    visitor scrolls back. An element must never reset while it is still grazing
    the viewport.
@@ -24,9 +25,11 @@ a second scrolling engine or compete for the main thread.
 
 - `C7WaveReveal` owns IntersectionObserver state for actual reading units.
 - Items outside the safe viewport are armed with an entry direction. When they
-  enter, only `opacity` and compositor `transform` animate.
-- `C7WaveLines` is the shared visual wave, rather than a clipping mask for
-  each individual card.
+  enter, `opacity` and compositor `transform` settle the item while a fixed,
+  twelve-point wavy `clip-path` briefly opens it left-to-right (or
+  right-to-left on reverse scrolling).
+- `C7WaveReveal` contains a synchronised two-line SVG crest. `C7WaveLines`
+  remains the low-key ambient motif of the landscape sections.
 - The decorative mouse-following cursor is removed from the C7 page. It added
   a pointer, scroll and rAF loop without contributing to the requested scroll
   narrative.
@@ -34,8 +37,8 @@ a second scrolling engine or compete for the main thread.
 ## Acceptance checks
 
 - Production build passes.
-- At 1440x900 and 390x844, direct and reverse scroll leave no visible reveal
-  element at zero opacity after the transition settles.
+- At 1440x900 and 390x844, direct and reverse scroll run both the crest and
+  reveal; no visible reveal element remains at zero opacity after settling.
 - Reduced motion has zero pending/running content reveals and no infinite DOM
   animation.
 - No console/page errors during the exercise.

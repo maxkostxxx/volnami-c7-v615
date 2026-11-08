@@ -1695,11 +1695,17 @@ html.c7-poster-capture .c7-landscape::after {
 
 /* v640: short rolling entrances on reading units, with no full-panel mask. */
 .c7-wave-reveal { position: relative; min-width: 0; }
-.c7-wave-reveal__content { min-width: 0; grid-column: 1 / -1; }
+.c7-wave-reveal__content { position: relative; z-index: 1; min-width: 0; grid-column: 1 / -1; }
+.c7-wave-reveal__front { position: absolute; z-index: 2; top: 50%; left: 0; width: 100%; height: clamp(3rem, 7vw, 5.5rem); overflow: visible; pointer-events: none; opacity: 0; }
+.c7-wave-reveal__front path { fill: none; stroke: var(--c7-sun); stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.c7-wave-reveal__front path:first-child { stroke-width: 2.5; }
+.c7-wave-reveal__front path:last-child { stroke: var(--c7-sun-warm); stroke-width: 1; opacity: .8; }
+.c7-wave-reveal[data-wave-state="running"] .c7-wave-reveal__front { animation: c7-wave-front-right 760ms cubic-bezier(.16,.72,.2,1) both; }
+.c7-wave-reveal[data-wave-direction="down"] .c7-wave-reveal__front { animation-name: c7-wave-front-left; }
 .c7-motion-item.is-motion-pending { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * -.35), var(--c7-wave-rise), 0) rotate(-.6deg); }
 .c7-motion-item.is-motion-pending.is-motion-from-top { transform: translate3d(calc(var(--c7-wave-travel) * .25), calc(var(--c7-wave-rise) * -.72), 0) rotate(.45deg); }
-.c7-motion-item.is-motion-running { will-change: transform, opacity; animation: c7-wave-item-rise var(--c7-wave-duration) var(--c7-wave-ease) var(--c7-wave-delay, 0ms) both; }
-.c7-motion-item.is-motion-running.is-motion-from-top { animation-name: c7-wave-item-fall; }
+.c7-motion-item.is-motion-running { will-change: transform, opacity, clip-path; animation: c7-wave-item-rise var(--c7-wave-duration) var(--c7-wave-ease) var(--c7-wave-delay, 0ms) both, c7-wave-wipe-right var(--c7-wave-duration) var(--c7-wave-ease) var(--c7-wave-delay, 0ms) both; }
+.c7-motion-item.is-motion-running.is-motion-from-top { animation-name: c7-wave-item-fall, c7-wave-wipe-left; }
 @keyframes c7-wave-item-rise {
   0% { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * -.35), var(--c7-wave-rise), 0) rotate(-.6deg); }
   56% { opacity: 1; transform: translate3d(.22rem, -.18rem, 0) rotate(.08deg); }
@@ -1709,6 +1715,28 @@ html.c7-poster-capture .c7-landscape::after {
   0% { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * .25), calc(var(--c7-wave-rise) * -.72), 0) rotate(.45deg); }
   56% { opacity: 1; transform: translate3d(-.18rem, .16rem, 0) rotate(-.06deg); }
   100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
+}
+@keyframes c7-wave-wipe-right {
+  0% { clip-path: polygon(0 0,0 0,0 0,0 0,0 0,0 0,0 100%,0 100%,0 100%,0 100%,0 100%,0 100%); }
+  62% { clip-path: polygon(0 0,55% 0,60% 9%,65% 0,69% 5%,73% 0,73% 100%,69% 95%,65% 100%,60% 91%,55% 100%,0 100%); }
+  100% { clip-path: polygon(0 0,100% 0,100% 0,100% 0,100% 0,100% 0,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,0 100%); }
+}
+@keyframes c7-wave-wipe-left {
+  0% { clip-path: polygon(100% 0,100% 0,100% 0,100% 0,100% 0,100% 0,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%); }
+  62% { clip-path: polygon(39% 0,100% 0,100% 0,100% 0,100% 0,100% 0,100% 100%,55% 100%,51% 91%,47% 100%,43% 95%,39% 100%); }
+  100% { clip-path: polygon(0 0,100% 0,100% 0,100% 0,100% 0,100% 0,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,0 100%); }
+}
+@keyframes c7-wave-front-right {
+  0% { opacity: 0; transform: translate3d(-108%, -50%, 0) rotate(-1deg); }
+  11% { opacity: .95; }
+  83% { opacity: .95; }
+  100% { opacity: 0; transform: translate3d(108%, -50%, 0) rotate(1deg); }
+}
+@keyframes c7-wave-front-left {
+  0% { opacity: 0; transform: translate3d(108%, -50%, 0) scaleX(-1) rotate(-1deg); }
+  11% { opacity: .95; }
+  83% { opacity: .95; }
+  100% { opacity: 0; transform: translate3d(-108%, -50%, 0) scaleX(-1) rotate(1deg); }
 }
 .c7-about-sheet { background: transparent; }
 .c7-services::before, .c7-cases::before { background: transparent; }
@@ -1735,8 +1763,9 @@ html.c7-poster-capture .c7-landscape::after {
 .c7-privacy-actions a { font-size: .8rem; text-underline-offset: .2em; }
 .c7-privacy-actions button { min-height: 44px; padding: .55rem 1.1rem; border: 0; border-radius: 999px; background: var(--c7-forest); color: var(--c7-white); font: inherit; font-size: .85rem; cursor: pointer; }
 @media (prefers-reduced-motion:reduce), (forced-colors:active) {
- .c7-motion-item.is-motion-pending { opacity: 1; transform: none; }
- .c7-motion-item.is-motion-running { animation: none; transform: none; }
+ .c7-motion-item.is-motion-pending { opacity: 1; clip-path: none; transform: none; }
+ .c7-motion-item.is-motion-running { animation: none; clip-path: none; transform: none; }
+ .c7-wave-reveal__front { display: none; }
 }
 @media (forced-colors:active) { .c7-privacy-notice { border-color: CanvasText; background: Canvas; color: CanvasText; } }
 

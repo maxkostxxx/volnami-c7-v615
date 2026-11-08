@@ -140,5 +140,9 @@ export function C7WaveReveal({ children, className = '', intro = false, ...props
 
   return <div ref={ref} className={`c7-wave-reveal ${className}`} {...props}>
     <div className="c7-wave-reveal__content">{children}</div>
+    <svg className="c7-wave-reveal__front" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M-80 94C96 14 206 153 376 83S686 27 842 90s282 77 678-55" />
+      <path d="M-80 112C92 39 226 169 394 106s302-49 454 13 278 68 672-38" />
+    </svg>
   </div>
 }
