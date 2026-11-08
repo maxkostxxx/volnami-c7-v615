@@ -10,10 +10,13 @@ import { C7AboutReveal } from './about-reveal'
 import { C7Brief } from './brief'
 import { C7CaseImage } from './case-image'
 import { C7WaveReveal } from './wave-reveal'
+import { C7WaveLines } from './wave-lines'
+import { C7MotionPreferences } from './motion-preferences'
 import { C7PrivacyNotice, C7PrivacyButton } from './privacy-notice'
 import { earlyWorkerBootstrap } from './scene/early-worker'
 import './tokens.css'
 import './c7.css'
+import './wave-motion.css'
 
 export const metadata: Metadata = {
   title: 'Volnami — стратегия, дизайн и digital',
@@ -41,6 +44,7 @@ export default function C7Page() {
     <script dangerouslySetInnerHTML={{ __html: earlyWorkerBootstrap }} />
     <a className="c7-skip" href="#c7-main">{site.a11y.skipToContent}</a>
     <C7Landscape />
+    <C7MotionPreferences />
     <C7Chrome />
     <C7PrivacyNotice />
 
@@ -53,7 +57,8 @@ export default function C7Page() {
           </h1>
           <p>{site.hero.subtitle}</p>
         </C7WaveReveal>
-        <a className="c7-scroll-cue" href="#about" aria-label="Перейти к разделу О нас"><span aria-hidden="true" /></a>
+        <C7WaveLines tone="dark" />
+        <a className="c7-scroll-cue" href="#about" aria-label="Перейти к разделу О нас"><span className="c7-motion-ambient" aria-hidden="true" /></a>
       </section>
 
       <section className="c7-about c7-paper-section" id="about" aria-labelledby="c7-about-title" tabIndex={-1}>
@@ -80,6 +85,7 @@ export default function C7Page() {
             </li>)}
           </ol>
         </C7WaveReveal>
+        <C7WaveLines />
       </section>
 
       <section className="c7-services c7-paper-section" id="services" aria-labelledby="c7-services-title" tabIndex={-1}>
@@ -127,6 +133,7 @@ export default function C7Page() {
           <h2 id="c7-testimonials-title">{site.testimonials.title}</h2>
           <C7Testimonials />
         </C7WaveReveal>
+        <C7WaveLines tone="dark" />
       </section>
 
       <section className="c7-contacts c7-scene-section" id="contacts" aria-labelledby="c7-contacts-title" tabIndex={-1}>

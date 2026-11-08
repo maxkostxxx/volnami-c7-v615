@@ -75,7 +75,7 @@ export function C7Testimonials() {
         else if (event.key === 'End') goTo(count - 1, false)
         else goTo(index + (event.key === 'ArrowRight' ? 1 : -1), false)
       }}>
-      <ul role="list">{site.testimonials.list.map(item => <li key={item.name}>
+      <ul role="list">{site.testimonials.list.map((item, itemIndex) => <li key={item.name} aria-current={itemIndex === index ? 'true' : undefined}>
         <blockquote>{item.paragraphs.map(paragraph => <p key={paragraph.slice(0, 36)}>{paragraph}</p>)}</blockquote>
         <p className="c7-quote-author"><strong>{item.name}</strong>{item.role ? <span>{item.role}</span> : null}</p>
       </li>)}</ul>

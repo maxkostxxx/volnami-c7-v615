@@ -6,10 +6,11 @@
   --c7-paper: #f6f3ea;
   --c7-surface: rgba(248, 240, 230, .84);
   --c7-surface-light: rgba(248, 240, 230, .78);
-  --c7-wave-duration: 620ms;
-  --c7-wave-rise: 36px;
-  --c7-wave-stagger: 42ms;
-  --c7-wave-ease: cubic-bezier(.19,.65,.24,1);
+  --c7-wave-duration: 680ms;
+  --c7-wave-rise: 38px;
+  --c7-wave-travel: 48px;
+  --c7-wave-stagger: 52ms;
+  --c7-wave-ease: cubic-bezier(.16,.72,.2,1);
   --c7-paper-soft: #ece8dc;
   --c7-sun: #f3c6d5;
   --c7-sun-warm: #f4c99f;
@@ -43,5 +44,5 @@
 }
 
 @media (max-width: 720px) {
-  .c7 { --c7-wave-duration: 540ms; --c7-wave-rise: 28px; --c7-wave-stagger: 32ms; }
+  .c7 { --c7-wave-duration: 600ms; --c7-wave-rise: 28px; --c7-wave-travel: 34px; --c7-wave-stagger: 46ms; }
 }

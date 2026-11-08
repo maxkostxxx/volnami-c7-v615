@@ -1696,8 +1696,20 @@ html.c7-poster-capture .c7-landscape::after {
 /* v640: short rolling entrances on reading units, with no full-panel mask. */
 .c7-wave-reveal { position: relative; min-width: 0; }
 .c7-wave-reveal__content { min-width: 0; grid-column: 1 / -1; }
-.c7-motion-item.is-motion-pending { opacity: 0; }
-.c7-motion-item.is-motion-running { will-change: transform, opacity; }
+.c7-motion-item.is-motion-pending { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * -.35), var(--c7-wave-rise), 0) rotate(-.6deg); }
+.c7-motion-item.is-motion-pending.is-motion-from-top { transform: translate3d(calc(var(--c7-wave-travel) * .25), calc(var(--c7-wave-rise) * -.72), 0) rotate(.45deg); }
+.c7-motion-item.is-motion-running { will-change: transform, opacity; animation: c7-wave-item-rise var(--c7-wave-duration) var(--c7-wave-ease) var(--c7-wave-delay, 0ms) both; }
+.c7-motion-item.is-motion-running.is-motion-from-top { animation-name: c7-wave-item-fall; }
+@keyframes c7-wave-item-rise {
+  0% { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * -.35), var(--c7-wave-rise), 0) rotate(-.6deg); }
+  56% { opacity: 1; transform: translate3d(.22rem, -.18rem, 0) rotate(.08deg); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
+}
+@keyframes c7-wave-item-fall {
+  0% { opacity: 0; transform: translate3d(calc(var(--c7-wave-travel) * .25), calc(var(--c7-wave-rise) * -.72), 0) rotate(.45deg); }
+  56% { opacity: 1; transform: translate3d(-.18rem, .16rem, 0) rotate(-.06deg); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
+}
 .c7-about-sheet { background: transparent; }
 .c7-services::before, .c7-cases::before { background: transparent; }
 .c7-services > .c7-wave-reveal, .c7-cases > .c7-wave-reveal { width: 100%; background: var(--c7-surface); }
@@ -1723,7 +1735,8 @@ html.c7-poster-capture .c7-landscape::after {
 .c7-privacy-actions a { font-size: .8rem; text-underline-offset: .2em; }
 .c7-privacy-actions button { min-height: 44px; padding: .55rem 1.1rem; border: 0; border-radius: 999px; background: var(--c7-forest); color: var(--c7-white); font: inherit; font-size: .85rem; cursor: pointer; }
 @media (prefers-reduced-motion:reduce), (forced-colors:active) {
- .c7-motion-item.is-motion-pending { opacity: 1; }
+ .c7-motion-item.is-motion-pending { opacity: 1; transform: none; }
+ .c7-motion-item.is-motion-running { animation: none; transform: none; }
 }
 @media (forced-colors:active) { .c7-privacy-notice { border-color: CanvasText; background: Canvas; color: CanvasText; } }
 

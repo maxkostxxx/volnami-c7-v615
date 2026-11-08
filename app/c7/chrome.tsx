@@ -7,13 +7,36 @@ import { readMotionPaused, setMotionPaused } from './motion'
 
 export function C7Chrome() {
   const [open, setOpen] = useState(false)
+  const [closing, setClosing] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [motionPaused, updateMotionPaused] = useState(false)
   const [systemReduced, setSystemReduced] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingFragmentRef = useRef(false)
-  const close = useCallback(() => setOpen(false), [])
+  const finishClose = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = null
+    setOpen(false)
+    setClosing(false)
+  }, [])
+  const close = useCallback(() => {
+    if (systemReduced || readMotionPaused() || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      finishClose()
+      return
+    }
+    setClosing(true)
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(finishClose, 540)
+  }, [finishClose, systemReduced])
+  const openMenu = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = null
+    setClosing(false)
+    setOpen(true)
+  }
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current) }, [])
 
   useEffect(() => {
     updateMotionPaused(readMotionPaused())
@@ -52,12 +75,20 @@ export function C7Chrome() {
     if (!document.getElementById(id)) return
     if (location.hash !== href) history.pushState(history.state, '', href)
     if (open) {
+      // Escape begins the decorative close animation. A subsequent navigation
+      // must not inherit its 540 ms delay or leave keyboard focus behind the
+      // fading overlay.
+      if (closing) {
+        finishClose()
+        focusFragment()
+        return
+      }
       pendingFragmentRef.current = true
       close()
       return
     }
     focusFragment()
-  }, [close, focusFragment, open])
+  }, [close, closing, finishClose, focusFragment, open])
 
   useEffect(() => {
     // One path for header, menu, hero cue, skip link and footer. Preserve native
@@ -89,7 +120,7 @@ export function C7Chrome() {
   }, [])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || closing) return
     const panel = panelRef.current
     const touched: Element[] = []
     for (const element of Array.from(panel?.parentElement?.children ?? [])) {
@@ -131,7 +162,7 @@ export function C7Chrome() {
       touched.forEach((element) => element.removeAttribute('inert'))
       buttonRef.current?.focus()
     }
-  }, [open, close])
+  }, [open, closing, close])
 
   useEffect(() => {
     if (open || !pendingFragmentRef.current) return
@@ -147,13 +178,15 @@ export function C7Chrome() {
       <div className="c7-header-actions">
         <a className="c7-brief" href={site.header.cta.href}>{site.header.cta.label}</a>
         <a className="c7-telegram" href={site.header.telegram.href} aria-label={site.header.telegram.label}><Telegram /></a>
-        <button ref={buttonRef} className="c7-menu-button" type="button" aria-expanded={open} aria-controls="c7-menu" onClick={() => setOpen(true)}>
+        <button ref={buttonRef} className="c7-menu-button" type="button" aria-expanded={open && !closing} aria-controls="c7-menu" onClick={openMenu}>
           <span className="c7-vh">{site.header.menuLabel}</span><i /><i /><i />
         </button>
       </div>
     </header>
 
-    {open ? <div ref={panelRef} className="c7-menu" id="c7-menu" role="dialog" aria-modal="true" aria-label={site.header.menuLabel}>
+    {open ? <div ref={panelRef} className="c7-menu" id="c7-menu" role="dialog" aria-modal="true" aria-label={site.header.menuLabel}
+      data-state={closing ? 'closing' : 'open'} inert={closing} aria-hidden={closing || undefined}
+      onAnimationEnd={event => { if (closing && event.target === event.currentTarget) finishClose() }}>
       <button className="c7-menu-close" type="button" onClick={close} aria-label={site.header.menuCloseLabel}><span /><span /></button>
       <nav aria-label={site.header.menuLabel}>
         <ul role="list">{site.nav.map((item) => <li key={item.href}><a href={item.href}>{item.label}</a></li>)}</ul>
@@ -168,6 +201,7 @@ export function C7Chrome() {
         <a href={site.contacts.email.href}>{site.contacts.email.value}</a>
         <a href={site.contacts.telegram.href}>{site.contacts.telegram.value}</a>
       </div>
+      <svg className="c7-menu__edge" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 32C220 105 400-22 680 38S1130 98 1440 22V100H0Z" /></svg>
     </div> : null}
   </>
 }
