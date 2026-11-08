@@ -72,6 +72,11 @@ html:has(.c7) {
   pointer-events: none;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  /* Stable buffer while Safari/Chrome animate their address bar on scroll. */
+  .c7-landscape { bottom: auto; height: 100lvh; }
+}
+
 html.c7-poster-capture .c7 > :not(.c7-landscape) {
   display: none !important;
 }

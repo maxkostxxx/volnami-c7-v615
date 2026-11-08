@@ -38,9 +38,9 @@ export default function C7Page() {
   return <div className="c7">
     {/* v627: warm the worker entry and the world module while the page loads,
         so the first 3D frame waits for one transfer, not two. */}
-    <link rel="prefetch" href="/3d/c7/runtime-v646/worker-entry.js" as="script" />
-    <link rel="prefetch" href="/3d/c7/runtime-v646/startup-inputs.js" as="script" />
-    <link rel="prefetch" href="/3d/c7/runtime-v646/world.js" as="script" />
+    <link rel="modulepreload" href="/3d/c7/runtime-v646/worker-entry.js" />
+    <link rel="modulepreload" href="/3d/c7/runtime-v646/startup-inputs.js" />
+    <link rel="modulepreload" href="/3d/c7/runtime-v646/world.js" />
     <script dangerouslySetInnerHTML={{ __html: earlyWorkerBootstrap }} />
     <a className="c7-skip" href="#c7-main">{site.a11y.skipToContent}</a>
     <C7Landscape />

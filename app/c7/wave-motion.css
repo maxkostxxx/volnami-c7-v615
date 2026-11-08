@@ -40,7 +40,8 @@
   50% { transform: translate3d(0, .25rem, 0) rotate(45deg); }
 }
 
-.c7-header .c7-brief { isolation: isolate; overflow: hidden; }
+.c7-header .c7-brief { position: relative; isolation: isolate; overflow: hidden; }
+@media (min-width: 721px) { .c7-header .c7-brief { position: absolute; } }
 .c7-contact-cta,
 .c7-brief-send button,
 .c7-privacy-actions button {
@@ -62,6 +63,7 @@
   transition: transform 480ms var(--c7-ease);
   pointer-events: none;
 }
+@media (hover: hover) and (pointer: fine) {
 .c7-header .c7-brief:hover::before,
 .c7-header .c7-brief:focus-visible::before,
 .c7-contact-cta:hover::before,
@@ -70,6 +72,15 @@
 .c7-brief-send button:focus-visible::before,
 .c7-privacy-actions button:hover::before,
 .c7-privacy-actions button:focus-visible::before { transform: translate3d(0, 5%, 0) rotate(2deg); }
+}
+
+.c7-letter-source { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.c7-letter-word { display: inline-block; white-space: nowrap; }
+.c7-letter { display: inline-block; }
+@media (hover: hover) and (pointer: fine) {
+  .c7-service-list > article, .c7-case { transition: transform 260ms var(--c7-ease), box-shadow 260ms var(--c7-ease); }
+  .c7-service-list > article:hover, .c7-case:hover { transform: translateY(-7px); box-shadow: 0 14px 28px rgba(22,41,32,.12); }
+}
 
 .c7-section-heading > a,
 .c7-footer nav a,

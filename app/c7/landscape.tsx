@@ -172,7 +172,10 @@ export function C7Landscape() {
       if (!world) return
       coverDirty = true
       const nextWidth=host.clientWidth,nextHeight=host.clientHeight
-      const changed=viewportWidth>0&&(nextWidth!==viewportWidth||nextHeight!==viewportHeight)
+      // Mobile browser chrome changes height during a touch scroll. Rewriting
+      // scrollTop in that case fights native scrolling and jumps the camera.
+      // Preserve chapter anchoring only for a real width/orientation reflow.
+      const changed=viewportWidth>0&&(nextWidth!==viewportWidth||(!mobileProfile&&nextHeight!==viewportHeight))
       const previousProgress=exactProgress
       storyLayoutDirty = true
       viewportWidth=nextWidth;viewportHeight=nextHeight
